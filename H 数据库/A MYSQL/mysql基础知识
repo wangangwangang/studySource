@@ -1,0 +1,236 @@
+~mysql是关系型数据库管理系统（RDBMS）     PS：DB2/ORACLE也是关系型数据库管理系统
+
+~RDBMS 即关系数据库管理系统(Relational Database Management System)的特点：
+	1.数据以表格的形式出现,而不是将所有数据放在一个大仓库内，这样就增加了速度并提高了灵活性。
+	2.每行为各种记录名称
+	3.每列为记录名称所对应的数据域
+	4.许多的行和列组成一张表单
+	5.若干的表单组成database
+
+~MySQL数据库的特点
+	1.MySQL 由瑞典 MySQL AB 公司开发，目前属于 Oracle 公司
+	2.MySQL 是开源的，所以你不需要支付额外的费用。
+	3.MySQL 支持大型的数据库。可以处理拥有上千万条记录的大型数据库。
+	4.MySQL 使用标准的 SQL 数据语言形式。
+	5.MySQL 可以运行于多个系统上，并且支持多种语言。这些编程语言包括 C、C++、Python、Java、Perl、PHP、Eiffel、Ruby 和 Tcl 等。
+	6.MySQL 对PHP有很好的支持，PHP 是目前最流行的 Web 开发语言。	
+	7.MySQL 支持大型数据库，支持 5000 万条记录的数据仓库，32 位系统表文件最大可支持 4GB，64 位系统支持最大的表文件为8TB。
+	8.MySQL 是可以定制的，采用了 GPL 协议，你可以修改源码来开发自己的 MySQL 系统
+
+~增加数据库用户
+	1）mysql -u root -p <passwd>
+	2）mysql > use mysql
+	3）mysql > insert into user (Host,User,authentication_string,Select_priv,Insert_priv,Update_priv,ssl_type,ssl_cipher,x509_issuer,x509_subject) values ('localhost','wanga1',PASSWORD('123456'),'Y','Y','Y','','','','');
+	刷新用户数据库访问权限，如果没有4）这个步骤，则在执行6）时会报错
+	4）mysql > flush privileges;
+	5）\q
+	6）mysql -u wanga -p <passwd>		即可登录新用户
+
+
+-----------------------------------------linux客户端操作----------------------------------------
+	
+~环境准备：
+	1）服务端安装：sudo apt-get install mysql-server
+	2）客户端安装：sudo apt-get install mysql-client
+	3）mysql开发包安装：sudo apt-get install libmysqlclient-dev 
+	4）可视化界面安装：sudo apt-get install mysql-workbench
+	5）检查是否安装好：sudo netstat -tap | grep mysql
+	6）安装中文：
+		（1）vi /etc/mysql/mysql.conf.d/mysqld.cnf
+			   在lc-messages-dir=/usr/share/mysql下一行写：character-set-server=utf8
+		（2）vi /etc/mysql/conf.d/mysql.cnf
+			   在[mysql]下一行写：default-character-set=utf8
+		（3）sudo /etc/init.d/mysql restart
+	7）如果安装过程中遇见无法获取锁之类的问题，使用以下组合方案
+		（1）rm /var/cache/apt/archives/lock
+		（2）rm /var/lib/apkg/lock
+    8）重启：
+		（1）第一种方式 service mysqld restart 
+		（2）第二种方式 /etc/init.d/mysql stop 
+						/etc/init.d/mysql start
+
+~客户端操作：
+	1）登录：mysql -h <hostName> -u <userName> -p <passwd>
+		（1）-h：当连接的数据库服务端不在本台主机时，填写主机名或者IP地址
+		（2）-u：mysql用户名
+		（3）-p：mysql用户密码
+	2）退出：\q
+	
+~数据库操作
+	1）增加数据库：create database <databaseName>
+	2）删除数据库：drop   database <databaseName>
+	3）查看所有数据库：show   databases
+	4）使用数据库：use  <databaseName>
+	5）查看当前使用的数据库：select database()
+	6）数据库路径：/var/lib/mysql
+	
+~数据表操作
+	1）增加表：create table <tableName> ( item1Name item1Type 约束条件 ,item2Name item2Type 约束条件...) 
+	2）删除表：drop   table <tableName> 
+	3）更改表名：alter table <oldTableName> to/as <newTableName>
+	4）查寻所有表：show tables
+	注意：（1）在增加表最后增加default charset=utf8可使char类型默认识别中文，否则不识别中文
+	
+~数据表结构操作
+	1）增加表结构：alter table <tableName> add <newItemName itemType 约束条件>  first/after oldItemName		##first代表在第一行添加，after oldItemName代表在某一行之后添加，不写默认在最后一行
+	2）删除表结构：alter table <tableName> drop <itemName>
+	3）更改表结构名称：
+		（1）alter table <tableName> change <oldItemName>  <nemItemName newItemtype 约束条件> 		##更改结构名以及类型
+		（2）alter table <tableName> modify <oldItemName>  <newItemtype 约束条件>					##只更改类型
+	4）查询表的所有结构：desc/describe <tableName>
+	
+~表中数据操作
+	1）增加表数据：insert into <tableName> (item1Name,item2Name...) values (item1data,item2data...)		##如果不写(item1Name,item2Name...)，那么value之后的数据就需要按照表结构依次输入数据
+	2）删除表数据：delete from <tableName> where <行查询条件>
+	3）更改表数据：update <tableName> set itemName=itemdata where <行查询条件>		##如果没有行查询条件，就是更改所有行的itemName的值
+	4）查询所有表数据：select <item1Name,item2Name...>/* from <tableName> <查询结果处理条件>
+	
+~约束条件专区
+	1）not null
+		（1）插入行时，没有给结构项赋值，默认为NULL
+		（2）约束条件指定为not null，则在增加行时必须给结构项赋值，否则报错
+	2）default
+		（1）插入行时，没有给结构项赋值，默认为default之后的值
+	3）unique
+		（1）设定结构项的值不能重复
+	4）auto_increment
+		（1）设定结构项依次增加1
+		（2）必须同时设定not null 和unique
+
+~查询处理专区
+	先后关系：from > where > order by > limit
+	先后关系：from > where > group by > having > limit
+	1）from ...：指定查询的表
+	2）where ...：指定数据查询的条件
+	3）order by ...：按照某一项排序   asc/默认:升序  desc:降序
+	4）limit n,m：限制输出几行，n为从第n+1行开始，m为一共输出几行
+	5）group by ...：按照某一项分组，并配合聚合函数使用
+	6）having ...：与where用法大致相同，不过在group by之后条件筛选只能用having
+	
+~函数使用
+	1）count()		计数函数
+	2）sum()		求和函数，但属性必须是整形
+	3）avg()		计算平均值
+	4）max()		求最大值
+	5）min()		求最小值
+	注意：（1）未分组时，函数对整个表的某一列处理
+		  （2）分组后，函数对分组的某一列处理
+	
+
+~mysql数据库备份/还原
+		1）备份：  	注意：备份文件中不包含数据库的信息，只包含mydatabase数据库中表的信息
+			（1）mysqldump -u root -p mydatabase   >   /mypath/mysqlbackup.sql  
+				（linux 终端命令） 将名为mydatabase的数据库的数据和表结构导出到mypath目录下并命名为mysqlbackup.sql
+			（2）mysqldump -u root -p --events --ignore-table=mysql.event mydatabase  >  /mypath/mysqlbackup1.sql
+				（linux 终端命令） 因mysqldump默认不会导出事件表，所以弹出警告,此命令可以避免警告的产生
+			（3）mysqldump -u root -p -d mydatabase   >   /mypath/mysqlbackup2.sql
+				（linux 终端命令） 如需只导出表结构则加上“-d”参数
+		2）还原：
+			（1）source /mypath/mysqlbackup   
+			    （mqsql 终端命令）注意：必须要进入还原的数据库下（use mydatabase）
+			（2）mysql -u root -p mydatabase  <  /mypath/mysqlbackup.sql
+				（linux 终端命令）将本地/mypath/mysqlbackup.sql中记录的数据恢复到名为mydatabase数据库中
+				  
+			
+			
+			
+--------------------------------------------------C语言API start--------------------------------------------
+~注意事项
+	1）头文件：<mysql/mysql.h>
+	2）编译：gcc ... -lmysqlclient
+
+~新的数据类型
+	1）MYSQL：数据库句柄类型
+	2）MYSQL_RES：数据库查询结果集类型
+	3）MYSQL_ROW：行数据信息
+	4）MYSQL_field：第一行列名集合
+
+~数据库句柄定义：
+	1）原型：MYSQL <句柄名>			
+	2）示例：MYSQL mysql;
+
+~mysql_init()		数据库初始化
+	1）原型：MYSQL * mysql_init(MYSQL *mysql)						//参数为句柄地址
+	2）示例：mysql_init(&mysql)
+	注意：（1）出错返回NULL
+
+
+~mysql_real_connect()		数据库链接
+	1）原型：MYSQL * mysql_real_connect(MYSQL *mysql,				//句柄地址
+									    const char *host,			//主机IP
+										const char *user,			//用户名
+										const char *passwd,			//密码
+										const char *db,				//数据库名
+										unsigned int port,			//端口，一般为0
+										const char *unix_socket,	//连接类型，一般为NULl
+										unsigned long client_flag)	//表示mysql运行ODBC数据库的标记一般为0
+										)
+	2）示例：mysql_real_connect(&mysql,"localhost","root","123456","stu",0,NULL,0)
+	注意：（1）出错返回NULL
+	
+~mysql_set_character_set()		设置字符集识别中文
+	1）原型：
+	2）示例：mysql_set_character_set(&mysql,"utf8")
+
+~void mysql_close()		数据库断开链接
+	1）原型：void mysql_close(MYSQL *mysql)
+	2）示例：mysql_close(&mysql)
+	
+~mysql_query()		数据库操作1
+	1）原型：int mysql_query(MYSQL *mysql,
+							 const char *query		//sql语句
+							)
+	2）示例：mysql_query(&mysql,sql)
+	注意：（1）sql语句一般写在一个字符串sql中，利用sprintf语句
+		  （2）示例：struct student s1={1,"q",98};
+		             char sql[128];
+					 sprintf(sql,"insert into test values(%d,"%s",%d)",s1.num,s1.name,s1.score);
+					 mysql_query(&mysql,sql);
+		  （3）成功返回0，出错返回非0
+~mysql_real_query()		数据库操作2
+	1）原型：int mysql_real_query(MYSQL *mysql,
+							      const char *query,		//sql语句
+							      unsigned int length		//sql语句的长度
+								 )
+	2）示例：mysql_real_query(&mysql,sql,strlen(sql))
+	注意：（1）对于二进制数据查询只能用这个
+		  （2）查询速度更快
+		  
+~mysql_story_result()		数据库查询结果集获取1
+	1）原型：MYSQL_RES *mysql_story_result(MYSQL *mysql)
+	2）示例：MYSQL_RES result;
+	         &result=mysql_story_result(&mysql)
+	注意：（1）必须上一条数据库处理语句中的sql是关于select/show/desc/explain等有结果集的语句，否则本条语句无意义
+~mysql_use_result()		数据库查询结果集获取2
+	1）原型：MYSQL_RES *mysql_use_result(MYSQL *mysql)
+	2）示例：MYSQL_RES * result;
+	         result=mysql_use_result(&mysql)
+	
+~mysql_num_rows()		查询结果集处理：返回行数
+	1）原型：
+	2）示例：unsigned int num_row;
+			 num_row=mysql_num_rows(&result);
+			 
+~mysql_num_fields()		查询结果集处理：返回列数
+	1）原型：
+	2）示例：unsigned int num_field;
+			 num_field=mysql_num_fields(&result);
+			 
+~mysql_fetch_row()		查询结果集处理：吸收一行数据信息
+	1）原型：
+	2）示例：MYSQL_ROW row[20];
+	         row[i]=mysql_fetch_row(&result);
+			 
+~mysql_fetch_field()		查询结果集处理：吸收第一行的项目名称
+	1）原型：
+	2）示例：MYSQL_field *field;
+	         field=mysql_fetch_field(&result);
+			 
+~mysql_free_result()		查询结果集处理：释放结果集内存
+	1）原型：
+	2）示例：mysql_free_result(&result);
+	
+--------------------------------------------------C语言API end--------------------------------------------
+
+
+

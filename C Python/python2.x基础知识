@@ -1,0 +1,666 @@
+~python的基本概念
+	1）python是一种解释性，面向对象，动态数据类型的高级程序设计语言
+
+~python的执行
+	1）Python 文件将以 .py 为扩展名
+	2）文本中#!/usr/bin/python声明解释器，然后设置文件可执行，在命令行输入文件名即可执行
+	3）usr/bin/python test.py，命令行执行命令时在文件名前加上解释器地址
+	
+~优点
+	1）简单 -- Python 是一种代表简单主义思想的语言。阅读一个良好的 Python 程序就感觉像是在读英语一样，尽管这个英语的要求非常严格！Python 的这种伪代码本质是它最大的优点之一。它使你能够专注于解决问题而不是去搞明白语言本身。
+	2）易学 -- 就如同你即将看到的一样，Python 极其容易上手。前面已经提到了，Python 有极其简单的语法。
+	3）免费、开源 -- Python 是 FLOSS（自由/开放源码软件）之一。简单地说，你可以自由地发布这个软件的拷贝、阅读它的源代码、对它做改动、把它的一部分用于新的自由软件中。FLOSS 是基于一个团体分享知识的概念。这是为什么 Python 如此优秀的原因之一——它是由一群希望看到一个更加优秀的 Python 的人创造并经常改进着的。
+	4）高层语言 -- 当你用 Python 语言编写程序的时候，你无需考虑诸如如何管理你的程序使用的内存一类的底层细节。
+	5）可移植性 -- 由于它的开源本质，Python 已经被移植在许多平台上（经过改动使它能够工作在不同平台上）。如果你小心地避免使用依赖于系统的特性，那么你的所有 Python 程序无需修改就可以在下述任何平台上面运行。这些平台包括 Linux、Windows、FreeBSD、Macintosh、Solaris、OS/2、Amiga、AROS、AS/400、BeOS、OS/390、z/OS、Palm OS、QNX、VMS、Psion、Acom RISC OS、VxWorks、PlayStation、Sharp Zaurus、Windows CE 甚至还有 PocketPC、Symbian 以及 Google 基于 Linux 开发的 Android 平台！
+	6）解释性 -- 这一点需要一些解释。一个用编译性语言比如 C 或 C++ 写的程序可以从源文件（即 C 或 C++ 语言）转换到一个你的计算机使用的语言（二进制代码，即0和1）。这个过程通过编译器和不同的标记、选项完成。当你运行你的程序的时候，连接/转载器软件把你的程序从硬盘复制到内存中并且运行。而 Python 语言写的程序不需要编译成二进制代码。你可以直接从源代码运行程序。在计算机内部，Python 解释器把源代码转换成称为字节码的中间形式，然后再把它翻译成计算机使用的机器语言并运行。事实上，由于你不再需要担心如何编译程序，如何确保连接转载正确的库等等，所有这一切使得使用 Python 更加简单。由于你只需要把你的 Python 程序拷贝到另外一台计算机上，它就可以工作了，这也使得你的 Python 程序更加易于移植。
+	7）面向对象 -- Python 既支持面向过程的编程也支持面向对象的编程。在“面向过程”的语言中，程序是由过程或仅仅是可重用代码的函数构建起来的。在“面向对象”的语言中，程序是由数据和功能组合而成的对象构建起来的。与其他主要的语言如 C++ 和 Java 相比，Python 以一种非常强大又简单的方式实现面向对象编程。
+	8）可扩展性 -- 如果你需要你的一段关键代码运行得更快或者希望某些算法不公开，你可以把你的部分程序用 C 或 C++ 编写，然后在你的 Python 程序中使用它们。
+	9）丰富的库 -- Python 标准库确实很庞大。它可以帮助你处理各种工作，包括正则表达式、文档生成、单元测试、线程、数据库、网页浏览器、CGI、FTP、电子邮件、XML、XML-RPC、HTML、WAV 文件、密码系统、GUI（图形用户界面）、Tk 和其他与系统有关的操作。记住，只要安装了 Python，所有这些功能都是可用的。这被称作 Python 的“功能齐全”理念。除了标准库以外，还有许多其他高质量的库，如 wxPython、Twisted 和 Python 图像库等等。
+	10）规范的代码 -- Python 采用强制缩进的方式使得代码具有极佳的可读性。
+~缺点
+	1）运行速度，有速度要求的话，用 C++ 改写关键部分吧。
+	2）国内市场较小（国内以 Python 来做主要开发的，目前只有一些 web2.0 公司）。但时间推移，目前很多国内软件公司，尤其是游戏公司，也开始规模使用他。
+	3）中文资料匮乏（好的 Python 中文资料屈指可数，现在应该变多了）。托社区的福，有几本优秀的教材已经被翻译了，但入门级教材多，高级内容还是只能看英语版。
+	4）构架选择太多（没有像 C# 这样的官方 .net 构架，也没有像 ruby 由于历史较短，构架开发的相对集中。Ruby on Rails 构架开发中小型web程序天下无敌）。不过这也从另一个侧面说明，python比较优秀，吸引的人才多，项目也多。
+	
+~如何设置python脚本识别中文字段
+	1）在文档开头添加一行  #coding=utf-8
+	2）注意：# coding=utf-8 的 = 号两边不要空格。
+	
+~python的标识符
+	1）在python中标识符由字母、数字和下划线组成
+	2）不能由数字开头
+	3）区分大小写
+	4）以单下划线开头的（_foo）表示不能直接访问的类属性，需要通过类提供的接口进行访问，不能用from XXX import *而导入
+	5）以双下划线开头的（__foo）代表类的私有成员
+	6）以双下划线开头和结尾的（__foo__）代表python里特殊方法专用的标识，比如说__init__()代表类的构造函数
+	7）python可以一行显示多条语句，用;分开
+
+~python的保留字符
+	1）保留字符不能被定义为变量或者常量的标识符
+	2）所有的python关键字只包含小写，不包含大写
+	3）保留字符列表：and	exec	not  assert	finally	or break	for	pass
+	   class	from	print continue	global	raise	
+	   def	if	return del	import	try elif	in	while
+	   else	is	with except	lambda	yield
+
+~行和缩进
+	1）python的代码块不使用{}来控制函数、类以及其他逻辑判断，而是通过缩进
+	2）缩进的空白数量是可变的，但是所有代码块语句必须包含相同的缩进空白数量，这个必须严格执行
+	
+~python引号在定义字符串时的用法
+	1）单引号：str='test'
+	2）双引号：str="test"
+	3）三引号：str='''test  
+	                  file'''   #可以定义多行字符串
+
+~注释
+	1）单行注释：#注释内容
+	2）多行注释：'''
+	             注释内容
+				 注释内容
+				 ''' 
+				 或 
+				 """
+				 注释内容
+				 注释内容
+				 """
+		注意：（1）第一个文档字符串是文档帮助信息，用__doc__可以打印出来
+              （2）文档字符串之前不能有正式内容，除了#注释之外
+   
+~代码组
+	1）缩进相同的一组语句，称之为一个代码块或代码组
+	2）像if、while、def和class这样的复合语句，首行以关键字开始，以冒号( : )结束，该行之后的一行或多行代码构成代码组
+	3）我们将首行及后面的代码组称之为一个子句
+	
+~变量的赋值
+	1）python中的变量赋值不需要类型声明
+	2）变量在使用前必须赋值，只有赋值后该变量才会被创建
+	3）支持多个变量赋值：a=b=c=1   a,b,c=1,97.8,"wangfugui"
+	
+~标准数据类型
+	1）number：数字
+	2）string：字符串
+	3）list：列表
+	4）tuple：元组
+	5）dictionary：字典
+	注意：1）删除标识符：a=1
+	                     delete a 
+	
+~number：数字
+	1）数字的定义：a=1
+	2）数字的类型
+		（1）int（有符号整型）
+		（2）long（长整型[也可以代表八进制和十六进制]）
+		（3）float（浮点型）
+		（4）complex（复数）
+
+~string：字符串
+	1）字符串的定义：str="123456"
+	2）字符串有两种取值方法：str[0]~str[5] 或 str[-6]~str[-1]
+	3）字符串获取操作：
+		（1）print str           # 输出完整字符串
+		（2）print str[0]        # 输出字符串中下标为0的字符，或者print[-6]
+		（3）print str[2:5]      # 输出字符串中下标为2至下表为4的字符，不包括下标为5的字符
+		（4）print str[2:]       # 输出从下标为2开始的字符串，下标可以为空表示取到头或尾。
+		（5）print str * 2       # 输出字符串两次
+		（6）print str + "TEST"  # 输出连接的字符串
+		
+~list：列表
+	1）列表的定义：list=[1,98.5,"wangang",4,5,6]
+	2）列表有两种取值方法：list[0]~list[5] 或 list[-6]~list[-1]
+	3）查看列表元素：
+		（1）print list           # 输出完整列表
+		（2）print list[0]        # 输出列表中下标为0的字符，或者print[-6]
+		（3）print list[2:5]      # 输出列表中下标为2至下表为4的字符，不包括下标为5的字符
+		（4）print list[2:]       # 输出从下标为2开始的列表，下标可以为空表示取到头或尾。
+		（5）print list * 2       # 输出列表两次
+		（6）print list + "TEST"  # 输出连接的列表
+		（7）print len(list)	  # 输出列表长度
+	4）增加列表元素：
+		（1）list1.append('wa')   		#每次只能在list1末尾增加一个元素
+		（2）list1.extend(list2)        #将list2中的元素添加到list1的末尾
+		（3）list1.insert(0,1)          #在下表为0的地方插入1元素，其余对象依次后移
+	5）删除列表元素：del list[1]
+	6）更改列表元素：list[1]=89.5
+	
+
+~tuple：元组
+	1）元组的定义：tup=(1,98.5,"wangang",4,5,6)
+	2）元组有两种取值方法：tup(0)~tup(5) 或 tup(-6)~tup(-1)
+	3）查看元组元素：
+		（1）print tup           # 输出完整元组
+		（2）print tup(0)        # 输出元组中下标为0的字符，或者print(-6)
+		（3）print tup(2:5)      # 输出元组中下标为2至下表为4的字符，不包括下标为5的字符
+		（4）print tup(2:)       # 输出从下标为2开始的元组，下标可以为空表示取到头或尾。
+		（5）print tup * 2       # 输出元组两次
+		（6）print tup + "TEST"  # 输出连接的元组
+		（7）print len(tup)	     # 输出元组长度
+	4）删除元组元素：但是元组不能删除，相当于只读列表。
+	5）更改元组元素：但是元组不能二次赋值，相当于只读列表。
+	6）增加元组元素：但是元组不能增加，相当于只读列表。
+	注意：（1）元组是另一个数据类型，类似于 List（列表）。
+		  （2）元组用 () 标识。内部元素用逗号隔开。
+		
+~dictionary：字典
+	1）字典的定义：dic={'num':1,'score':98.5,'name':'wangang'}
+	2）查看字典元素：
+		（1）print dic['num']          # 输出键为'num'的值
+		（2）print dic                 # 输出完整的字典
+		（3）print dic.keys()          # 输出所有键
+		（4）print dic.values()        # 输出所有值
+	3）增加字典元素：
+		（1）dic['sex']='man'
+	4）删除字典元素：
+		（1）del dict['Name']  		   # 删除键是'Name'的条目
+		（2）dict.clear()      		   # 清空字典所有条目
+		（3）del dict          		   # 删除字典
+	5）更改字典元素
+		（1）dic['name']='wangang1'
+	注意：（1）列表是有序的对象集合，字典是无序的对象集合
+	      （2）字典中的值是由键来存取，不是由偏移下表来存取
+		  （3）字典由'{}'标识，字典由其索引键(key)和其值(value)决定
+		  （4）不允许同一个键出现两次。创建时如果同一个键被赋值两次，后一个值会被记住，如下实例
+		  （5）键必须不可变，所以可以用数字，字符串或元组充当，所以用列表就不行
+		  
+~数字转换函数的使用
+	1）int(str)     #将字符串str="123"转化成整数a=123
+	2）str(a)       #将对象123转换为字符串"123"
+	3）oct(a)		#将数字123转换成8进制0173
+	4）hex(a)       #将数字123转换成16进制0x7b
+	5）ord('a')     #将一个字符转换为它的整数值（ASCII码值）
+	6）chr(97)      #将一个整数（ASCII码值）转换为一个字符 
+	
+~算数运算符
+	示例：a=10，b=20
+	1）+	加 - 两个对象相加										a + b 输出结果 30
+	2）-	减 - 得到负数或是一个数减去另一个数						a - b 输出结果 -10
+	3）*	乘 - 两个数相乘或是返回一个被重复若干次的字符串			a * b 输出结果 200
+	4）/	除 - x除以y												b / a 输出结果 2
+	5）%	取模 - 返回除法的余数									b % a 输出结果 0
+	6）**	幂 - 返回x的y次幂										a**b 为10的20次方， 输出结果 100000000000000000000
+	7）//	取整除 - 返回商的整数部分（向下取整）	                9//2 输出结果 4
+																	-9//4 输出结果 -5
+																	
+~比较运算符
+	示例：a=10，b=20
+	1）==	等于 - 比较对象是否相等					(a == b) 返回 False。
+	2）!=	不等于 - 比较两个对象是否不相等			(a != b) 返回 true.
+	3）>	大于 - 返回x是否大于y					(a > b) 返回 False。
+	4）<	小于 - 返回x是否小于y。					(a < b) 返回 true。
+	5）>=	大于等于 - 返回x是否大于等于y。			(a >= b) 返回 False。
+	6）<=	小于等于 - 返回x是否小于等于y。			(a <= b) 返回 true。
+	
+~赋值运算符
+	示例：a=10，b=20
+	1）=	简单的赋值运算符	c = a + b 将 a + b 的运算结果赋值为 c
+	2）+=	加法赋值运算符		c += a 等效于 c = c + a
+	3）-=	减法赋值运算符		c -= a 等效于 c = c - a
+	4）*=	乘法赋值运算符		c *= a 等效于 c = c * a
+	5）/=	除法赋值运算符		c /= a 等效于 c = c / a
+	6）%=	取模赋值运算符		c %= a 等效于 c = c % a
+	7）**=	幂赋值运算符		c **= a 等效于 c = c ** a
+	8）//=	取整除赋值运算符	c //= a 等效于 c = c // a
+	
+~位运算与C语言一致
+
+~逻辑运算符
+	示例：a=10，b=20
+	1）and		x and y		布尔"与" - 如果 x 为 False，x and y 返回 False，否则它返回 y 的计算值。		(a and b) 返回 20。
+	2）or		x or y		布尔"或" - 如果 x 是非 0，它返回 x 的值，否则它返回 y 的计算值。			(a or b) 返回 10。
+	3）not		not x		布尔"非" - 如果 x 为 True，返回 False 。如果 x 为 False，它返回 True。		not(a and b) 返回 False
+	注意：（1）与C语言中&& || !区分开来
+
+~成员运算符
+	1）in	    如果在指定的序列中找到值返回 True，否则返回 False。	
+	2）not in	如果在指定的序列中没有找到值返回 True，否则返回 False。
+	
+~身份运算符
+	1）is		公用一块内存
+	2）is not	不共用一块内存
+	
+~运算符优先级（由高及低）
+	1）**							指数 (最高优先级)
+	2）~ + -						按位翻转, 一元加号和减号 (最后两个的方法名为 +@ 和 -@)
+	3）* / % //						乘，除，取模和取整除
+	4）+ -							加法减法
+	5）>> <<						右移，左移运算符
+	6）&							位 'AND'
+	7）^ |							位运算符
+	8）<= < > >=					比较运算符
+	9）<> == !=						等于运算符
+	10）= %= /= //= -= += *= **=	赋值运算符
+	11）is is not					身份运算符
+	12）in not in					成员运算符
+	13）not and or					逻辑运算符
+
+~if条件语句
+	
+	1）用法：
+			if 判断条件1:               #关键句
+				执行语句块1……			#语句块
+			elif 判断条件2:
+				执行语句块2……
+			elif 判断条件3:
+				执行语句块3……
+			else:
+				执行语句块4……
+	注意：（1）关键句由关键字开头，由冒号结尾
+		  （2）语句块中的每个语句必须缩进一致
+		  （3）每个关键句必须缩进一致
+		  （4）一个字句由一个关键句和一个语句块组成
+		  
+~while循环语句
+	1）用法：
+			while 判断条件(condition)：
+				执行语句块(statements)……
+	注意：（1）没有do
+		  （2）也没有do-while用法
+		  （3）注意关键句中也是冒号结尾
+		  
+~for循环语句用法
+	1）用法：	
+			for iterating_var in sequence:
+				statements(s)
+	注意：（1）注意关键句中也是冒号结尾
+		  （2）for循环可以遍历任何序列的项目，如一个列表或者一个字符串
+		  
+~pass用法
+	1）当子句中的语句块部分没有语句，可以用pass做占位符
+	2）没有具体的意义
+	
+
+~time模块
+	1）time.time()
+		（1）用于获取当前时间戳
+		（2）每个时间戳都以自从1970年1月1日午夜（历元）经过了多长时间来表示
+		（3）时间间隔是以秒为单位的浮点小数
+		（4）输出格式：1591168238.61
+	2）time.localtime()/time.localtime(time.time())
+		（1）返回浮点数的时间戳方式向时间元组转换，只要将浮点数传递给如localtime之类的函数
+		（2）输出格式：time.struct_time(tm_year=2016, tm_mon=4, tm_mday=7, tm_hour=10, tm_min=3, tm_sec=27, tm_wday=3, tm_yday=98, tm_isdst=0)
+	3）time.asctime()/time.asctime(time.localtime())/time.asctime(time.localtime(time.time()))
+		（1）输出系统指定格式的时间
+		（2）输出格式：Thu Apr  7 10:05:21 2016
+	4）time.strftime("%Y-%m-%d %H:%M:%S")/time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())/time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
+		（1）输出自定义格式的时间
+		（2）示例输出格式：2020-06-03 15:17:16
+		注意：	%y 两位数的年份表示（00-99）
+				%Y 四位数的年份表示（000-9999）
+				%m 月份（01-12）
+				%d 月内中的一天（0-31）
+				%H 24小时制小时数（0-23）
+				%I 12小时制小时数（01-12）
+				%M 分钟数（00-59）
+				%S 秒（00-59）
+				%a 本地简化星期名称
+				%A 本地完整星期名称
+				%b 本地简化的月份名称
+				%B 本地完整的月份名称
+				%c 本地相应的日期表示和时间表示
+				%j 年内的一天（001-366）
+				%p 本地A.M.或P.M.的等价符
+				%U 一年中的星期数（00-53）星期天为星期的开始
+				%w 星期（0-6），星期天为星期的开始
+				%W 一年中的星期数（00-53）星期一为星期的开始
+				%x 本地相应的日期表示
+				%X 本地相应的时间表示
+				%Z 当前时区的名称
+				%% %号本身
+
+~calendar日历模块
+	1）calendar.month(2016,1)
+		（1）输出末年某月的日历
+		（2）输出格式：
+					January 2016
+				Mo Tu We Th Fr Sa Su
+							1  2  3
+				4  5  6  7  8  9  10
+				11 12 13 14 15 16 17
+				18 19 20 21 22 23 24
+				25 26 27 28 29 30 31
+				
+~函数
+	1）函数语法：
+		def functionname( parameters ):
+			"函数_文档字符串"
+			function_suite
+			return [expression]
+		注意：	（1）函数代码块以 def 关键词开头，后接函数标识符名称和圆括号()。
+				（2）任何传入参数和自变量必须放在圆括号中间。圆括号之间可以用于定义参数。
+				（3）函数的第一行语句可以选择性地使用文档字符串—用于存放函数说明。
+				（4）函数内容以冒号起始，并且缩进。
+				（5）return [表达式] 结束函数，选择性地返回一个值给调用方。不带表达式的return相当于返回 None。
+	2）函数调用：functionname()
+	3）函数传参：
+		（1）在 python 中，类型属于对象，变量是没有类型的
+		（2）可更改(mutable)与不可更改(immutable)对象：strings, tuples, 和 numbers 是不可更改的对象，而 list,dict 等则是可以修改的对象
+
+~模块基本用法
+	示例：# file : test.py
+	a = 37                    # 一个变量
+	
+	def foo:                  # 一个函数
+		print "I'm foo"
+	
+	class bar:                # 一个类
+		def grok(self):
+			print "I'm bar.grok"
+	
+	b = bar()                 # 创建一个实例
+	
+	1）improt test调用模块：通常模块为一个文件，直接使用import来导入就好了。可以作为module的文件类型有".py"、".pyo"、".pyc"、".pyd"、".so"、".dll"。
+		（1）使用模块中元素：test.a   test.foo()
+	2）import test.py as tt：将导入的模块文件***.py创建名字空间（重命名为tt）
+		（1）使用模块中元素：tt.a   tt.foo()
+	3）from test.py import a:将模块中的变量，函数，类等直接导入当前名字空间，调用时直接即可
+		（1）使用模块中元素：a   foo()
+	4）搜索路径：当你导入一个模块，Python 解析器对模块位置的搜索顺序是：
+		（1）指定目录
+		（2）如果不在当前目录，Python 则搜索在 shell 变量 PYTHONPATH 下的每个目录。
+		（3）如果都找不到，Python会察看默认路径。UNIX下，默认路径一般为/usr/local/lib/python/。
+	注意：（1）import module_name的本质就是将模块先解释一遍，并且可以在当前脚本中通过module_name.***使用模块中的方法和变量
+		  （2）from module_name import ***就是将模块先解释一遍，并且可以在当前脚本通过***使用模块中的方法和变量
+		  （3）文件的末尾经常出现if (__name__=="__main__"):这句语句，作用就是判断身份，判断解释这个文件时是以模块身份解释的还是以执行脚本程序解释的，可以实现在执行脚本程序时解释，但是在作为模块时不解释此处
+~global <变量> ：告诉python解释器，变量是一个全局变量
+
+~Python中的包
+	1）包是一个分层次的文件目录结构，它定义了一个由模块及子包，和子包下的子包等组成的 Python 的应用环境。
+	2）简单来说，包就是文件夹，但该文件夹下必须存在 __init__.py 文件, 该文件的内容可以为空。
+	3）__init__.py 用于标识当前文件夹是一个包
+
+
+~标准输入输出		
+	1）print
+		（1）print输出是默认换行的
+		（2）在语句后加,可实现不换行
+		（3）格式输出%：name="wangang"
+                  score=98	
+	              print "my name is %s,my score is %d" % (name,score)       #注意：%后面的输出项必须用()括起来
+	2）raw_input([prompt])
+		（1）从标准输入读取一个行，并返回一个字符串（去掉结尾的换行符）
+		（2）[prompt]是输入提示语句
+		（3）示例： 代码：
+					str = raw_input("请输入：")
+					print "你输入的内容是: ", str
+					终端：
+					请输入：Hello Python！
+					你输入的内容是:  Hello Python！
+	3）input([prompt])
+		（1）input([prompt]) 函数和 raw_input([prompt]) 函数基本类似
+		（2）另外input 可以接收一个Python表达式作为输入，并将运算结果返回
+		（3）示例：	代码：
+					str = raw_input("请输入：")
+					print "你输入的内容是: ", str
+					终端：
+					请输入：[x*5 for x in range(2,10,2)]
+					你输入的内容是:  [10, 20, 30, 40]
+
+~文件的操作
+	1）文件打开：fo = open("foo.txt", "w+")
+		（1）原型：file object = open(file_name  , access_mode , buffering)
+		（2）object：file类型的对象
+		     file_name：需要打开的文件名
+			 access_mode：打开模式
+			 buffering：一般不用
+		（3）打开模式
+			t				文本模式 (默认)
+			b				二进制模式
+			+	可读可写
+			r	只读		(默认)
+			rb	只读		二进制格式
+			r+	读写		(默认)
+			rb+	读写		二进制格式
+			w	只写		(默认) 			如果文件不存在创建新文件只写，文件存在先删除内容再从头写入
+			wb	只写		二进制格式		如果文件不存在创建新文件只写，文件存在先删除内容再从头写入
+			w+	读写		(默认)			如果文件不存在创建新文件读写，文件存在先删除内容再从头写入
+			wb+	读写		二进制格式		如果文件不存在创建新文件读写，文件存在先删除内容再从头写入
+			a	追加        (默认)          如果文件不存在创建新文件追加，文件存在从文件的结尾写入
+			ab	追加        二进制格式      如果文件不存在创建新文件追加，文件存在从文件的结尾写入
+			a+	读写        (默认)          如果文件不存在创建新文件读写，文件存在从文件的结尾写入
+			ab+	读写        二进制格式      如果文件不存在创建新文件读写，文件存在从文件的结尾写入			 
+		（4）File对象的属性
+			属性			描述
+			fo.closed		返回true如果文件已被关闭，否则返回false。
+			fo.mode		返回被打开文件的访问模式。
+			fo.name		返回文件的名称。
+			fo.softspace	如果用print输出后，必须跟一个空格符，则返回false。否则返回true。
+	2）文件关闭：fo.close()
+	3）文件写入：fo.write( "www.runoob.com!\nVery good site!\n")
+		（1）原型：fileObject.write(string)
+		（2）string：代表写入文件的字符串
+	4）文件读取：
+		 str=fo.read(10)
+		（1）原型：fileObject.read([count])
+		（2）[count]：准备从文件中读取的字节数
+		 str=fo.readline(10)
+		（1）原型：fileObject.read([count])
+		（2）[count]：准备从读取的行中截取的字节数
+	5）文件指针定位：fo.tell()
+	6）文件指针移动：fo.seek(0,0)
+		（1）原型：seek(offset ,from)
+		（2）offect：位移的字节数
+			 from：从哪开始位移（0 开头，1 当前位置，2 结尾）
+			 
+
+~os模块：文件操作模块
+	1）os.rename(current_file_name, new_file_name)  	#文件重命名
+	2）os.remove(file_name)								#文件删除
+	3）os.mkdir("newdir")								#创建目录
+	4）os.rmdir('dirname')								#删除目录
+	5）os.chdir("newdir")								#移动至指定目录，类似于shell下的cd
+	6）os.getcwd()										#获取当前目录
+	7）os.access(path, mode) 							#检验文件是否存在，是否有读、写、执行权限，返回True或者False
+	   mode:os.F_OK: 测试path是否存在。
+			os.R_OK: 测试path是否可读。
+			os.W_OK：测试path是否可写。
+			os.X_OK：测试path是否可执行。
+	8）os.chmod(path, mode)								#更改文件权限
+	
+--------------------------------------------python标准异常-------------------------------------------------------
+	异常名称			描述
+	BaseException		所有异常的基类
+	SystemExit			解释器请求退出
+	KeyboardInterrupt	用户中断执行(通常是输入^C)
+	Exception			常规错误的基类
+	StopIteration		迭代器没有更多的值
+	GeneratorExit		生成器(generator)发生异常来通知退出
+	StandardError		所有的内建标准异常的基类
+	ArithmeticError		所有数值计算错误的基类
+	FloatingPointError	浮点计算错误
+	OverflowError		数值运算超出最大限制
+	ZeroDivisionError	除(或取模)零 (所有数据类型)
+	AssertionError		断言语句失败
+	AttributeError		对象没有这个属性
+	EOFError			没有内建输入,到达EOF 标记
+	EnvironmentError	操作系统错误的基类
+	IOError				输入/输出操作失败
+	OSError				操作系统错误
+	WindowsError		系统调用失败
+	ImportError			导入模块/对象失败
+	LookupError			无效数据查询的基类
+	IndexError			序列中没有此索引(index)
+	KeyError			映射中没有这个键
+	MemoryError			内存溢出错误(对于Python 解释器不是致命的)
+	NameError			未声明/初始化对象 (没有属性)
+	UnboundLocalError	访问未初始化的本地变量
+	ReferenceError		弱引用(Weak reference)试图访问已经垃圾回收了的对象
+	RuntimeError		一般的运行时错误
+	NotImplementedError	尚未实现的方法
+	SyntaxError			Python语法错误
+	IndentationError	缩进错误
+	TabError			Tab 和空格混用
+	SystemError			一般的解释器系统错误
+	TypeError			对类型无效的操作
+	ValueError			传入无效的参数
+	UnicodeError		Unicode 相关的错误
+	UnicodeDecodeError	Unicode 解码时的错误
+	UnicodeEncodeError	Unicode 编码时错误
+	UnicodeTranslateError	Unicode 转换时错误
+	Warning				警告的基类
+	DeprecationWarning	关于被弃用的特征的警告
+	FutureWarning		关于构造将来语义会有改变的警告
+	OverflowWarning		旧的关于自动提升为长整型(long)的警告
+	PendingDeprecationWarning	关于特性将会被废弃的警告
+	RuntimeWarning		可疑的运行时行为(runtime behavior)的警告
+	SyntaxWarning		可疑的语法的警告
+	UserWarning			用户代码生成的警告
+	
+------------------------------------------------python内置函数---------------------------------------------------
+~dir()函数
+	1）作用：参数是模块名，返回内容是一个列表，列表的内容模块里定义的所有模块，变量和函数，并且排好序。
+	2）用法：示例 dir(math)
+	
+~globals() 和 locals() 函数
+	1）根据调用地方的不同，globals() 和 locals() 函数可被用来返回全局和局部命名空间里的名字。
+	2）如果在函数内部调用 locals()，返回的是所有能在该函数里访问的命名。
+	3）如果在函数内部调用 globals()，返回的是所有在该函数里能访问的全局名字。
+	4）两个函数的返回类型都是字典。所以名字们能用 keys() 函数摘取。
+	
+~range(start, stop[, step])
+	1）创建一个整数列表
+	2） start: 计数从 start 开始。默认是从 0 开始。例如range（5）等价于range（0， 5）;
+		stop: 计数到 stop 结束，但不包括 stop。例如：range（0， 5） 是[0, 1, 2, 3, 4]没有5
+		step：步长，默认为1。例如：range（0， 5） 等价于 range(0, 5, 1)
+
+~id()
+	1）id(object)函数是返回对象object在其生命周期内位于内存中的地址
+	2）python思想中一切皆对象
+
+									  
+									  面向对象，类的使用
+-----------------------------------------------------------------------------------------------------------------
+~面向对象的概念
+	1）类：用来描述具有相同属性和方法的对象的集合。
+	2）方法：类中定义的函数。
+	3）对象：类的实例
+	4）类变量（静态变量）：类变量在整个实例化的对象中是公用的，类变量定义在类中，但在函数体之外。类变量通常不作为实例变量使用。
+	5）实例变量（成员变量）：在类的声明中，类的属性是用变量来表示的，这种变量就被称为实例变量，是在类声明的内部，但在其成员方法之外
+	6）数据成员：类变量和实例变量
+	7）继承：即一个派生类（子类）（derived class）继承基类（父类）（base class）的字段和方法，继承也允许把一个派生类的对象作为一个基类对象对待。
+	8）方法重写：如果从父类继承的方法不能满足子类的需求，可以对方法进行改写，这个方法叫做方法的覆盖，也叫做方法的重写
+	9）实例化：创建一个类的示例，类的具体对象。
+
+~类的创建
+	class ClassName:
+		'类的帮助信息'  				#类文档字符串，类的帮助信息可以通过ClassName.__doc__查看。
+		class_suite  					#类体，由类变量，方法，数据属性组成。
+		
+~创建第一个类：
+	#!/usr/bin/python
+	# -*- coding: UTF-8 -*-
+ 
+	class Employee:
+		'所有员工的基类'
+		empCount = 0
+ 
+		def __init__(self, name, salary):
+			self.name = name
+			self.salary = salary
+			Employee.empCount += 1
+   
+		def displayCount(self):
+			print "Total Employee %d" % Employee.empCount
+ 
+		def displayEmployee(self):
+			print "Name : ", self.name,  ", Salary: ", self.salary
+		
+		def __del__(self):
+			print self.__class__.__name__,"销毁"
+			
+	注意：（1）empCount 变量是一个类变量，它的值将在这个类的所有实例之间共享。你可以在内部类或外部类使用 Employee.empCount 访问。
+		  （2）self代表类的实例，而并非类，self在定义类的方法时必须存在，在类的调用时不用传入相应的参数。
+		  （3）类的方法与普通函数只有一个特别的区别-他们必须由一个额外的（第一个参数名称self）
+		  （4）__init__方法是一种特殊的方法，被称为类的构造函数或者初始化方法，当创建了这个类的实例时就会调用该方法。
+		  （5）__del__方法是一种特殊的方法，被称为析构函数，当删除类的实例时会主动调用，如果不主动删除，那么在退出程序后自动删除调用析构函数
+
+~创建实例对象
+	1）实例化类其他编程语言中一般用关键字 new，但是在 Python 中并没有这个关键字，类的实例化类似函数调用方式。
+	2）以下使用类的名称 Employee 来实例化，并通过 __init__ 方法接收参数。
+	3）具体创建：emp1=Emploee("zhangsan",9000)
+				 emp2=Emploee("lisi",9500)
+				 
+~访问属性
+	1）使用.访问
+	2）使用类名称访问类变量：Emploee.empCount
+	3）使用对象名访问方法：emp1.displayCount()   emp1.displayEmployee()
+	4）使用对象名访问局部变量：emp1.name   emp1.salary
+	5）	emp1.age = 7  		#给对象添加一个 'age' 属性
+		emp1.age = 8  		#修改对象的'age' 属性
+		del emp1.age  		#删除对象的'age' 属性
+	
+~python的内置类属性
+	1）__dict__：类的属性，（包含一个字典，由类的属性组成）
+	2）__doc__：类的文档字符串
+	3）__name__：类名
+	4）__module__：类定义所在的模块
+	5）__bases__：类的所有父类构成元素（包含了一个由所有父类构成的元素）
+	
+~删除实例对象
+	1）del emp1
+	
+~类的继承
+	1）语法：	class 派生类名(基类1名，基类2名...):
+					...
+	2）在python中继承中的一些特点：
+		（1）如果在子类中需要父类的构造方法就需要显式的调用父类的构造方法，或者不重写父类的构造方法。
+		（2）Python 中使用子类的方法时先查找子类中此方法的定义，如果没有，再依次查找基类1，基类2...
+
+~运算符重载
+	实例
+	#!/usr/bin/python
+	class Vector:
+	def __init__(self, a, b):
+      self.a = a
+      self.b = b
+ 
+	def __str__(self):
+      return 'Vector (%d, %d)' % (self.a, self.b)
+   
+	def __add__(self,other):
+      return Vector(self.a + other.a, self.b + other.b)
+ 
+	v1 = Vector(2,10)
+	v2 = Vector(5,-2)
+	print v1 + v2
+	
+	以上代码执行结果如下所示:
+	Vector(7,8)
+	注意：	（1）运算符重载的定义:就是让自定义的类生成的对象(实例)能够使用运算符进行操作
+			（2）在Python汇总方法名如果是__xxx__()格式的，就代表着这个方法名具有特殊的功能，也称为“魔法”方法；
+			（3）当使用“print()”方法的时候，一旦定义了__str__(self)方法，那么就会让该类实例对象被print调用时返回类的特定信息，即return方法后的语句。
+
+~类的属性与方法
+	实例
+	#!/usr/bin/python
+	# -*- coding: UTF-8 -*-
+	
+	class JustCounter:
+		__secretCount = 0  # 私有变量
+		publicCount = 0    # 公开变量
+ 
+		def count(self):
+			self.__secretCount += 1
+			self.publicCount += 1
+			print self.__secretCount
+ 
+	counter = JustCounter()
+	counter.count()
+	counter.count()
+	print counter.publicCount
+	print counter.__secretCount  # 报错，实例不能访问私有变量
+	
+	注意：	（1）类的私有属性：两个下划线开头，声明该属性为私有，不能在类的外部被使用或直接访问。在类内部的方法中使用时 self.__privateAttrs。
+			（2）类的私有方法：两个下划线开头，声明该方法为私有方法，不能在类的外部调用。在类的内部调用 self.__privateMethods
+
+~单下划线，双下划线，首尾双下划线说明：
+	（1）首尾双下划线：	__foo__:定义的是特殊方法，一般是系统定义名字 ，类似__init__() 之类的。
+	（2）单下划线：		_foo:以单下划线开头的表示的是 protected 类型的变量，即保护类型只能允许其本身与子类进行访问，不能用于from module import *
+	（3）双下划线:		__foo:双下划线的表示的是私有类型(private)的变量, 只能是允许这个类本身进行访问了。
+	
+~type(变量名)：查看变量类型
+
+~hasattr(object, name)：判断对象object是否包含名为name的特性（hasattr是通过调用getattr(ojbect, name)是否抛出异常来实现的）。 参数object：对象。 参数name：特性名称。
+
+						特性包含返回true,特性不包含返回false
+						

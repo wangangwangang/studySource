@@ -1,0 +1,17 @@
+1)安装
+	1)cd ~/.vim
+	2)unzip taglist_45.zip
+	3)cd ~/.vim/doc
+	4)vim打开
+	5)运行“:helptags .”命令，注意后面的点不要丢了，这是为了生成ctags帮助文件的索引，然后才能正常使用帮助。
+	6)现在，再启动vim，tags功能就可以用了
+
+2)命令：TlistToggle控制开关
+
+3).vimrc配置
+	1)"禁止自动改变当前Vim窗口的大小  
+	  let Tlist_Inc_Winwidth=0 
+	2)"把方法列表放在屏幕的右侧       
+	  let Tlist_Use_Right_Window=1
+	3)"设置快捷键                     
+	  map <F4> :TlistToggle <Enter>

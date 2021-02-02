@@ -1,0 +1,78 @@
+~概念：
+	1）Git 是一个开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目
+	2）通过GIT管理GitHub托管的项目代码
+	3）GIT就是连接GITHUB平台与本地仓库的工具
+	
+
+
+~安装
+	1）Windows下安装：
+		（1）Git官网：http://www.git-scm.com/download/win
+		（2）在桌面上右键，如果出现git GUI here,git bash here两个选项，说明安装成功
+
+	2）linux下安装：
+		（1）sudo apt-get update			更新安装包
+		（2）sudo apt-get install git		安装git
+			如果出现以下问题：
+				E: 无法获得锁 /var/lib/dpkg/lock-frontend - open (11: 资源暂时不可用)
+				E: Unable to acquire the dpkg frontend lock (/var/lib/dpkg/lock-frontend), is another process using it?
+			解决办法：
+				sudo rm /var/cache/apt/archives/lock
+				sudo rm /var/lib/dpkg/lock-frontend
+		（3）终端输入git命令,如果出现提示信息说明安装成功
+
+
+~Git工作区域：
+	1）Git远程仓库：Git服务器
+	2）工作区域（Working Directory）:添加，编辑，修改等动作
+	3）暂存区域：暂存已经修改的文件最后统一提交到Git仓库
+	4）Git本地仓库（Git Repository）:最终确定的文件保存到仓库，成为一个新的版本，并且对他人可见
+	
+
+~创建/修改远程克隆的仓库文件：
+	1）mkdir test $$ cd test								创建一个文件夹并进入
+	2）git init												在文件夹内初始化Git（创建Git仓库），出现.git文件夹
+	3）git config --global user.name "wangangwangang"		设置用户名
+	4）git config --global user.email "1911847374@qq.com"	设置用户名邮箱（该设置在Github仓库主页显示谁提交了该文件）
+	5）git config --list  									查看配置信息
+	6）git clone <仓库地址>									将远程仓库（github对应的项目）复制到本地
+	7）修改本地仓库文件
+	8）git status											查看有改变的文件当前状况，判断它是在工作区域（红色）还是在暂存区域（绿色）	
+	9）git add <filename>									将文件从工作区域添加到暂存区域
+	10）git commit -m "提交描述"							将文件从暂存区域添加到Git本地仓库
+	11）git push	 origin(远程计算机)   master(本地分支名)   master(程分支名)		将文件从本地仓库同步到远程仓库
+	12）git pull:同步远程仓库到本地
+	
+
+~git status无法识别新增或修改的文件
+	1）有可能这个文件位于.gitignore文件中定义的被忽视的路径中
+	2）执行git add -f <fileName>
+
+~如何查看提交对象的hash值以及ID？
+	1）执行git log命令 
+
+
+~实现无账号密码push：使用ssh协议
+	1）首先生成密钥对：ssh-keygen -t rsa -C "youremail"
+	2）然后将生成的位于~/.ssh/的id_rsa.pub的内容复制到你github setting里的ssh key中。
+	3）clone代码 
+	    （1）复制之后，如果你还没有克隆你的仓库，那你直接使用ssh协议用法：git clone git@github.com:yourusername/yourrepositoryname克隆就行了。
+		（2）如果已经使用https协议克隆了，那么按照如下方法更改协议：git remote set-url origin git@github.com:yourusername/yourrepositoryname.git
+
+~使用git查看每行内容最近的更改人员
+	git blame  <fileName>    
+	
+~查看更改历史
+	git log 						查看历史提交记录
+	git log <fileName>				查看某个文件的提交记录
+	git log -p  <fileName>		    查看历史提交记录，并显示更改前后的对照
+	git log -p -2   <fileName>	    查看历史提交记录，并显示更改前后的对照，只查看最近两条提交记录
+	
+
+
+~git 撤销操作
+	1）git reset --soft HEAD^   这样就成功的撤销了你的commit，注意，仅仅是撤回commit操作，您写的代码仍然保留
+	2）git checkout . 		    彻底清除修改，写的代码也完全消失
+
+
+

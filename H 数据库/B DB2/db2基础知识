@@ -1,0 +1,84 @@
+~数据库操作场景
+	（1）linux终端客户端
+	（2）windows界面客户端
+	（3）c语句
+	
+~DB2相关(linux终端)
+	（1）环境准备：
+		1.如何安装
+		2.启动/关闭：db2start/db2stop
+		3.检测：db2_ps或ps -ef | grep -i INSTANCE 
+	（2）数据库常规操作
+		1.链接数据库:db2 connect to <dbname> usre <username> using <password>
+		2.断开链接:db2 terminate
+		3.增加数据库:db2 create database <dbname> using codeset UTF-8 territory CN pagesize 8 K (注意8和K之间有空格)
+		4.删除数据库:db2 drop db <dbname>
+		5.改数据库名称:
+		6.查看数据库列表:db2 list db directory
+		7.查看数据库节点:db2 list node directory
+		7.建表:
+		8.删表:db2 drop table  <tablename>
+		9.更改表结构
+		10.显示表的列表:db2 list tables
+		11.显示表结构:db2 describe table <tablename>
+		12.复制一个表结构并命名:db2 create table <table1name> like <table2name>
+		13.增加数据:
+		14.删除数据:
+		15.更改数据:
+		16.查询数据:
+			1）基本用法：db2 "select * from <tablename> where ..."
+			2）升序排列：db2 "select * from <tablename> order by <列名> asc"           （asc可省略，默认为升序）
+			3）降序排列：db2 "select * from <tablename> order by <列名> desc"
+		17.如何编目数据库服务：理解节点的含义
+			1）编目远程服务：（创建本地数据库节点与远程服务器连接，并确定端口号）
+							db2 catalog tcpip node 节点名称（可以任意值） remote ip地址 server 端口号
+							例如：db2 catalog tcpip node  NECSSDB remote  182.119.66.210  server  6000
+			2）编目数据库：（将远程数据库绑定到本地数据库节点）
+							db2 catalog db 数据库名 at node 节点名称
+							例如：db2 datalog db ECSSDB at node NECSSDB 
+			3）刷新高速缓存：db2 terminate
+			4）删除节点编目：db2 uncatalog node NECSSDB 
+			5）删除数据库编目：db2 uncatalog db  LECSSB（数据库别名）
+			6）刷新高速缓存：db2 terminate
+		18.如何备份数据库
+			1）将表数据导出：db2 "export to <targetTableName.del> of del select * from <tablename> where ..."               全量导出时注意剔除某个表怎么处理（创建列表变量时配合grep的不包含用法-v）
+			2）导出整个数据库包括表结构
+		19.如何恢复数据库
+			1）根据导出的数据恢复：db2 "import from <targetTableName.del> of del insert into <tablename>"
+			2）根据数据库导出包恢复:
+	（3）数据库选项
+		1.-x		省略列标题以及底部统计信息的打印
+
+	（4）windows界面客户端登录数据库所需信息
+		1.用户名
+		2.数据库名（不是别名）
+		3.数据库实例用户密码
+		4.服务端prot
+		5.数据库服务端IP
+	（5）如何在linux底层查询数据库信息
+		1.链接数据库：db2 connect to <dbname> usre <username> using <password> 
+		2.显示数据库密码明文：encryptDBPassword $DBPASSWD
+		3.查看数据库列表（通过数据库名找到节点名）：db2 list db directory
+		4.显示节点信息（可根据节点名找到数据库服务端IP及port）
+	（6）数据库实例：
+		1.db2实例是一组进程和一组共享内存
+		2.linux/unix/下实例与服务器用户（实例用户）绑定，实例名称与实例用户名称保持一致，实例创建在实例用户目录下
+		3.创建实例：db2icrt（实例用户名称）
+		4.显示服务器下所有实例用户：db2ilist
+		5.删除实例：db2idrop
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+

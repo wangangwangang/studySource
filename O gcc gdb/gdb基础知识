@@ -1,0 +1,72 @@
+~视频资源（IT之路/系统编程网络编程/第三章进程与线程/第二节/10：00左右）
+
+~概念：gdb是一个由GNU开源组织发布的、unix/linux操作系统下的、基于命令的、功能强大的程序调试工具
+
+~安装
+	1）在/home/Download目录下载gdb源码包：wget http://ftp.gnu.org/gnu/gdb/gdb-8.0.1.tar.gz（硬盘中有）
+	2）用tar -zxvf 命令解压缩你下载的源码包
+	3）生成makefile文件：
+		（1）gdb-8.0.1目录下./configure
+		（2）make
+		（3）sudo make install
+		（4）查看安装是否成功：gdb -v
+
+~gdb的四大功能：
+	1）启动你的程序，可以按照你的自定义的要求随心所欲地运行程序
+	2）可以让被调试的程序在你指定的断点处停住（断点可以是条件表达式）
+	3）当程序被停住时，可以检查此时你的程序中所发生的事。
+	4）动态的改变你程序的执行环境
+
+~gdb主要是用来调试C/C++等编译语言
+
+~命令：（注意在gcc编译时加-g参数）
+	gdb								单独启动gdb
+	file <可执行文件名>				单独启动gdb后载入文件
+	gdb	 <可执行文件名>				带文件启动gdb
+	q/quit							退出gdb
+	
+	
+	b/break <函数名>				设置断点
+	b/break <源文件名>:numLine  	设置断点
+	d/delete						删除所有断点
+	d/delete  n						删除编号为n的断点
+	i/info b/breakpoints			查询断点信息
+	s/step							进入到子函数内部
+	r/run							运行程序
+	c/continue						遇到断点终止程序的运行后，继续运行软件
+	n/next							单步运行
+	p  <变量名>						查看变量值
+	p  <函数名>						显示函数地址
+	p  <数组名：array>				打印数组值：{0，1，2，3}
+	p  array[n]						打印数组特定元素值
+	finish							结束当前子函数
+	until							结束当前循环
+	backtrace						查看当前运行的文件和所在的行
+	
+	l/list 							显示代码，默认10行
+	l/list <源文件名>:行号			显示指定行号附近10行的代码，如果不加文件名默认当前运行到的文件
+	l/list <源文件名>:<函数名>		显示函数定义位置，如果不加文件名默认当前运行到的文件
+	i/info r/reg					查询寄存器的信息
+	i/info frame					显示当前函数的程序语言
+	i/info source					显示调试的源文件
+	!<command>/shell <command>		在gdb终端执行shell命令
+
+
+~如何在next时能够运行到子函数内部
+	1）断点的设置方式为b 函数名，程序运行到断点处可以next运行到子函数北部
+	2）断点的设置方式为b/break <源文件名>:numLine，不过num在函数定义中， 程序运行到断点处可以next运行到子函数北部
+	3）在运行到断电后，正常执行next,显示下一步执行函数时，执行step
+	
+~设置断点的意义
+	1）可以通过next进行单步执行
+	2）可以打印当前的变量值
+	
+~如何快速定位段错误？
+	1.gcc test.c -g           //编译时加-g选项
+	2.ulimit -c unlimited     //设置生成core文件的大小无限制
+	3../a.out				  //执行程序，生成core文件
+	4.gdb a.out core          //进入gdb调试界面，并将a.out core文件加载进dgb中
+	5.where					  //在gdb界面下执行where命令，定位到段错误的所在位置
+	
+~
+	5.where

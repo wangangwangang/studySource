@@ -1,0 +1,365 @@
+~查fun()函数依赖库：man -a fun
+
+【进程】
+~进程的概念
+	1.进程是一个程序的运行实例
+	2.可以一次并发执行
+	3.拥有独立的权限与职责（内存），互不影响（父进程退出，不影响子进程）
+	4.每个进程运行在各自的虚拟地址，进程之间可以通过由内核控制的机制相互通讯
+	5.终端也是一个进程
+	
+~查看进程的相关命令
+	1.ps- ef
+	2./proc 目录下通过pid查看进程相关信息
+	3.ps -aux
+	4.top
+	
+~STAT : 进程状态
+	1.R : Running 或 Runnable 的缩写，表示进程在 CPU 的就绪队列中，正在运行或者正在等待运行。
+	2.D : Disk Sleep 的缩写，也就是不可中断状态睡眠（Uninterruptible Sleep），一般表示进程正在跟硬件交互，并且交互过程不允许被其他进程或中断打断。
+	3.Z : Zombie 的缩写，如果你玩过“植物大战僵尸”这款游戏，应该知道它的意思。它表示僵尸进程，也就是进程实际上已经结束了，但是父进程还没有回收它的资源（比如进程的描述符、PID 等）。
+	4.S : Interruptible Sleep 的缩写，也就是可中断状态睡眠，表示进程因为等待某个事件而被系统挂起。当进程等待的事件发生时，它会被唤醒并进入 R 状态。
+	5.I : Idle 的缩写，也就是空闲状态，用在不可中断睡眠的内核线程上。前面说了，硬件交互导致的不可中断进程用 D 表示，但对某些内核线程来说，它们有可能实际上并没有任何负载，用 Idle 正是为了区分这种情况。要注意，D 状态的进程会导致平均负载升高， I 状态的进程却不会。
+	6.T : Stopped 或 Traced 的缩写，表示进程处于暂停或者跟踪状态，向一个进程发送 SIGSTOP 信号，它就会因响应这个信号变成暂停状态（Stopped）；再向它发送 SIGCONT 信号，进程又会恢复运行（如果进程是终端里直接启动的，则需要你用 fg 命令，恢复到前台运行）。
+	7.S+：父进程（其下有子进程）
+	8.X ：也就是 Dead 的缩写，表示进程已经消亡，所以你不会在 top 或者 ps 命令中看到它。
+	
+~进程编程主要涉及函数
+	1.fork()
+	2.wait()
+	3.exit()
+	4.getpid()/getppid()
+	
+~获得进程ID相关的函数
+	1.uid_t getuid(void)		获得进程的用户标识号
+	2.gid_t getgid(void)		获得进程的所属组ID
+	3.pid_t getpid(void)		获得进程ID
+	4.pid_t getppid(void)		获得父进程ID
+	5.pid_t getpgrep(void)		获得当前进程所在进程组ID
+	6.pid_t getpgid(pid_t pid)	获得进程ID为pid的进程所在的进程组ID
+	
+~fork():创建进程
+	1.依赖库：<sys/types.h> <unistd.h>
+	2.原型：pid_t fork(void)
+	3.返回值：调用一次，返回两个值，在父进程中的返回值是本次形成的子进程的pid,在子进程中的返回值是0，错误返回-1
+	4.注意：子进程与父进程优先级一样，宏观上可以理解为同时并发进行
+	
+~exit():无论在任何位置出现，都是终止当前所在的进程，是进程进入僵尸状态
+	1.依赖库：<stdlib.h>
+	2.原型：void exit(int status)
+	
+~exit()/return/break的区别
+	1.return:退出当前函数
+	2.exit():无论出现在何处，都是结束当前所在的进程，并产生返回值
+	3.break：
+		（1）退出当前循环体（while/for）
+		（2）退出switch case
+
+~wait():进程回收函数，阻塞
+	1.依赖库：<sys/types.h> <sys/wait.h>
+	2.原型：pid_t wait(int *status)
+	3.WEXITSTATUS(status):提取status中对应子进程exit()返回值的部分
+	4.注意：
+		（1）进程退出后，默认由父进程回收
+		（2）若父进程提前退出，则由系统分配进程回收子进程
+
+~exec()：
+	1.可以用来执行一个可执行文件来代替当前进程的执行映像
+	2.该调用并没有生成新的进程，而是在原有进程的基础上替换原有进程的正文，调用前后是同一个进程，进程号pid不变，但执行的程序变了（执行的指令序列改变了）
+	
+~system()
+	1.用法：system ("<command>")
+	2.说明：
+		（1）原理即是开启一个终端，在终端执行命令或者程序
+		（2）执行起来效率低，但是简单
+		（3）不会影响当前程序
+		
+【线程】
+~进程与线程相关描述
+	1.进程是资源管理的最小单位，线程是程序运行的最小单位
+	2.线程是进程的一条执行路径，它包含独立的堆栈和CPU寄存器状态，每个线程共享其所属的进程的所有的资源，包括打开的文件，内存页面，信号标识及动态分配的内存
+	3.线程是属于进程的，线程运行在进程空间内，同一进程所产生的线程共享同一物理内存空间，当进程退出时该进程所产生的线程都会被强制退出并清除，一个进程至少需要一个线程作为它的指令执行体，进程管理着资源，而将线程分配到某个CPU上执行
+	
+~进程和线程在内存上的对比
+	进程A：栈/堆栈   堆	  BSS区  全局变量   代码段
+	fork()
+	进程B：栈/堆栈   堆	  BSS区  全局变量   代码段
+					
+	进程A：栈/堆栈   堆	  BSS区  全局变量   代码段
+	线程A：栈/堆栈
+	pthread_create()	
+	线程B：栈/堆栈
+	
+~进程与线程主要应用对比
+			进程							线程
+创建		fork()							pthread_create()
+退出		exit()							pthread_exit()
+等待/回收	wait()/waitpid()				pthread_join()/pthread_detach()
+读取ID		getpid()						pthread_self()
+
+~pthread_create():创建线程
+	1.依赖库：<pthread.h>
+	2.原型：int pthread_create(	pthread_t *restrict ,									线程标识符指针
+								const pthread_attr_t *restrict attr,					线程属性，一般为NULL
+								void  *(*start_routine)(void *),						线程运行的起始地址
+								void *restrict arg )									运行函数参数，尽量malloc一个堆空间，防止中间变量被销毁
+	3.注意：在编译时加上-lpthread编译选项
+	
+~pthread_exit()：线程退出
+	1.依赖库：<pthread.h>
+	2.原型：void pthread_exit(void *value_ptr)
+	
+~pthread_join():等待/回收
+	1.依赖库：<pthread.h>
+	2.原型：int pthread_join(	pthread_t thread,				回收的线程标识pthid
+								void  **value_ptr)				对应着回收的线程中pthread_exit()中的返回值
+
+								
+---------------------------------------------------进程间通讯机制---------------------------------------------------
+	1.信号：	  			不可数据交互
+	2.管道( pipe/fifo)：	可以数据交互 
+	3.文件：	  			可以数据交互				文件锁控制互斥
+	4.信号量:	  			不可数据交互				控制互斥
+	5.共享内存：  			可以数据交互				方法最有效，最快
+	6.消息队列：            可以数据交互				做封包
+	7.套接字：	  			可以数据交互				与其余通信机制不同的是，它可以用于不同机器间的进程通信，多用于网络编程
+
+【信号】	
+~信号
+	1.信号来源：
+		（1）硬件操作：比如硬件快捷键，硬件故障
+		（2）终端命令：kill -9 <pid>
+		（3）进程调度API函数：kill(),raise(),alarm(),setitimer()
+	2.信号的信号值定义路径：/usr/include/asm/signal.h
+
+~signal():捕捉信号，执行自定义操作
+	1.依赖库：<signal.h>
+	2.用法：signal(	参数一：需要捕捉的信号值
+					参数二：信号处理方式
+							（1）自定义需要执行的函数体：void fun(int arg)
+							（2）SIG_IGN：忽略信号
+							（3）SIG_DEF：执行缺省操作
+				  )
+	3.注意：
+		（1）函数非阻塞
+		（2）本质上就是将捕捉的信号自定义一个执行操作，不让其进行缺省操作
+			
+~详谈kill命令
+	1.linux终端向一个进程发送信号用kill命令，不要以为kill命令就是用来杀死进程的，
+	  它可以发送各种信号给进程，杀死进程只是起到了其中的一个作用，也就是-9（SIGKILL）信号
+	2.命令格式：
+		（1）kill     <信号参数>  <pid>				->对某一个进程发送新信号
+		（2）killall  <信号参数>  <command>			->对command执行程序的所有进程发送信号
+	3.重要的信号：
+		
+		-1/SIGHUP					默认：重启进程
+		-2/SIGINI					默认：中断进程（快捷键Ctrl + C 对应信号）
+		-9/SIGKILL        			默认：强制中断进程
+		-17/SIGSTOP       			默认：暂停进程的运行
+
+【无名管道】		
+~pipe(无名管道)
+	1.只作用于具有亲属关系的进程之间，因为先pipe()后fork()
+	2.自带互斥机制，同时操作读写时，不用担心冲突
+	
+~pipe()：产生无名管道
+	1.依赖库：<unistd.h>
+	2.int pipe(int fds[2])
+	3.参数：
+		（1）用来接收产生的文件描述符
+		（2）fds[0]:读端			
+		（3）fds[1]:写端
+	4.说明：	
+		（1）执行读端，需要关闭写，执行写端，需要关闭读端
+		（2）管道在写与读同时进行时，一般内核存在一种预先占用机制，不会说产生这种情况，写到一半被读走了，
+		（3）read有阻塞机制，如果管道为空，则read会阻塞
+		（4）管道是半双工的，数据只能向一个方向流动
+		（5）单独构成一种独立的文件系统，管道对于管道两端而言，就是一个文件，但它不是普通的文件，它不属于某种文件系统，而是单独的构成一种文件系统，并且只存在于内存中。
+		
+~详谈read()/write()返回值的含义
+		
+	ret_read=(fds[0],buf,1024)
+	1.ret_read==0	管道断裂，即对面fds[1]关闭了，且此时read()不再阻塞
+	2.ret_read>0	读取成功，值为读取的字节数
+	3.ret_read<0	因为其他的原因读取失败
+		
+	ret_write=write(fds[1],buf,strlen(buf))
+	1.ret_write>=0	写成功，值为写的字节数
+	2.ret_write<0	管道断裂，即对面的fds[0]读端断裂，并且默认向本进程发送一个SIGPIPE信号，默认直接退出程序
+					注意：在write()端所在进程写signal(SIGPIPE，fun)，就是防止read()进程直接退出而导致管道断裂，
+							  从而引发write()进程直接没有提示退出，可以明确本次退出是由于管道破裂而导致的
+	
+【有名管道】		
+~有名管道/FIFO
+	1.FIFO不同于PIPE之处在于它提供一个路径名与之关联，以FIFO的文件形式存在于文件系统中
+	2.在文件系统中是一个有名字的管道
+	3.在任何进程都可以打开
+	4.进程间无需关联
+	5.有名管道打开时，open()会阻塞，因为管道两端必须同时打开open()才会继续（无名管道是自动打开的）
+	6.errno的定义目录：/usr/include/asm-generic/errno-base.h(errno.h)
+	
+~mkfifo():FIFO的创建
+	1.依赖库：<sys/types.h> <sys/stat.h>
+	2.原型：int mkfifo(	const char *pathname ,				文件路径
+						mode_t mode)						文件权限
+
+【文件锁】						
+~文件（文件锁）
+	1.当多个进程都需要对同一个文件进行读写操作时，有时候需要确保进程在一次读写操作完成之前，文件不被其他进程修改。文件
+	  锁机制提供了这样的同步功能。
+	  
+~fcntl():创建文件锁
+	1.依赖库：<fcntl.h>	<unistd.h>
+	2.原型：int fcnlt(	int fd,					文件描述符
+						int cmd,				操作指令：F_GETLK（获取文件锁当前的状态）
+														  F_SETLK（设置文件锁）
+													      F_SETLKW（设置文件锁阻塞）
+						struct flock *lock)		定义文件锁属性的结构体的地址
+						
+~struct flock             	锁属性结构体
+ {  ...
+	short l_type;			锁类型：					F_RDLCK/读锁        F_WRLCK/写锁        F_UNLCK/解锁
+	short l_whence;			加锁区域起点：				SEEK_SET/文件开头	SEEK_END/文件结尾	F_CUR/文件指针当前位置
+	off_t l_start;			相对枷锁起点的偏移量	
+	off_t l_len;			枷锁区域长度
+	...
+ }
+ 
+~文件锁的兼容性
+	
+			加读锁			加写锁
+无锁		可以 			可以 
+有读锁		可以			不可以
+有写锁		不可以			不可以
+
+-----------------------------------------------------------------------------------------------------
+~linux下消息队列/共享内存/信号量的查看与删除
+	1.IPCS：查看
+		（1）-q			查看消息队列
+		（2）-m			查看共享内存
+		（3）-s			查看信号量
+		（4）-a/无      查看以上三者信息
+	2.IPCRM：删除
+		（1）-q			删除消息队列及信息
+		（2）-m			删除共享内存及信息
+		（3）-s			删除信号量及信息
+
+
+------------------------------------------------------------------------------------------------------
+
+
+【消息队列】
+~消息队列
+			1.消息队列是系统内核地址空间中的一个内部的链表。消息可以按照顺序发送到队列中，也可以以几种不同的方式从队列中读取，
+			  每一个消息队列用一个唯一的IPC标识符表示。
+			2.消息具有特定的格式以及特定的优先级，对消息队列有写权限的进程可以按照一定的规则添加新消息，对消息队列有读权限的
+			  进程可以从消息队列中读取消息
+			3.可以实现多对多通信，灵活度高
+			4.可以设置优先级，先处理某种类型，后处理另一种类型
+			
+~msgget():创建消息队列
+	1.依赖库：<sys/types.h> <sys/ipc.h> <sys/msg.h>
+	2.原型：int msgget(	key_t key,				键值：1.指定键值，或由ftok()产生
+													  2.IPC_PRIVATE：系统指定键值
+						int msgflg)				信号量标志：1.IPC_CREAT：队列若无，则创建
+															2.与IPC_CREAT一起使用时，若队列存在则返回错误
+															3.mode_flags:文件权限
+	3.一般用法：msgid = msgget(0x100,IPC_CREAT|0777)
+	4.key生成方式：key = ftok("./a",1);
+				   原型：key_t ftok(const char *pathname,	   文件路径		
+				                    int proj_id);				取值在0-255之间
+									
+~msgsnd():向消息队列发消息
+	1.依赖库：<sys/types.h> <sys/ipc.h> <sys/msg.h>
+	2.原型：int msgsnd(	int msgid,				消息队列标识符
+						void *msgp,				发送内容（配合struct msgbuf使用）
+						size_t msgsz,			内容大小：sizeof(msgbuf)-sizeof(long)
+						int msgflg				标志：0/阻塞   IPC_NOWAIT/非阻塞
+						)
+~msgrcv():从消息队列接受消息
+	1.依赖库：<sys/types.h> <sys/ipc.h> <sys/msg.h>
+	2.原型：ssize_t msgrcv(	int msgid,						消息队列标识符
+							struct msgbuf *msgp,			接受的内容放在哪
+							size_t msgsz,					接受多少内容
+							long msgtyp,					内容的类型是多少
+							int msgflg						标志：0/阻塞 IPC_NOWAIT/非阻塞
+							)
+	3.注意：若在rcv时，msgid消失，则解除阻塞
+
+~struct msgbuf				消息属性结构体
+ {
+	long type;				消息类型
+	char mtext[1024];		消息正文，不一定是字符数组，也可以是别的数据类型，比如说结构体
+ }
+ 
+ 
+		
+		
+【共享内存】
+~共享内存描述：
+	1.两个不同进程A，B共享内存的基本原理是，同一块物理内存被映射到进程A，B各自的进程地址空间，
+	  进程A可以及时看到进程B对共享内存中数据的更新，反之亦然
+	2.这块共享的物理内存，需要我们自行创建，挂载，映射
+	3.需要配合互斥机制
+	4.读取后，数据不会丢失
+	
+~shmget():创建共享内存空间
+	1.依赖库：<sys/ipc.h> <sys/shm.h>
+	2.原型：int shmget(	key_t key,				键值：1.指定键值，或由ftok()生成
+													  2.IPC_PRIVATE：系统指定键值
+						size_t size,			开辟空间的大小
+						int shmflg)				共享内存标志：	1.IPC_CREAT：若无，则创建
+																2.IPC_ECECL：与IPC_CRAET一起使用时，若空间存在，则返回错误
+																3.mode_flags:类似于文件权限
+	3.使用方式：shmid = shmget(	0x100,1024,IPC_CREAT|0777)
+	
+~shmat()：将开辟的共享内存物理空间映射到进程中
+	1.依赖库：<sys/types.h> <sys/shm.h>
+	2.原型：void *shmat( int shmid,						由shmget返回的共享内存标志
+						 const void *shmaddr,			1.映射该共享内存的进程内存地址
+														2.若为NULL，系统自动分配
+						 int shmflg)					标志：	SHM_RND
+																SHM_RDONLY
+																
+~shmctl():对共享内存中内容进行操作
+	1.依赖库：<sys/ipc.h> <sys/shm.h>
+	2.原型：int shmctl( int shmid,						共享内存标识符
+					    int cmd,						共享内存操作：（1）IPC_STAT		读取一个共享内存的数据结构，shmid_ds,并储存在buf中
+																	  （2）IPC_SET		设置shmid_ds中各元素的值，值取自buf
+																	  （3）IPC_RMID		把共享内存标记为可删除，当最后一个进程托连此共享内存的时候，系统将删除该共享内存																	  										
+						struct shmid_ds *buf)			共享内存属性结构体
+
+【信号量】
+~概念：system IPC中，对于每一个新建的信号量，消息队列以及共享内存都有一个在整个系统中唯一的标识符，每个标识符也都有唯一对
+       应的关键字，关键字的数据类型由系统定义为key_t
+
+~semget():创建/获取信号量
+		1.依赖库：<sys/types.h> <sys/ipc.h> <sys/sem.h>
+		2.原型：int semget( key_t key,			键值：（1）自定义  （2）ftok()生成  （3）IPC_PRIVATE：系统指定
+							int nsems,			信号量的数目
+							int semflg)			信号量标志：1.IPC_CREAT：若无，则创建
+														    2.IPC_ECECL：与IPC_CRAET一起使用时，若空间存在，则返回错误
+															3.mode_flags:类似于文件权限
+
+~semop()	信号量操作，p/v操作
+	1.依赖库：<sys/types.h> <sys/ipc.h> <sys/sem.h>
+	2.原型：int semop(	int semid,						信号量标志
+						struct sembuf *sops,			指向sembuf结构的数组指针
+						unsigned nsops					元素个数
+					 );
+
+~struct sembuf		
+ {
+	...
+	unsigned  short  sem_num;				信号量下表
+	short            semop;					做生产操作还是消费操作  (1)p/-n/生产/写入 (2)v/+n/消费/读出
+	short            sem_flg;				(1)IPC_NOWAIT/非阻塞 (2)IPC_UNDO/进程退出的时候自动撤销该次操作
+	...
+ }
+ 
+~semctl()	信号量控制
+	1.依赖库：<sys/types.h> <sys/ipc.h> <sys/sem.h>
+	2.原型：int semctl(	int semid,			信号量标志
+						int semnum,			信号量下标
+						int cmd	)			操作命令：1/init  2/destory SETVAL
+						

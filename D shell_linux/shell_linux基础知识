@@ -1,0 +1,1404 @@
+~打开终端快捷键
+	1.打开家目录终端（任意位置都可以使用）
+		创建新窗口：ctrl + alt + t
+	2.打开当前目录终端（必须在终端界面下才可以使用）
+		创建新窗口：ctrl + shift + n 
+		在同一窗口：ctrl + shift + t 
+		
+
+~file <filename>:判断文件类型
+
+~shell脚本的概念
+   1.shell是使用linux的桥梁
+   2.shell是用户和linux之间的接口程序
+   3.shell:
+       命令语言：交互解释和执行用户输入命令
+       程序设计语言：编写shell脚本，用于系统管理工作
+       shell是操作系统与用户进行交互的界面
+       用户（往返）shell（往返）操作系统
+   注意：shell启动时将运行初始化文件初始化自己，具体运哪个文件取决于该shell是 
+           1：登录shell
+           2：交互式（interactive）：解释执行用户的命令，用户输入一条命令，shell就解释执行一条
+           3：非交互式shell（批处理）：用户事先写一个shell脚本(Script)，其中有很多条命令，让shell一次把这些命令执行完，而不必一条一条的敲命令
+
+
+~ 基本脚本编程
+  1.使用文本编辑器（vi）建立shell脚本文件
+  2.脚本中应包含的内容
+     （1） 脚本运行环境设置    #!/bin/bash        ##声明解释器，shell脚本文件有解释器，因此不用像".c"文件一样先编译后执行，本身文件可一直接执行
+     （2） 设置脚本可执行
+     （3）例子：（创建shell_1）
+         #！/bin/bash
+         ls
+         date
+         执行方法：1）chmod  777  shell_1
+                      ./shell_1
+                   2) /bin/bash  shell_1
+     （4）shell脚本语言和编程语言很相似，也有变量和流程控制语句，但是shell脚本是提供解释执行的，不需要编译，shell程序从脚本中一行一行读取并执行这些命令，相当于一个用户把脚本中的命令一行一行敲到shell提示符下执行。
+          初学者尽量不要在root下运行shell，容易破坏系统
+
+
+~程序涉及语言大致可分为两类：
+（1）编辑型语言：Fortran,Ada,Pascal,C,C++,Java
+（2）解释型语言（脚本语言）：awk,perl,python,shell
+
+
+~几种常见的shell脚本解释器：
+（1）shell是一种脚本语言
+（2）解释器有：bash,sh,csh,ksh
+
+
+~使用脚本语言的好处：
+   他们多半运行在比编辑型语言还高的层级，能够轻易处理文件与目录之类的对象，缺点是他们效率一般不如编辑行语言。不过权衡之下，通常使用脚本编程还是值得的。
+
+~查询命令位置：which  命令
+
+~查询命令类型：type   命令 
+
+
+----------------------变量相关-------------------------
+~shell中预定义变量
+	$0:			当前程序文件的名称
+	$n:			当前程序的第n个参数
+	$*；		当前程序的所有参数（不包括程序本身）
+	$@；		当前程序的所有参数（不包括程序本身）
+	$#:			当前程序的参数个数（不包括程序本身）
+	$?:			上一条命令执行成功为0，否则不为0
+	$UID:		当前用户的ID
+	$PWD:		当前所在目录
+	$BASH:		用于引用的bash的默认全路径名（缺省值就是系统默认值）
+	$SHELL:		用于引用的bash的默认全路径名（缺省值就是系统默认值）
+	$LINENO：	显示当前行号
+	$FUNCNAME:	显示当前函数名
+	$HOME:		显示当前用户家目录
+	$OSTYPE:	显示操作系统类型
+	$LOGNAME：  此变量保存登录名
+	$USER：     用户名
+	$PATH：		保存用冒号分隔的目录路径名
+    $TERM：		终端类型（xterm图形终端，linux文本终端）
+	$PS1：		主提示符，"#" "$"
+	$PS2：		辅助提示符，"\"，在输入行末尾输出该提示符
+	$PS3:		命令行提示环境变量
+	$IFS：		shell指定的缺省域分隔符（空格  table  ：）
+
+~shell脚本自定义变量
+	1）类型：局部变量/环境变量
+	2）局部变量只作用于当前shell
+	3）环境变量可以作用于当前shell，子shell，孙shell...
+	4）默认为局部变量，利用export内建命令可将变量导出为环境变量	
+    5）定义普通变量：（1）例：MYVAR=hello，变量名和其值总是配对出现
+					 （2）变量值中出现空格，需要加双引号，赋值左右不能有空格
+                      例：AB="123  456"
+    6）定义只读变量：readonly  <选项>  <参数>
+					 （1）-f：定义只读函数
+					 （2）-a：定义只读属组
+					 （3）-p：显示制度变量列表
+					 （4）无选项：定义普通变量
+	7）访问变量：（1）在变量名前加"$"
+                      例：MYVAR="how are you"
+                      echo  $MYVAR
+    8）清除变量：（1）使用unset命令清除变量
+				 （2）例：unset  MUYVAR
+ 	9）查看变量/函数列表：set 
+
+
+	
+~wc  <选项>  <filename>：统计文件信息
+	1.无选项				行数 单词数 字节数 文件名
+	2.-l					行数 文件名
+	3.-w					单词数 文件名
+	4.-c					字节数 文件名（包括回车和空格）
+	5.-L					最长行的字节数（不包括回车）
+
+
+-------------------------------------重定向-----------------------------------------
+（1）文件描述符：
+说明：当执行shell命令时，会默认打开3个文件，每个文件有对应的文件描述符方便我们使用 
+
+类型       文件描述符   默认情况          对应文件句柄位置
+标准输入        0       从键盘获得输入    /pro/slef/fd/0
+标准输出        1       输出到屏幕        /pro/slef/fd/1
+错误输出        2       输出到屏幕        /pro/slef/fd/2
+
+（2）输出重定向
+命令                               介绍
+command   >    filename          把标准输出重定向到新文件中
+command  1>    filename          同上
+command   >>   filename          把标准输出追加到新文件中
+command  1>>    filename         同上
+command  2>   filename           把标准错误重定向到新文件中 
+command  2>>   filename          把标准错误追加到新文件中
+
+
+（3）输出重定向
+命令                                  介绍
+command    <   filename          以新文件作为标准输入
+command   0<   fillename         同上
+command    <<  delimiter         从标准输入中读入，知道遇见delimiter分隔符
+
+
+（4）重定向绑定： >  /dev/null   2>&1
+	1)>   /dev/null
+		作用：将标准输出重定向到/dev/null中，/dev/null代表linux的空设备文件，所有往这个文件里面写入的内容都会丢失，俗称"黑洞"。
+	2) 2>&1
+		作用：这条命令用到了重订绑定，采用&可以将两个输出绑定在一起，这条命令的作用是错误输出将和标准输出同用一个文件描述符。
+（5）>  /dev/null  2>&1   与   2>&1  >  /dev/null     区别
+	1）command：默认将标准输出和标准出错都输出到终端界面
+		1->stdout
+		2->stdout
+	2）command >> file:将标准输出重定向到file中
+		1->file
+		2->stdout
+	3）command >> file 2>&1 :将标准输出和标准出错都重定向到file中
+		1->file
+		2->1->file
+	4）command 2>&1 >>file：将标准输出重定向到file中
+		2->1->stdout
+		1->file  
+
+（6）echo "*****"  | tee -a test.txt   在终端显示并重定位到文件（加－a是追加，不加是覆盖）
+
+-------------------------------------------------------------------------------------------------------------------
+  
+
+
+~转义字符：
+	1）\c：显示后不换行（用于设置echo不换行）
+	2）\t：水平制表符
+
+~匹配符
+（1）*：匹配0个或多个存在的任何字符
+（2）？：匹配一个存在的任何字符
+（3）[字符]：匹配任何一个给出的字符
+     ls shell [0~9]
+
+
+~命令/算术替换
+（1）命令替换：使用命令的输出来替换命令所在位置的内容
+               例：MYVAR=`date`
+                   echo  $MYVAR  相当于 date
+（2）算术替换：使用算数运算的结果替换算数表达式所在位置的内容。
+        $((expression))
+        例：MYVAR=$((1+1))
+            echo  $MYVAR
+
+~反斜线（转义符"\"）
+	如果下一个字符有特殊含义，反斜线防止shell误解其含义，即屏蔽其特殊含义
+	特殊字符：&  *  +  $  `  "  |  ?  [  ]  ;  >  <  ^
+	例：（1）ab=123
+			echo=$ab
+			echo=\$ab
+		（2）echo  'dfa*sd<fas>aaa$d!df'
+			echo  dfa\*sd\<fas\>aaaa\$d\!df
+		（3）echo  'I'm  good  boy'（待审核）
+			echo  "I\'m  good  boy"
+
+
+~条件测试：
+	（1）使用test命令：test  条件表达式
+	（2）使用括号[]"：[空格  条件表达式  空格]
+	（3）条件表达式的值为真返回零，为假时返回非零值
+		例：if  test  -n  $HOME
+			if  [ -n $HOME ]
+
+~条件测试类型：
+	1）文件测试
+		-e  文件名：文件存在为真
+		-r  文件名：文件存在可读为真
+		-w  文件名：文件存在可写为真
+		-x  文件名：文件存在可执行为真
+		-s  文件名：文件存在非空为真
+		-d  文件名：文件存在而且是目录为真
+		-f  文件名：文件存在而且是普通文件为真
+		-h  文件名：文件为链接文件
+		-c  文件名：文件存在而且是字符型特殊文件为真
+		-b  文件名：文件存在而且是块特殊文件为真
+		注意：当判断普通文件和链接文件时，应先判断链接文件，因为链接文件也是普通文件，普通文件有可能把链接文件覆盖
+
+	2）字符串测试：
+		=             等于为真
+		!=            不等为真
+		-z  字符串    字符串为空串为真
+		-n  字符串    字符串为非空串为真 
+
+	3）数值测试：
+		-eq：等于
+		-ne：不等于
+		-lt：小于
+		-gt：大于
+		-le：小于等于
+		-lg：大于等于
+		例：if  [ 2 -lg 1]
+
+	4）混合条件：
+		（1）&&：与
+			例：if [ 1 -lt 1 ]&&[ 1 -eq 2 ]
+		（2）||：或
+			例：if [ 1 -lt 1 ]||[ 1 -eq 2 ]
+		（3）混合
+			例：if [ 1 -eq 1 ]&&[ 3 -lg 2 ]||[ 2 -gt 5 ]
+
+~测试时使用的逻辑操作符：（条件内逻辑）
+	1）-a：逻辑与，操作符两边均为真，结果为真，否则为假
+	2）-o：逻辑或，操作符两边至少一边为真，结果为真，否则为假
+	3）！：逻辑否，条件为假，结果为真
+	注意：优先级!>-a>-o
+		例：if [ -x file1 -a -x file2]
+			if [ ! -d file1 ]
+
+~read:
+	1）格式：read 变量名表
+	2）作用：从标准输入设备读入一行，分解成若干字，赋值给shell程序内部定义的变量
+	3）例：#!/bin/bash
+		   read  var
+		   echo  "$var"=$var
+	       结果：执行/bin/bash  shell，输入5，屏幕上显示$var=5
+
+~exit
+	1）功能：退出shell脚本程序，在exit之后有可选择的指定一个数字作为返回状态
+
+                       echo RETURNNUM
+
+~shell返回值：
+	1）函数返回值可以显示增加return语句，如果不加，会将最后一条命令运行结果作为返回值
+	2）shell函数返回值一般只能是整数，若一定要让函数返回字符串，那么可以先定义一个变量，用来接受字符串，脚本在需要的时候访问这个变量
+
+~shell脚本包含：
+	1）主脚本文件：main.sh
+       被包含脚本：shell.sh     
+                   #!/bin/bash
+                   echo "I'm shell.sh"
+    2）方法一：main.sh
+               #!/bin/bash
+               . ./shell.sh（shell.sh的位置）
+               echo  "I'm main.sh"
+    3）方法二：main.sh
+               #!/bion/bash
+               source  ./shell.sh
+               echo "I'm main.sh"
+	注意：主脚本文件需要执行权限，被调用脚本不需要执行权限
+
+
+~cat/zcat:
+	1）cat  file1  fil2 		     	可以显示两个文件的内容
+	2）cat  -n file1         			可以给显示的文件增加行号
+	3）cat  file1  file2  >> file3  	把文件file1,file2内容合并到file3 中
+	4）zcat file  [file2]        		获取压缩文件file内容
+
+~head:
+	1）haed -n num file1  从文件中读取前num行
+	2）head -c num file1  从文件中读取前num个字符
+
+
+
+~注释的方法：
+	1）单行注释：#注释内容
+	2）代码块注释：
+		if false;then
+			注释代码块
+		fi
+
+~单引号：
+	1）例：your_name='qinj ss sss'
+         str=' $a:YES '
+	2）特征：（1）单引号里的任何字符都会原样输出，单引号字符串中的变量是无效的
+			 （2）单引号字符串中不能出现单引号（对单引号使用转义符后也不行）
+
+~双引号：
+	1）例:your_name=" jack"
+       str="hello my name is $your_name"
+	2）特征：（1）双引号里可以有变量
+			 （2）双引号里可以出现转义字符 
+
+
+~获取字符串长度：
+	1）例：string=“abcd”
+           echo ${# string }
+
+~提取字符串：
+	1）例：string="qawsedrftg"
+           echo ${string:2:4}
+           输出：wsed
+
+~数组的使用：
+	1）bash支持一维数组，不支持多维数组
+	2）定义数组：
+	   说明：在shell中，用括号来表示数组，数组元素“空格”符号分开
+       定义数组的一般形式是：array_name( value0 value1 value2...)
+	例：array_name=(value0 value1 vallue2)    
+		或者
+        array_name=(value0
+                    value1
+					value2
+				   )
+		或者
+		array_name[0]=value0
+		array_name[1]=value1
+		array_name[2]=value2（注意：可以不使用连续的下标）
+
+~读取数组中单个元素：
+	1）格式：${arrar_name[index]}
+	2）例：value=${array_name[2]}
+
+~读取数组的所有元素：
+	1）说明：使用@或者*
+	2）例：${array_name[*]}或者${array_name[@]}
+
+~数组的长度：
+	1）取得数组元素的个数:lenth=${#array_name[*]}或length=${#array_name[@]}
+	2）取得数组单个元素的长度：length=${#array_name[index ]}
+
+
+~命令结果输出方式：
+	1）echo `date`
+	2）echo $(date)
+	
+~ps:查看进瞬间状态信息
+	（1）ps -aux:  :USER（进程拥有者）  PID（进程ID） %CPU（占用的内存使用率） %MEM（占用的内存使用率）  VSZ（占用的虚拟内存的大小）  RSS（占用的内存大小）  TTY（运行的终端的号码） STAT（进程状态） START（进程开始时间） TIME（累计使用CPU的时间） COMMANND（开启进程的命令）
+	（2）ps -f:（打印全要素）：UID（进程拥有者） PID（进程ID） PPID（父进程ID） C（占用的CPU使用率） STIME（进程开始时间） TTY（运行的终端的号码） TIME（累计使用CPU的时间） CMD（开启进程的命令）  
+	（3）ps -e:（打印全部进程） ：
+	（4）ps -u <用户名>:（打印指定用户名进程）:
+	（5）ps -ef:（打印全部进程及全部要素）:
+	（6）ps -fu <用户名>：（打印制定用户进程及全要素）：
+
+
+
+~echo <word> | <command>    linux shell 脚本输入<command> 后需要交互，此语句可自动输入<word> 执行
+
+~echo  －e        处理特殊字符时使用，打印的字符串不是简单的打印
+
+~cp：文件复制
+	1）cp -rpf test1/test2/*  test3 与 cp -rpf test1/test2/  test3  区别就是包不包含test2目录（*号前一级目录）名称
+	2）r：若给出的源文件是一个目录文件，此时将复制该目录下所有的子目录和文件
+	3）p：除复制文件的内容外，还把修改时间和访问权限也复制到新文件中。
+	4）f：覆盖已经存在的目标文件而不给出提示
+
+
+~shell中echo与printf用法
+	（1）echo有自动换行功能，printf没有
+	（2）printf用法沿用C中printf函数用法，可规定打印格式
+	（3）printf按格式打印时，%s类型的变量需要加""
+	     printf用例：printf "%d,%s" $num $name
+
+
+~制作菜单工具
+	一：功能
+		（1）初始显示菜单
+		（2）提供变量赋值渠道
+		（3）输入数字选择项
+		（4）进入循环
+		（5）单项结束后有提示退出，清空界面再次显示菜单
+	二：采用的循环方案：while_case
+
+~date
+	"+ %Y/%m/%d"       2019/11/26
+	"+ %H:%M:%S"       21:09:15
+	"+ %A"              星期二
+	"+ %P"              下午
+	"+ %F"              2019-11-26
+	"+ %T"              21:09:15
+
+~linux下设置系统时间的方法：前面设置时间，后面为同步系统时间到硬件
+	date -s "YYYY-mm-dd  HH:MM:SS"  && hwclock --systohc
+
+
+
+~df          查看磁盘空间占用情况
+	1.-h				自动将空间大小转化为合适的单位（Bit/Byte/KB/MB/GB/TB）,默认单位是字节Byte
+	2.-T				显示文件系统类型
+
+~du          查看现有所有目录文件所占空间的大小
+	1.-a				连同普通文件大小一起显示、
+	2.-h				自动将空间大小转化为合适的单位（Bit/Byte/KB/MB/GB/TB），默认单位是千字节KB
+	3.<dirname>			查询某个目录文件的空间占用情况
+
+~查看当前目录下文件夹大小，不显示其子目录
+	du --max-depth=1 -lh  该文件夹的完整路径
+
+~vi /etc/services      linux下查看各种服务的端口
+
+
+~tail -f <logname>     动态查看日志文件，监听文件追加在最后一行的内容
+
+~Linux操作系统启动后，各级profile文件的执行顺序：（profile文件本质上就是shell脚本,只不过1和2两个文件是系统在登录时自动执行）
+	1./etc/profile   本文件主要是为每个用户设置环境信息，当用户第一次登录时，该文件被执行，并从/etc/profile.d目录的配置文件中搜索shell的设置
+	2.~/.profile     为当前用户设置环境信息
+	3.<mypath>/myprofile    执行<mypath>/myprofile,可以实现配置文件独立化，不影响用户本身配置
+
+
+~端口是什么？
+	1.虚拟网络端口就是服务进程的入口，还有一种端口是硬件的I/O端口
+	2.端口号只有整数，范围是从0－56635
+	3.客户端Port随机选择大于1024的数字（0－1023有特殊用途）
+	4.TCP端口和UDP端口，由于TCP和UDP两个协议是独立的，因此各自的端口号也相互独立，比如TCP端口为234，UDP端口也可为234，两者并不冲突
+	5.端口是为了区分同一IP下不同网络服务
+
+~lsof -i tcp:11111   				查看端口对应的是什么服务，及其相关信息（包括pid）
+		
+~kill -9 <PID>    					停止当前进程，但不停止其子进程
+
+~netstat -na | grep <端口号>     	查看端口状态
+
+~telnet <ip> <port>     			检查端口是否打开(只能检查tcp端口)
+
+
+~同一程序开启的不同进程，端口不相同
+
+~在发报文时，控制的多并发，是指控制同时多少请求端往系统发送报文
+
+~top作用：查看进程动态信息
+	1.具体用法查看《实践指南》P96
+
+~新建用户，修改密码
+	1.root下创建用户：useradd  <用户名>
+	2.root下删除用户：userdel   <用户名>
+	3.root下更改用户密码：
+		1）使用交互式界面输入密码
+			passwd  <用户名>
+            <首次输入密码>
+			<再次输入密码>
+		2）将密码当做参数一条语句完成
+			echo <密码> | passwd --stdin <用户名>
+
+~rm -rf  *    不用确定，直接删除
+	1）r：将目录及以下之档案亦逐一删除。
+	2）f： 即使原档案属性设为唯读，亦直接删除，无需逐一确认。
+
+~lsb_release 
+	-v	显示版本信息
+	-i	显示该发行版的ID
+	-d	显示该发行版的描述信息 
+	-r	显示当前系统是发行版的具体版本号
+	-c	发行版代号
+	-a	显示上面所有信息
+	-h	显示帮助信息
+	
+~查看CPU相关信息
+cat /proc/cpuinfo | grep "model name" | uniq          查看CPU型号
+cat /proc/cpuinfo | grep "physical id" | uniq | wc -l 查看CPU个数
+cat /proc/cpuinfo | grep "CPU cores"   |uniq          查看CPU核数
+
+~查看内存相关信息
+cat /proc/meminfo | grep MemTotal     查看内存总数
+
+~程序检查语句
+	/bin/bash -n test.sh   检查test.sh是否有语法错误
+	/bin/bash -x test.sh   将运算流程显示出来
+
+~查看服务器下用户
+	cat /etc/passwd | sed 's/:/ /g' | awk '{print $1}'
+
+~while：满足条件继续
+	语法：while 条件 
+		  do
+			命令
+		  done 
+	
+~until用法：满足条件终止
+	until []
+	do
+		...
+	done
+
+~if用法：满足条件开始
+	if [];then
+	    elif [];then
+			...
+		else
+			...
+	else 
+		...
+	fi 
+
+~for语句用法（一）：根据列表对i赋值，执行完列表循环结束（分隔符默认为空格）
+	for i in ***
+	do
+	done
+
+~for语句用法（二）：根据循环判断条件前后语句对i赋值，根据中间语句结束
+	for((i=0;i>10;i++))
+	do
+	done
+	
+~case语句用法
+	case $i in
+	A)***;;
+	B)***;;
+	C)***;;
+	esac
+
+~select语句用法：打印菜单，自带输入渠道，默认无限循环，根据输入的参数配合case语句执行
+	select i in "A" "B" "C"
+	do
+		case $i  in
+			A)***;;
+			B)***;;
+			C)***;;
+		esac
+	done	
+ 
+~if语句常见逻辑处理
+	-d file		判断文件类型是否为目录
+	-f file     判断文件类型是否为普通文件
+	-e file		判断文件是否存在
+	-r file     判断文件是否可读
+	-w file     判断文件是否可写
+	-x file     判断文件是否可执行
+	-eq         等于
+	-ne			不等于
+	-lt			小于
+	-gt			大于 
+	-le			小于等于
+	-ge 		大于等于
+	-z $A       判断字符串是否为空
+	-a 			与
+	-o 			或 
+	!			非 
+	!=			不等于
+	
+
+	
+~exit		退出脚本
+
+~数组的定义与引用
+	A=( a b c )   :数组的定义，空格为分隔符
+	echo ${A[m]}  :显示数组元素0.1.2.3...
+	echo ${A[@]}  :显示数组所有元素
+	echo ${#A[@]} :显示数组元素个数
+	
+~函数的定义与使用
+	function fun()
+	{
+		...
+	}               :函数的定义，function可加可不加
+	
+	fun ***         :函数的使用，参数直接跟在后面
+	
+~read的使用
+	（1）read -p "please input a num:" A  提供一个输入通道，伴随提示语句
+	（2）读取文件
+		1.cat file1 | while read line
+		  do
+			echo $line >>file2
+		  done
+		2.while read line
+		  do
+			echo $line >>file2
+		  done < file1
+		  
+
+~unset用法：用于消除变量或数组的定义
+	a=( a b c )
+	unset a
+	A="word"
+	unset A
+
+~sed用法：文件内容编辑，处理特殊字符前面加\
+	（一）增：添加行
+		1）sed '/qqq/a ###' file					定位到qqq所在行，在之后加一行###，预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		2）sed '/qqq/i ###' file                    定位到qqq所在行，在之前加一行###，预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+	（二）增：添加字符
+		1）sed 's/qqq/###&/g' file					定位到qqq，在之前加字符###,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作						
+		2）sed 's/qqq/&###/g' file					定位到qqq，在之后加字符###,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作						
+		3）sed 's/^/###/g'    file					在行首添加字符###，预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		4）sed 's/$/###/g'	  file					在行尾添加字符###，预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+	（三）删：删除行
+		1）sed 'nd'      file						删除第n行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		2）sed '$d'      file 						删除最后一行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		3）sed 'n,md'    file						删除n到m行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		4）sed 'nd;md'   file						删除n和m行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		5）sed '/^$/d'   file						删除空白行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		6）sed '/qqq/d'  file						删除qqq所在行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+	（四）删：删除字符
+		1）sed 's/qqq//g' file						删除字符qqq,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		2）sed 's/ //g'   file						删除空白字符,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+	（五）改：字符替换
+		1）sed 's/qqq/###/g' file                   将字符qqq替换为###,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+	（六）查：打印指定内容
+		1）sed -n 'p' file 							打印整个文档,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		2）sed -n 'np' file							打印第n行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		3）sed -n '$p' file							打印最后一行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		4）sed -n 'n,mp' file						打印n到m行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		5）sed -n 'np;mp' file						打印n和m行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+		6）sed -n '/qqq/p' file                     打印qqq所在行,预处理预览并未真正的改变文件，sed -i ***对文件做真正的操作
+    （七）多命令实现
+		1）;符号                                    比如sed 's/qqq/###/g;/qqq/a ###;s/^/###/g' file
+		2)-e										比如sed -e 's/qqq/###/g' -e '/qqq/a ###' -e 's/^/###/g'  file
+
+	
+~awk用法：文件内容列定位
+	1）awk '{print $n}' file						定位第n列
+	2）awk '{print $NF}' file						定位最后一列
+	3）awk '{print $n$m}' file						定位第n列和第m列
+	4）awk '{print "n:" $n ",m:" $m}' file			定位第n列和第m列，""内添加打印注解
+	5）awk -F: '{print $n}' file                    定位第n列,指定：为分隔符，默认空格为分隔符
+	6）awk '$1=="a" {print $3;exit}'  file          如果$1是a,打印$3并立刻退出
+
+		
+		
+~grep用法：文件内容行定位
+	1）grep "qqq"   file						    定位含有qqq的行
+	2）grep "^qqq"  file							定位以qqq开头的行
+	3）grep "qqq$"  file							定位以qqq结尾的行
+	4）grep "[a-z]" file							定位含有小写字母的行
+	5）grep "^[a-z]" file							定位以小写字母开头的行
+	6）grep "[a-z]$" file							定位以小写字母结尾的行
+	7）grep "[A-Z]" file							定位含有大写字母的行
+	8）grep "^[A-Z]" file							定位以大写字母开头的行
+	9）grep "[A-Z]$" file							定位以大写字母结尾的行
+	10）grep "[0-9]" file							定位含有数字的行
+	11）grep "^[0-9]" file							定位以数字开头的行
+	12）grep "[0-9]$" file							定位以数字结尾的行
+	
+~grep选项描述
+	1）grep -E "qqq|###" file 或 egrep "qqq|###" file   定位含有qqq或###的行，使用扩展模式匹配
+	2）grep -v "qqq" file							    定位不包含qqq的行，反选操作
+	3）grep -n "qqq" file							    定位包含qqq的行，并显示行号
+	4）grep -w "qqq" file						    	定位包含单词qqq的行（aaqqq不行）
+	5）grep -i "qqq" file                               定位包含qqq的行，不区分大小写（QQQ也可以）
+
+
+~find用法：文件路径定位
+	1）find <path>                                  定位指定路径下所有文件的路径
+	2）find <path> -name <filename>					定位指定路径，指定名称文件的路径
+	3）find <path> -maxdepth <maxnum>               定位指定路径，指定最大查询目录层数文件的路径（当前目录为第一层）
+	4）find <path> -mindepth <minnum>               定位指定路径，指定最小查询目录层数文件的路径（当前目录为第一层）   
+	5）find <path> -type   <d|f>       			    定位指定路径，指定类型文件的路径（目录文件|普通文件）
+	6）find <path> -mtime <参数>					定位指定路径，指定天数范围文件的路径
+		1.参数：+m									距离当前时间m天之前的文件
+		2.参数：-m									距离当前时间m天以内的文件
+		3.参数：m									距离当前时间第m天的文件
+													例如：
+														当前时间：2019-12-30  11:30
+														往前推三天：2019-12-27 11:30
+														需要查询时间：2019-12-27 11:30  ——  2019-12-28 11:30
+	7）find <path> -mmin <参数>						定位指定路径，指定分钟范围文件的路径
+		1.参数：+m									距离当前时间m分钟之前的文件
+		2.参数：-m									距离当前时间m分钟以内的文件
+		3.参数：m									距离当前时间第m分钟的文件
+													例如：
+														当前时间：2019-12-30  11:30
+														往前推三分钟：2019-12-30 11:27
+														需要查询时间：2019-12-30 11:27  ——  2019-12-28 11:28														
+	8）find <path> -size <+n[k|M|G]>				定位指定路径，指定大小文件的路径
+		
+~file [filename]									判定文件类型
+
+~将命令1结果以参数形式传给后方的命令2
+	1）<find命令> -exec <命令2> {} \;				将命令1执行结果放入{}，作为命令2的参数，以\;结尾
+	2）<命令1> | xargs <命令2>                      将命令1执行结果放到命令2后面，作为命令2的参数
+	备注：2用法只适用于参数跟在命令最后面的情况，如果参数放在命令中间，那么只能用1用法（例如：<find命令> -exec cp {} <path2> \;）
+		  1用法只能是find命令
+
+~tar:打包归档文件，压缩文件
+	1）打包cf，压缩z|j
+		1.tar -cf tar1.tar file1 file2								将文件打包至tar1.tar，文件大小基本不变
+		2.tar -vcf tar1.tar file1 file2								将文件打包至tar1.tar，并显示文件名
+		3.tar -zcf tar1.tar.gz/tar1.tgz   file1 file2				将文件打包并压缩至tar1.tar.gz/tar1.tgz，文件比tar1.tar小
+		4.tar -vzcf tar1.tar.gz/tar1.tgz  file1 file2				将文件打包并压缩至tar1.tar.gz/tar1.tgz，并显示文件名,文件比tar1.tar小
+		5.tar -jcf tar1.tar.bz2		file1 file2						将文件打包并压缩至tar1.tar.bz2,文件比tar1.tar.gz小，但是时间要长一点，不常用
+		6.tar -vjcf tar1.tar.bz2	file1 file2						将文件打包并压缩至tar1.tar.bz2,并显示文件名,文件比tar1.tar.gz小，但是时间要长一点，不常用
+		7.--exclude=<dir/dir1>  --exclude=<dir/dir2>				打包时排除某个目录
+		8.-g <diff_file>											打包时创建归档信息，用于增量备份参考（增量备份只备份目录结构以及新增文件）
+	2）追加rf|Af
+		1.tar.t -rf tar1ar file3									将文件追加至tar1.tar
+		2.tar -Af tar1.tar tar2.tar									将tar2.tar中的文件追加至tar1.tar
+	3）显示列表
+		1.tar -tf tar1.tar											不解包查看文件列表
+		2.tar -vtf tar1.tar											不解包产看文件列表详细信息
+	4）解包
+		1.tar -xf tar1.tar	-C <path>								解包tar1.tar至指定目录下
+		2.tar -vxf tar1.tar  -C <path>								解包tar1.tar至指定目录下，并显示文件名
+		3.tar -zxf tar1.tar.gz/tar1.tgz  -C <path>					解压缩tar1.tar.gz/tar1.tgz至指定目录下
+		4.tar -vzxf tar1.tar.gz/tar1.tgz  -C <path>					解压缩tar1.tar.gz/tar1.tgz至指定目录下，并显示文件名
+		5.tar -jxf tar1.tar.bz2  -C <path>							解压缩tar1.tar.bz2至指定目录下
+		6.tar -vjxf tar1.tar.bz2  -C <path>							解压缩tar1.tar.bz2至指定目录下，并显示文件名
+		
+~``/$()：命令结果提取，例：a=$(date)相当于a=`date`
+
+~cron:unix下自带定时任务工具，伴随系统启动，自带守护进程
+	1）/sbin/service crond start			启动服务（root用户）
+	2）/sbin/service crond status			查看服务状态（root用户）
+	3）crontab -e							编辑模式
+				表达式格式：分 时 日 月 周 <command>
+		1.*代表每一个时间戳
+		2.，代表并列				例如：10，20  21  *  *  *  <command>	21:10和21:20执行命令
+		3.-代表连续					例如：10-20   21  *  *  *  <command>	21:10-21:20每分钟执行一次命令，包括21:10和21：20
+		4./代表除法					例如：*/2     21  *  *  *  <command>	21:00到21:58每两分钟执行一次命令，包括21:00和21:58
+		5.月和星期尽量用英文简写代替
+		6.日如果写L，代表每月最后一天
+	4）crontab -l							查看已有定时任务清单
+	5）crontab -r							删除所有定时任务
+	
+~文件大小单位换算
+	1）Bit：比特，也称二进制位
+	2）Byte：字节，一个汉字占2Bit，1Byte=8Bit
+	3）KB：千字节，1KB=1024Byte
+	4）MB：兆字节，1MB=1024KB
+	5）GB：吉字节，1GB-1024MB
+	6）TB：千吉字节，1TB=1024GB
+	
+~ls:显示文件
+	1）-a									显示当前路径所有文件，包括隐藏文件
+	2）-l									显示当前路径文件，并显示文件的详细信息
+											第一列：文件类型以及三类用户对文件的权限
+											第二列：文件的硬链接个数
+											第三列：所有者，文件属于哪个用户
+											第四列：属组
+											第五列：文件大小，默认单位Byte
+											第六列：文件修改时间
+											第七列：文件名
+	3）-lh									显示当前路径文件，并显示文件的详细信息,并将文件大小转化为合适的大小
+	4）-R									将子路径下文件都显示出来
+	5）-F									在文件名后显示文件类型指示符，/代表目录文件，*代表可运行文件，没有标志代表普通文件
+	6）-S									按大小排序
+	7）-t									按时间排序
+	
+~reboot	:重启，也可以init 6
+
+~shutdown -h now:立刻关机，也可以init 0
+
+~linux操作系统有哪几种常见的发行版
+	1)linux mint
+	2)ubuntu
+	3)centos
+	4)manjaro
+	5)deepin
+	6)arch linux
+	7)mx linux
+	8)elementary
+	9)zorin
+	10)fedora
+	11)opensuse
+	12)debian
+	
+~写脚本小技巧：如果脚本程序有命令行参数，可以写一个启动脚本start.sh专门配参数与命令脚本实现嵌套调用
+
+~expect:实现无交互操作
+
+
+~eval与echo
+	1.echo是变量替换并打印
+	2.eval是变量替换并将替换后的内容当成命令执行 
+	
+~echo_read/read -p  ：提供一个变量赋值通道，提供输入提示，将输入放入内容紧跟在提示信息后，不换行（\c）
+	1.echo -e "please inout :\c"
+	  read a
+	2.read -p "please input :"  a
+	
+~常见算数运算：[] 符号里面一般放逻辑运算符     (())里面一般放算数运算符
+	1）运算符
+		1.+  加
+		2.-  减
+		3.*  乘
+		4./  除
+		5.%  取余
+		6.** 幂运算
+	2）运算方式
+		1.expr
+			(1)a=`expr $a + 1 `
+		2.let
+			(1)let "b1=(a+1)"
+			(2)let "b2=($a+1)"
+		3.$[]
+			(1)c1=$[a+1]
+			(2)c2=$[$a+1]
+		4.$(())
+			(1)d1=$((a+1))
+			(2)d2=$(($a+1))
+			
+~复合算数运算
+	1）运算符
+		1.+=  加等于
+		2.-=  减等于
+		3.*=  乘等于
+		4./=  除等于
+		5.%=  取余等于
+	2）运算方式
+		1.let
+			(1)let "a+=1"
+			
+~自增自减运算
+	1）运算符
+		1.++  自加
+		2.--  自减
+	2）运算方式
+		1.let
+			(1)let "b3=(++a)"
+			(2)let "b4=(++$a)"
+		2.$[]
+			(1)c3=$[++a]
+			(2)c4=$[++$a]
+		3.$(())
+			(1)d3=$((++a))
+			(2)d4=$((++$a))
+			
+~如何对单个字符按格式读取：
+	例：将A=111[222]333中222提取出来
+	1）echo $A | awk -F [ '{print $2}' | awk -F ] '{print $1}'
+	2）A=${A%%]*}  获取]前半部分
+	   A=${A##*[}  获取[后半部分
+	   
+~basename:去除文件路径前缀
+
+~ipcs：提供IPC设备的信息
+	1）-m		查看系统共享内存的信息
+	2）-q		查看系统消息队列的信息
+	3）-s		查看系统信号量的信息
+	4）null		显示所有信息
+	
+~ssh相关
+	1）ssh是什么？
+		ssh是专门为远程登录会话和其他网络服务提供的安全性协议。应用层协议。端口：22
+	2）如何安装？
+		1.更新源列表：sudo apt-get update
+		2.安装客户端：sudo apt-get install openssh-client
+		3.安装服务端： sudo apt-get install openssh-server
+		4.报错：Unable to locate package
+			执行：sudo apt-get upgrade
+				  sudo apt-get install openssh-client
+				  sudo apt-get install openssh-server
+	3）如何开启、关闭、检测ssh服务？
+		1.开启：sudo service ssh start
+		2.关闭：sudo service ssh stop
+		3.检测：sudo ps -ef | grep "ssh"
+	4）服务端主要提供什么服务？
+		1.提供类似于telnet远程连接服务器的服务（ssh具有数据加解密的功能）
+		2.提供类似于ftp服务的sftp-server，借助ssh协议来传输数据，体用更安全的数据传输服务
+	5）登录认证的两种方式？
+		1.基于密码/口令安全认证
+			（1）连接原理：
+					客户端发起请求，输入密码口令
+					服务器检查密码是否与本地一致
+		2.基于密钥（钥匙锁头）的安全认证
+			（1）产生非对称密钥对，公钥放服务端，私钥放客户端
+			（2）连接原理:
+					客户端发起请求，将公钥发给服务端
+					服务端将本地的公钥与接收的公钥匹配，如果一致，公钥加密"质询"发给客户端
+					客户端用私钥解密，将解密后的数据返回给服务器，如果依然一致（质询），则连接成功
+	6）客户端命令？具体用法？
+		1.ssh：只远程登录操作服务器
+				基本用法：ssh -p 22 <username>@<ip>
+						  执行之后键盘输入密码口令
+				（1）-p（小写）		接端口号
+				（2）注意：端口号不输入默认22，用户名不输入默认与当前所在服务器用户名一致
+		2.sftp：远程数据交互，也可以操作远程服务器
+				基本用法：sftp -oPort=22 <username>@<ip>
+				          执行之后键盘输入密码口令
+				（1）-oPort		接端口号
+				（2）help		打开帮助手册
+				（3）l<command> 操作本地服务器
+				（4）<command>	操作远程连接的服务器
+				（5）Binary		指定传输方式是二进制
+				（6）put/mput	推送文件/批量推送文件至远程服务器
+				（7）get/mget	获取文件/批量获取文件从远程服务器
+				（8）bye		退出sftp界面
+				（9）注意：端口号不输入默认22，用户名不输入默认与当前所在服务器用户名一致
+		3.scp：至远程数据交互
+				基本用法：
+						推送：
+						scp -P 22 -rp <localpath>  <username>@<ip>:<targetpath>
+						执行之后输入密码口令
+						获取：
+						scp -P 22 -rp <username>@<ip>:<targetpath>  <localpath>
+						执行之后输入密码口令
+				（1）-P（大写）		接端口号
+				（2）-r				递归，表示拷贝目录
+				（3）-p（小写）		保持文件属性（执行权限、时间戳...）
+				（4）注意：端口号不输入默认22，用户名不输入默认与当前所在服务器用户名一致
+	7）如何产生公私钥？如何将公私钥放入服务端/客户端？如何开启密钥登录？如何实现密钥登录？
+		1.详情见CSDN收藏夹
+	8）如何更改配置文件
+		1.详情见CSDN收藏夹
+		
+~telnet相关
+	1）telnet是什么？
+		telnet是internet远程登录服务的标准通信协议，是TCP/IP协议家族中的一员，端口：23
+	2）如何安装服务器以及客户端？telnet服务相关安装目录地址？
+		详情见CSDN收藏夹		
+	3）如何开启、关闭、检测Telnet服务？
+		详情见CSDN收藏夹
+	4）服务端主要提供什么服务？
+		1.远程连接服务器
+	5）登录认证方式?
+		1.基于密码/口令安全认证
+			（1）连接原理：
+					客户端发起请求，输入密码口令
+					服务器检查密码是否与本地一致
+	6）客户端有什么命令？
+		1.telnet：只远程登录操作服务器
+				基本用法：telnet <ip> <port>
+						  执行之后输入用户名，密码口令
+				1）如果不输入port，则默认是23端口
+				
+~ftp相关
+	1）ftp是什么？
+		ftp是文件传输协议，用于远程数据传输，属于应用层协议，端口21
+	2）如何安装服务端以及客户端？安装路径？
+		1.安装命令：yum -y install vsftpd
+		2.安装目录：/etc/vsftpd
+	3）如何开启、关闭、检测ftp服务?
+		1.设置开机启动：chkconfig vsftpd on
+		2.启动：server vsftpd start
+		3.重启：server vsftpd restart
+		4.检测：rpm -qa | grep vsftpd
+	4）服务端主要提供什么服务?
+		1）远程数据传输
+	5）登录认证的方式？
+		1.基于密码/口令安全认证
+			（1）连接原理：
+					客户端发起请求，输入密码口令
+					服务器检查密码是否与本地一致
+	6）客户端命令？具体用法？
+		1.ftp：远程数据交互，也可以操作远程服务器
+				基本用法：ftp -oPort=21 <username>@<ip>
+				          执行之后键盘输入密码口令
+				（1）-oPort		接端口号
+				（2）help		打开帮助手册
+				（3）l<command> 操作本地服务器
+				（4）<command>	操作远程连接的服务器
+				（5）Binary		指定传输方式是二进制
+				（6）put/mput	推送文件/批量推送文件至远程服务器
+				（7）get/mget	获取文件/批量获取文件从远程服务器
+				（8）bye		退出ftp界面
+				（9）注意：端口号不输入默认21，用户名不输入默认与当前所在服务器用户名一致
+				
+~ftp与sftp区别
+	主要是sftp比ftp要安全，sftp是基于ftp协议的加密传输
+
+~ping:定位网络通不通的手段，是基于ICMP（控制保温协议）来工作的
+	用法：ping <ip>
+	
+
+	
+~文件的属主，属组，用户组管理，用户管理，用户密码管理？
+	1）文件的分组本质上就是将文件分为三类操作者，一个特定处理人（属主），一群规定处理人（数组内用户），还有其余人，三者互不相关
+	2）查看文件属主属组：ls -al
+	3）更改文件属主属组：chown -R <new属主>.<new属组>  <path/filename>
+	4）新增用户组：groupadd <组名>
+	5）删除用户组：groupdel <组名>
+	6）查看有哪些用户组：cat /etc/group   组名：
+										  口令：
+										  组标识号（GID）：
+										  组内用户列表：
+	7）查看有哪些用户：cat /etc/passwd  用户名：
+										  用户密码（真正的密码存储在/etc/shadow中）：
+										  用户的系统ID（UID）：
+										  用户的组ID（GID）：
+										  用户全名（用户名的描述）：
+										  用户的默认主目录（家目录）：
+										  用户默认的shell程序
+	8）查看用户密码：cat /etc/shadow
+	
+	9）更改用户属组：usermod -G <属组> <用户名>
+	10）追加用户属组：usermod -AG <属组2> <用户名>
+	11）更改用户家目录：
+		1.更改/etc/passwd文件
+		2.usermod -d <家目录>   -u <UID>
+
+
+~查看用户所在用户组
+	1.groups <username>
+	2.cat  /etc/group | grep "<username>"
+	3.id <username>
+
+~ln：创建链接文件
+	1）硬链接用法：ln file  lnfile
+	2）软连接用法：ln -s file lnfile 
+	注意：（1）cp lnfile：复制的是源文件
+		  （2）mv lnfile：移动或重命名的是链接文件
+		  （3）rm lnfile：删除的是链接文件
+
+~ifconfig：网络信息查看
+
+~ctrl + c：强制退出
+
+~mv：重命名或移动
+
+~file <filename>：产看文件类型，详细信息
+
+~cat/more/head/tail
+	1）cat：查看文件所有内容
+	2）more：部分查看可继续
+	3）head：查看头几行，例如：head -5 file
+	4）tail：查看后几行，例如：tail -5 file
+
+~clear：清屏
+
+~pwd：显示当前目录
+
+~cd：切换目录
+
+~touch：创建文件
+
+~mkdir：创建目录
+	1）-p：创建多级目录，示例：mkdir -p ~/test/src
+
+~linux系统怎么操作仅提取/etc/passwd中所有可登录用户帐户名账户？
+	lslogins -u 
+
+~readlink和realpath
+	1）ln命令允许你在文件之间创建链接，readlink命令和realpath命令则允许你解析文件之间的这些链接
+	2）realpath可以显示目标文件的绝对路径
+	3）readlink可以显示目标文件的相对路径
+	4）readlink -f 可以显示目标文件的绝对路径，作用与realpath一致
+
+
+~ubuntu设置主屏幕及从屏幕，以及屏幕的左右顺序
+	1）xrandr
+		查看所有的输出接口
+	2）xrandr --output DP-3 --auto --primary
+		设置DP-3为主屏幕
+	3）xrandr --output DVI-I-1 --right-of DP-3 --auto 
+		设置DVI-I-1在DP-3的右边
+		
+~linux开机重启命令
+	1、Shutdown -r now 		关机后重启
+	2、Shutdown -h now 		关机后不重启
+	3、Shutdown -r +11 		11分钟后重启
+	4、Shutdown -r 11:00 	11点钟重启
+	5、Shutdown -h +11 		11分钟后关机
+	6、Shutdown -h 11:00 	11点钟关机
+	7、shutdown -c 			取消定时关机或重启命令
+
+~如何给普通用户添加sudo功能？
+	1.背景
+		  sudo是Linux系统管理指令，是允许系统管理员让普通用户执行一些或者全部root命令的一个工具。
+	  Linux系统下，为了安全，一般来说我们操作都是在普通用户下操作，但是有时候普通用户需要使用root
+	  权限，比如在安装软件的时候。这个时候如果我们切回root用户下效率就会比较低，所以用sudo命令就会很方便。
+	2.具体步骤
+		1）安装sudo：yum install sudo
+		2）进入root用户
+		3）vim /etc/sudoers
+		4）找到root ALL=(ALL) ALL
+		5）再下面添加一行<username> ALL=(ALL) ALL
+	3.注意，当sudoers文件是可写状态时，sudo功能关闭，需要设置成只读440
+
+
+~/etc/profile、/etc/bashrc、~/.bash_profile（~/.profile）、~/.bashrc区别
+
+	1）/etc/profile
+		（1）用来设置系统环境变量，路径			
+		（2）对系统内所有用户生效的
+		（3）第一个用户登录时,该文件被执行
+	2）/etc/bashrc  				   
+		（1）用来设置系统shell脚本，命令别名，路径     
+		（2）对系统内所有用户生效
+		（3）当bash shell被打开时,该文件被读取
+	3）~/.bash_profile（~/.profile）   
+		（1）用来设置一些环境变量，路径             
+		（2）对当前用户生效
+		（3）当用户登录时,该文件仅仅执行一次
+	4）~/.bashrc					   
+		（1）用来设置系统shell脚本，命令别名，路径     
+		（2）对当前用户生效
+		（3）当该用户登录时以及每次打开新的shell时,该文件被读取
+		
+~PS1设置相关
+  1）重要参数
+	\d ：代表日期，格式为 Weekday Month Date，例如 "Mon Aug 1"
+	\H ：完整的主机名称。举例来说，鸟哥的练习机 linux.dmtsai.tw ，那么这个主机名称就是 linux.dmtsai.tw  www.2cto.com  
+	\h ：仅取主机名称的第一个名字。以上述来讲，就是 linux 而已， .dmtsai.tw 被省略。
+	\t ：显示时间，为 24 小时格式，如： HH:MM:SS
+	\T ：显示时间，12 小时的时间格式！
+	\A ：显示时间，24 小时格式， HH:MM
+	\u ：目前使用者的账号名称；
+	\v ：BASH 的版本信息；
+	\w ：完整的工作目录名称。家目录会以 ~ 取代；
+	\W ：利用 basename 取得工作目录名称，所以仅会列出最后一个目录名。
+	\# ：下达的第几个指令。
+	\$ ：提示字符，如果是 root 时，提示字符为 # ，否则就是 $ 。
+  2）例如：PS1='\033[31m[\033[36m\u\033[37m:\033[34m\t\033[31m]\033[37m:\033[32m\w\n\033[37m->\033[0m'
+
+~shell脚本中显示内容带颜色（需要使用参数-e ）
+　　1）格式如下： （三者无前后顺序）
+　　    \033[字体颜色;背景颜色;输出特效m   字符串    \033[0m
+	2）颜色及功能列表
+		字体颜色：　　
+	    30: 黑色字  
+　　	31: 红色字  
+　　	32: 绿色字 
+　　	33: 黄色字 
+　　	34: 蓝色字 
+　　	35: 紫色字 
+　　	36: 天蓝字  
+　　	37: 白色字 
+
+		
+		背景色：
+		40: 黑 
+		41: 深红 
+		42: 绿 
+		43: 黄色 
+		44: 蓝色 
+		45: 紫色 
+		46: 深绿 
+		47: 白色 
+
+		
+		输出特效格式控制：
+		0：关闭所有属性  
+		1：设置高亮度  
+		4：下划线  
+		7：反显（字体颜色与背景颜色互换）
+		8：消隐								#可以用于隐藏密码  
+
+~ls显示的文件颜色
+  1）文件种类
+    fi（普通文件）
+	di（文件夹）
+	ln（链接文件）
+	ex（可执行文件）
+	*.sh（以.sh结尾的文件）
+	pi		so		bd		cd
+	or		mi		no		*.cmd
+	*.exe	*.com	*.btm	*.bat
+	*.tif	*.csh	*.tar	*.tgz
+	*.arj	*.taz	*.lzh	*.zip
+	*.z		*.Z		*.gz	*.bz2
+	*.bz	*.tz	*.rpm	*.cpio
+	*.jpg	*.gif	*.bmp	*.xbm
+	*.xpm	*.png	   
+  2.在.bashrc中编辑LS_COLORS值
+	例如：export LS_COLORS="fi=37:di=34:ln=33:ex=31:*.sh=32"
+  3.在.bashrc文件中编辑
+    alias ls="ls --color"
+
+~如何不加sh前缀执行脚本，设置文件可执行
+	chmod 777 test.sh
+
+~linux下如何让C编译后的可执行文件不加./执行，并且全局可用
+	1）在PATH中添加 . 目录可以实现当前目录不加./执行：PATH=$PATH:.
+	2）在PATH中添加文件所在目录的绝对路径，可全局使用：PATH=$PATH:/work/test/bin
+
+~PATH的编辑
+	1）PATH的作用是什么：让路径里面的命令全局可用
+	2）在哪里可以设置PATH值：.bashrc 或者.profile文件
+	3）如何在每次开启终端时都运行.profile或者.bashrc文件
+	4）如何设置：在2）文件中添加export PATH=$PATH:<mybinpath>
+
+
+~全局变量的设置
+	1）在哪里设置：在profile文件或bashrc文件中设置
+	2）如何设置：在1）文件中添加    (举例)export WA="wangang"
+
+
+~存储空间的使用是从挂载点开始算起的
+
+~df：查看各挂载点对应的文件系统所占用的存储空间是从哪里来，有多少，用了多少
+	1）-h：将文件系统空间信息以适合的单位显示出来
+	2）-T：显示文件系统的类型
+
+~du：查看目录及文件实际占用了多大空间
+
+~lsblk：列出系统上的所有磁盘列表
+	1）-f：显示文件系统的类型名称，以及UUID
+
+~mount：磁盘挂载命令
+	1）-t <文件系统类型>
+		传统文件系统：ext2/minix/vfat/iso9660
+		日志式文件系统：ext3/ext4/ReiserFS/Windoes'NTFS/IBM's JFS/SGI's XFS/ZFS
+		网络文件系统：NFS/SMFS
+	2）fdisk：查看移动硬盘名称
+	3）nfs挂载文件系统
+		（1）方法：mount -t nfs <IP>:<nfspath>  <localpath>
+		（2）意义：就是通过nfs共享了一个nfs远程服务器的文件夹
+	4）一般硬盘挂载
+		（1）方法：mount -t vfat /dev/sdb1(移动硬盘名称)  /mnt
+		（2）卸载硬盘：umount /mnt
+
+~tr命令小写转大写
+	cat aa.txt | tr "a-z" "A-Z"
+
+~tr命令大写转小写
+	cat aa.txt | tr "A-Z"  "a-z"
+
+~awk命令小写转大写
+	cat aa.txt | awk '{print toupper($0)}'
+		
+~awk命令大写转小写
+	cat aa.txt | awk '{print tolower($0)}'
+
+
+~shell脚本中while true 与while :都代表无限循环
+
+
+~shift的用法
+	位置参数可以用shift命令左移。比如shift 3表示原来的$4现在变成$1，
+	原来的$5现在变成$2等等，原来的$1、$2、$3丢弃，$0不移动。不带参数的shift命令相当于shift 1
+	
+~usermod的用法：更改用户属性：
+	- a | -- append       把用户追加到某些组中，仅与-G选项一起使用
+	- c | -- comment      修改/etc/passwd文件第五段comment
+	- d | -- home         修改用户的家目录通常和-m选项一起使用
+	- e | -- expiredate   指定用户帐号禁用的日期，格式YY-MM-DD
+	- f | -- inactive     用户密码过期多少天后采用就禁用该帐号，0表示密码已过期就禁用帐号，-1表示禁用此功能，默认值是-1
+	- g | -- gid          修改用户的gid，改组一定存在
+	- G | -- groups       把用户追加到某些组中，仅与-a选项一起使用
+	- l | -- login        修改用户的登录名称
+	- L | -- lock         锁定用户的密码
+	- m | -- move - home  修改用户的家目录通常和-d选项一起使用
+	- s | -- shell        修改用户的shell
+	- u | -- uid          修改用户的uid，该uid必须唯一
+	- U | -- unlock       解锁用户的密码
+		
+	
+~linux下id命令用法：用户名（uid）/用户属组（gid）/扩展组
+	1）id <username>:  uid=1069(wanga) gid=20(dialout) groups=20(dialout),999(docker)
+	2）id -u        :  1069
+	3）id -g        ： 20
+	4）id -nu       :  wanga
+	5）id -ng       ： dialout
+	
+~linux下source的用法：通知当前shell读入路径为filename的文件并依次执行文件中的所有语句。
+	1）通常用于重新执行刚修改的初始化文件，使之立即生效，而不必注销并重新登录。 
+    2）source命令也可以用点命令（即“.”命令），是bash shell的内置命令，这两个命令都以一个脚本
+	   为参数，该脚本将作为当前shell的环境执行，即不会启动一个新的子进程。
+	   所有在脚本中设置的变量将成为当前Shell的一部分。（注意：例如sh test.sh执行之后，是开启了一个子shell）
+		
+~hostname:显示服务器名称
+	-d  显示域名
+	
+~if判断条件
+	-t FD   		如果文件描述符 FD （默认值为1）打开且指向一个终端则返回为真
+	-o optionname   如果shell选项optionname开启则返回为真
+
+~"\"的用法
+	1）对有特殊含义的字符进行转义
+		例如 echo "123\$"，结果是123$
+	2）\Enter,反斜杠后面紧跟回车，表示下一行是当前行的续航
+	
+~显示屏幕分辨率：xrandr
+
+~nproc命令:主要在输出中显示可用处理单元的数量
+
+~uname命令:用于显示系统信息,uname可显示电脑以及操作系统的相关信息。
+	语法:uname [-amnrsv][--help][--version]
+	参数说明：
+		-a或--all 　    显示全部的信息。
+		-m或--machine 　显示电脑类型。
+		-n或-nodename 　显示在网络上的主机名称。
+		-r或--release 　显示操作系统的发行编号。
+		-s或--sysname 　显示操作系统名称。
+		-v 　           显示操作系统的版本。
+		--help 　       显示帮助。
+		--version 　    显示版本信息。
+		
+~curl命令:是一个利用URL规则在命令行下工作的文件传输工具，可以说是一款很强大的http命令行工具。它支持文件的上传和下载，是综合传输工具，但按传统，习惯称curl为下载工具。
+	语法：# curl [option] [url]
+	常见参数：
+		-A/--user-agent <string>              设置用户代理发送给服务器
+		-b/--cookie <name=string/file>    cookie字符串或文件读取位置
+		-c/--cookie-jar <file>                    操作结束后把cookie写入到这个文件中
+		-C/--continue-at <offset>            断点续转
+		-D/--dump-header <file>              把header信息写入到该文件中
+		-e/--referer                                  来源网址
+		-f/--fail                                          连接失败时不显示http错误
+		-o/--output                                  把输出写到该文件中
+		-O/--remote-name                      把输出写到该文件中，保留远程文件的文件名
+		-r/--range <range>                      检索来自HTTP/1.1或FTP服务器字节范围
+		-s/--silent                                    静音模式。不输出任何东西
+		-T/--upload-file <file>                  上传文件
+		-u/--user <user[:password]>      设置服务器的用户和密码
+		-w/--write-out [format]                什么输出完成后
+		-x/--proxy <host[:port]>              在给定的端口上使用HTTP代理
+		-#/--progress-bar                        进度条显示当前的传送状态
+		
+~time命令:用于测量指令的运行时间
+
+~cut命令:类似于awk命令
+	1）cut -f3 -d "_"							以_为分隔符打印第3区域
+	2）cut -c 3								打印第3个字符
+	
+~env命令用于显示系统中已存在的环境变量，以及在定义的环境中执行指令
+
+~[tab]              可以实现命令，参数，文件名的补齐
+
+~shutdown -r now    立刻重启
+
+~shutdown -h now    立刻关机 
+
+~seq  i j         循环打印从i到j
+
+
+
+-------------------------------------------远程登录相关-------------------------------------
+~如何解决远程登录凭据无法工作的问题：
+1.理论上都要联网
+2.电脑要打开远程登录权限
+3.设置编辑组策略     
+4.更新Windows凭据
+5.关闭密码保护共享
+
+~怎样确保本机xshell与虚拟机链接成功
+	1）虚拟机为网络配置为net模式
+	2）确保linux下有没有ssh服务，是否开启（sudo apt-get install openssh-server openssh-client）
+	3）xshell连接的是虚拟机的IP,以及22端口
+	
+~怎么确保另外一台机器上的xshell连接到虚拟机上的Linux
+	1）虚拟机为网络配置为net模式
+	2）确保linux下有没有ssh服务，是否开启（sudo apt-get install openssh-server openssh-client）
+	3）实现端口转发：编辑->虚拟网络编辑器->VMnet8->NAT设置->添加（设置主机端口，虚拟机IP，虚拟机端口）
+	4）xshell连接的是主机的IP,以及主机端口
+			
+
+
+
+
+-----------------------------------------------趣味小程序------------------------------------
+~rev
+	1）功能：一行一行将文件的所有字符倒叙输出
+	2）用法：rev <fileName>
+
+~sl
+	1）功能：屏幕上出现一辆火车
+	2）安装：sudo apt-get install sl
+	3）用法：sl
+	4）关闭：ctrl + c
+
+~aafire
+	1）功能：终端出现一辆火车
+	2）安装：sudo apt-get install libaa-bin
+	3）用法：aafire
+	4）关闭：ctrl + c
+	
+~cmatrix
+	1）功能：显示矩阵风格的动画效果
+	2）安装：sudo apt-get install cmatrix
+	3）用法：cmatrix
+	4）关闭：ctrl + c 
+
+~cowsay/xcowsay
+	1）功能：出现一头牛，说出你想要它说的话
+	2）安装：sudo apt-get install cowsay/xcowsay
+	3）用法：cowsay/xcowsay <txt>
+	4）关闭：自行关闭
+	
+~factor
+	1）功能：分解因数
+	2）用法：factor <testMath>
+	
+~oneko
+	1）功能：桌面上出现一个小猫追着鼠标
+	2）安装：sudo apt-get install oneko
+	3）用法：oneko
+	
+~boxes
+	1）功能：在输入文体或者代码周围框上各种ASCII艺术画
+	2）安装：sudo apt-get install boxes
+	3）用法：echo <testString> | boxes 
+			 echo <testString> | boxes -dog
+			 echo <testString> | boxes -cat
+			 echo <testString> | boxes -mouse
+
+~xeyes
+	1）功能：终端显示一双眼睛看着鼠标
+	2）安装：sudo apt-get install xeyes
+	3）用法：xeyes
+	
+~pv命令
+	1）功能：将需要输出的字符一个一个输出
+	2）安装：sudo apt-get install pv
+	3）用法：echo <testString> | pv -qL 10(每秒输出的字节数)
+
+

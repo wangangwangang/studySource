@@ -1,0 +1,653 @@
+#!/bin/bash
+
+#-------------------------------------------------------------------------------------------
+#										 开始提示
+#------------------------------------------------------------------------------------------
+clear
+echo -e "                               \033[32mhave a nice day .  bashrc start \033[0m                                              "
+echo -e "\033[31m-----------------------------------------------------------------------------------------------\033[0m"
+
+
+#-------------------------------------------------------------------------------------------
+#										 设置启动文件
+#------------------------------------------------------------------------------------------
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+if [ -f /home/wanga/bin/setPrint ]; then
+	 /home/wanga/bin/setPrint
+fi
+
+if [ -f ~/.profile ]; then
+	 source ~/.profile
+fi
+#------------------------------------------------------------------------------------------
+#										颜色列表
+#------------------------------------------------------------------------------------------
+BLACK="\033[0;30m"
+DARKGRAY="\033[1;30m"
+BLUE="\033[1;34m"
+LIGHTBLUE="\033[1;34m"
+GREEN="\033[0;32m"
+LIGHTGREEN="\033[1;32m"
+CYAN="\033[0;36m"
+LIGHTCYAN="\033[1;36m"
+RED="\033[0;31m"
+LIGHTRED="\033[1;31m"
+LIGHTRED_FLASH="\033[1;5;31m"
+PURPLE="\033[0;35m"
+LIGHTPURPLE="\033[1;35m"
+BROWN="\033[0;33m"
+YELLOW="\033[1;33m"
+LIGHTGRAY="\033[0;37m"
+WHITE="\033[1;37m"
+END="\033[0m"
+
+#------------------------------------------------------------------------------------------
+#										设置PS1
+#------------------------------------------------------------------------------------------
+export PS1="$LIGHTRED[$LIGHTCYAN\u$WHITE:$LIGHTBLUE\t$LIGHTRED]$WHITE:$LIGHTGREEN\w\n$WHITE->$END"
+
+
+#------------------------------------------------------------------------------------------
+#										设置ls显示的文件颜色
+#------------------------------------------------------------------------------------------
+export LS_COLORS="di=34:fi=37:ln=33:*.sh=32:ex=31:"
+
+
+#------------------------------------------------------------------------------------------
+#										设置PATH
+#------------------------------------------------------------------------------------------
+
+export MANPATH=$MANPATH:/usr/man:/usr/local/man:/usr/contrib/man:/opt/langtools/man
+PATH=
+PATH=$PATH:$HOME/bin:/usr/bin:/usr/local/bin:/usr/sbin:/bin:/sbin:.:/usr/share
+PATH=$PATH:/opt/gnome/bin:/opt/kde3/bin
+PATH=$PATH:/projects/phx/tools/linux:/projects/phx/tools
+PATH=$PATH:/opt/repo:/sirius/tools/bin/multi7
+PATH=$PATH:/usr/local/vim/bin
+PATH=$PATH:/work/test/bin
+PATH=$PATH:/usr/games
+export PATH
+
+#--------------------------------------------------------------------------------------------
+#									 	系统命令alias 
+#------------------------------------------------------------------------------------------
+
+alias ls="ls --color"
+alias ll="ls -al --color"
+alias vi="vim"
+
+#--------------------------------------------------------------------------------------------
+#									 	目录切换 
+#------------------------------------------------------------------------------------------
+alias ws="cd /work/my_apollo_sandbox"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#/usr/local/bin/zsh
+#------------------------------------------------------------------------------------------
+#                                      ALIASES
+#------------------------------------------------------------------------------------------
+
+#cstool
+alias cs="/local/sandbox/repo/sirius_sbx/pelican/ei/tools/cstool/src/cstool"
+
+alias calc="gcalctool"
+
+# coverity
+alias pelaser_coverity='makepkg_coverity --nopackage MAKEC_SUBSYS=pe_laser t=ram_narel'
+
+#trace
+alias clntrace='rm trace*; rm cs.txt'
+
+#codev
+alias cdevserv='ssh leslevm20'
+alias econfig='cd /net/leslevm20/local/econfig'
+
+#to list the files in a commit
+alias glf="git show --pretty=format: --name-only"
+
+# run from inside a pelican repo, output what the changelist would look like
+# if you published from HEAD of current sandbox
+alias pelcl='echo "Changes from HEAD <--> $(git tag | grep pelican_src | tail -1) ";git log --oneline HEAD ^$(git tag | grep pelican_src | tail -1)'
+
+showdiff() {
+	git log --oneline --format="%C(auto) %h %s" $1 ^$2
+}
+
+# remote desktop
+alias win='rdesktop -g 2200x1500 WADEDE6.auth.hpicorp.net -T WINDOWS -u AUTH\\wadede -r sound:remote -r clipboard:CLIPBOARD -5 -x b'
+alias winip='rdesktop -g 2200x1500 15.41.137.6 -T WINDOWS -u AUTH\\wadede -r sound:remote -r clipboard:CLIPBOARD -5 -x b'
+
+# alarm clock
+alias alarm='python ~/bin/popUpAlarm.py &'
+
+# post-review
+alias prev_pel='repo upload --re=scott.lee2@hp.com,donald.massey@hp.com,wesley.gruenberg@hp.com'
+alias prev_pelas='repo upload --re=scott.lee2@hp.com,donald.massey@hp.com,shetty.raviprasad@hp.com,wesley.gruenberg@hp.com'
+
+# REPO ALIASES
+# create sandbox, options: phx, apollo, sirius
+alias repoInit='repo init -u git@git.boi.rd.hpicorp.net:phx-manifests -b'
+
+# run integration's print test on print at ip address after -i
+alias ptest='/projects/phx/tools/integration/printtest.py -i'
+
+# quickly setup a terminal with pre-defined tabs/working directories
+alias term='/home/wadede/bin/startTerm.sh'
+
+# build in dune for threadx
+alias bldune='./run build.py --family selene --os threadx --arch cortexa7 --variant debug --hwplatform base --buildphase lp3 -z --ninja'
+alias bldipk='./run gen_ipk.sh --family selene --os threadx --arch cortexa7 --hwplatform base --buildphase lp3'
+# build in dune for linux
+alias bldlinux='./run build.py --family selene --os linux --arch cortexa7 --variant debug -z'
+# build in fhx file with linux and threadx
+alias makefhx='./run bundle.py --os linux --arch cortexa7 --family selene --variant debug; ./run ./bundle.py --arch cortexa7 --os threadx --family selene --hwplatform base --buildphase lp3; src/tools/fhxMaker/run src/tools/build/make_fhx.py  src/tools/build/recipes/selene.json -f FHX_ULBI_UROOTFS'
+# build threadx, linux, bundle them, and make fhx
+alias makeall='bldune; bldlinux; makefhx;'
+# copy dox to device
+alias cpdox='scp /work/sandbox/repo/dune_sbx2/dune/build/output/threadx-cortexa7-debug/selene/base-lp3/deploy/family/opt/dox/LP3.rbx root@15.86.198.203:/opt/dox/'
+# open multi for dox
+alias mltdox='multi_dox /work/sandbox/repo/dune_sbx2/dune/build/output/threadx-cortexa7-debug/selene/base-lp3/debug/threadxApp -m /work/sandbox/repo/dune_sbx2/dune/build/output/threadx-cortexa7-debug/selene/base-lp3/debug/dox_remap.txt &'
+# capture trace and decode
+alias dcap='d 15.86.197.84 ./build/output/threadx-cortexa7-debug/selene/base-lp3/tmp/SysTraceTokens ./build/output/linux-cortexa7-debug/selene/debug/SysTraceTokens; cstool -wT d.out > cs.txt; /local/sandbox/repo/dune_sbx2/dune/src/fw/print/engine/PageBasedEngine/canon/pelican_wrapper/pelican/tools/pelCPTool/pelican_cptool.py cs.txt > cps.txt;'
+# cleanup output files from 'dcap' alias
+alias drm='rm ./d.out; rm ./cs.txt; rm ./cps.txt;'
+
+# push change to gerrit for me_src
+alias pushme='git push me_src_gerrit master:refs/for/refs/heads/master'
+alias setupmesrc='git remote add me_src_gerrit ssh://derek.wade@phxgerrit.boi.rd.hpicorp.net/me_src'
+
+alias micest='bash ~/swapMouse.sh'
+
+alias lal='ls -al'
+alias capl='cd /work/sandbox/apollo_sandbox/apollo-core/scm/phx'
+alias capX='cd /work/sandbox/apollo_sandbox/apollo-core/scm/phx/EXE'
+alias capx='cd /work/sandbox/apollo_sandbox/apollo-core/scm/phx/exe'
+
+
+
+function chgckpt
+{
+	local _ckpt='' _mkfile='' _m='' _sed_cmd='' _level='' _target=''
+		OPTIND=1
+		while getopts 'hf:c:' _m;
+	do
+	case "$_m" in
+		f) _target+=" $OPTARG" ;;
+		c) _ckpt=$OPTARG ;;
+		h) echo "$FUNCNAME -f <all/xxx.c/xxx.cpp> -c [abc] -h" && return 0 ;;
+		*) return 1 ;;
+		esac
+			done
+			if [ $# -gt 0 ]; then
+	case "$_ckpt" in
+				*a*) _level+=" -DRT_A" ;;&
+					*b*) _level+=" -DRT_B" ;;&
+					*c*) _level+=" -DRT_C" ;;&
+					*d*) _level+=" -DRT_D" ;;&
+					esac
+					[ -z "$_level" ] && error_sh "Wrong checkpoint $_ckpt." && return 1
+					if [[ "${_target,,}" =~ ^[[:space:]]*all[[:space:]]*$ ]]; then
+						_sed_cmd="s/^\(DbgDefaultOptions:=\).*$/\1$_level/; s/^\(.*DbgOptions:=\$(DbgDefaultOptions)\).*$/\1/;"
+					else
+						for _m in $_target
+							do
+								if [ -f "$_m" ]; then
+									_sed_cmd+="s/^\($(basename $_m): *DbgOptions:=\$(DbgDefaultOptions)\).*$/\1$_level/;"
+								else
+									error_sh "Wrong file $_m." && return 1;
+							fi
+								done
+								fi
+								fi
+								_mkfile=$(find -name GNUmakefile.dbg | sed -n '/\/obj\//d; p')
+								for _m in $_mkfile
+									do
+										[ $# -gt 0 ] && sed -i "$_sed_cmd" $_m
+											echo '--------------------------'
+												echo $_m
+												cat $_m
+												done
+}
+
+
+
+
+
+
+#------------------------------------------------------------------------------------------
+#                                    FUNCTIONS
+#------------------------------------------------------------------------------------------
+
+# Function to switch to Dune environment
+usedune() {
+	cd /local/sandbox/repo/dune_sbx2/dune/
+		PATH=/sirius/tools2/bin:/sirius/tools/bin:$PATH
+
+		PS1=$DUNE_PS1
+		export PS1
+
+		SBX=dune
+		export SBX
+
+		PELICAN_SRC=/local/sandbox/repo/dune_sbx2/dune/src/fw/print/engine/PageBasedEngine/canon/pelican_wrapper/pelican
+		export PELICAN_SRC
+}
+
+# Function to switch to Apollo environment
+useap() {
+# MANPATH and PATH
+	export MANPATH=$MANPATH:/usr/man:/usr/local/man:/usr/contrib/man:/opt/langtools/man
+
+		PATH=
+		PATH=$PATH:$HOME/bin:/usr/bin:/usr/local/bin:/usr/sbin:/bin:/sbin:.:/usr/share
+		PATH=$PATH:/opt/gnome/bin:/opt/kde3/bin
+		PATH=$PATH:/projects/phx/tools/linux:/projects/phx/tools
+		PATH=$PATH:/opt/repo
+		export PATH
+
+		PS1=$APOLLO_PS1
+		export PS1
+
+		cd /local/sandbox/repo/apollo_sbx/apollo-core/scm/phx/components/pelican
+
+		SBX=apollo
+		export SBX
+
+		PELICAN_SRC=/local/sandbox/repo/apollo_sbx/apollo-core/scm/phx/components/pelican
+		export PELICAN_SRC
+}
+
+# Function to switch to phx environment
+usephx() {
+# MANPATH and PATH
+	export MANPATH=$MANPATH:/usr/man:/usr/local/man:/usr/contrib/man:/opt/langtools/man
+
+		PATH=
+		PATH=$PATH:$HOME/bin:/usr/bin:/usr/local/bin:/usr/sbin:/bin:/sbin:.:/usr/share
+		PATH=$PATH:/opt/gnome/bin:/opt/kde3/bin
+		PATH=$PATH:/projects/phx/tools/linux:/projects/phx/tools
+		PATH=$PATH:/opt/repo
+		export PATH
+
+		PS1=$PHOENIX_PS1
+		export PS1
+
+		cd /local/sandbox/repo/phoenix_sbx/scm/phx/components/ei/src
+
+		SBX=phoenix
+		export SBX
+}
+
+# Function to switch to Sirius environment
+usesirius() {
+	unset PYTHONPATH
+
+# MANPATH and PATH
+		export MANPATH=$MANPATH:/usr/man:/usr/local/man:/usr/contrib/man:/opt/langtools/man
+
+		PATH=
+		PATH=$PATH:$HOME/bin:/usr/bin:/usr/local/bin:/usr/sbin:/bin:/sbin:.:/usr/share
+		PATH=$PATH:/opt/gnome/bin:/opt/kde3/bin
+		PATH=$PATH:/projects/phx/tools/linux:/projects/phx/tools
+		PATH=$PATH:/opt/repo
+		PATH=/sirius/tools2/bin:/sirius/tools/bin:$PATH
+		export PATH
+
+		PS1=$SIRIUS_PS1
+		export PS1
+
+		PELICAN_SRC=/local/sandbox/repo/sirius_sbx/pelican
+		export PELICAN_SRC
+		echo "PELICAN_SRC=$PELICAN_SRC"
+		COMMON_VIDEO_SRC=/local/sandbox/repo/sirius_sbx/common_video
+		export COMMON_VIDEO_SRC
+		echo "COMMON_VIDEO_SRC=$COMMON_VIDEO_SRC"
+
+		cd /local/sandbox/repo/sirius_sbx/sirius/printengine/src/pe_laser/src
+
+		SBX=sirius
+		export SBX
+}
+
+getl2()
+{
+	cat $HOME/bin/lastDart.txt
+		cat $HOME/bin/lastPath.txt
+}
+
+# Function to traverse directories in a sandbox
+go()
+{
+	arg1=$1
+
+		SIRIUS_ROOT=/local/sandbox/repo/sirius_sbx/sirius/
+		PHX_ROOT=/local/sandbox/repo/phoenix_sbx
+		APOLLO_ROOT=/local/sandbox/repo/apollo_sbx
+		DUNE_ROOT=/local/sandbox/repo/dune_sbx2/dune/
+
+# Dune directory traversing
+		if [[ $SBX == "dune" ]]
+			then
+				if [[ $arg1 == "eng" ]]
+					then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/canon/pelican_wrapper
+						elif [[ $arg1 == "fbs" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/pub
+						elif [[ $arg1 == "brat" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/canon/BratwurstEngine
+						elif [[ $arg1 == "stub" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/Bratwurst/Remote/Engine/Stub/src
+						elif [[ $arg1 == "proxy" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/Bratwurst/Remote/Formatter/Proxy/src
+						elif [[ $arg1 == "make" ]]
+						then
+						cd $DUNE_ROOT
+						elif [[ $arg1 == "pel" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/canon/pelican_wrapper/pelican
+						elif [[ $arg1 == "ei" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/canon/pelican_wrapper/pelican/ei
+						elif [[ $arg1 == "at" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/canon/pelican_wrapper/pelican/ei/ATCN
+						elif [[ $arg1 == "vid" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/canon/pelican_wrapper/common_video
+						elif [[ $arg1 == "eia" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/canon/pelican_wrapper/pelican/eiAttrib
+						elif [[ $arg1 == "stub" ]]
+						then
+						cd $DUNE_ROOT/src/fw/print/engine/PageBasedEngine/Bratwurst/Remote/Engine/Stub/src
+						fi
+
+# Sirius directory traversing
+						elif [[ $SBX == "sirius" ]]
+						then
+						if [[ $arg1 == "opk" ]]
+							then
+								cd $SIRIUS_ROOT/opkgbuild
+								elif [[ $arg1 == "pel" ]]
+								then
+								cd $SIRIUS_ROOT/../pelican/src
+								elif [[ $arg1 == "pelas" ]]
+								then
+								cd $SIRIUS_ROOT/printengine/src/pe_laser/src
+								elif [[ $arg1 == "map" ]]
+								then
+								cd $SIRIUS_ROOT/printengine/src/lib_laser_mappings/src
+								elif [[ $arg1 == "pc" ]]
+								then
+								cd $SIRIUS_ROOT/printengine/src/pe_laser/src/page_creator/src
+								elif [[ $arg1 == "ei" ]]
+								then
+								cd $SIRIUS_ROOT/../pelican/ei/src
+								elif [[ $arg1 == "eiA" ]]
+								then
+								cd $SIRIUS_ROOT/../pelican/eiAttrib/src
+								elif [[ $arg1 == "sox" ]]
+								then
+								cd $SIRIUS_ROOT/opkgbuild/clearwater_sox
+								elif [[ $arg1 == "at" ]]
+								then
+								cd $SIRIUS_ROOT/../pelican/ei/ATCN/src
+								elif [[ $arg1 == "srt" ]]
+								then
+								cd $(ropkg show)
+								elif [[ $arg1 == "vid" ]]
+								then
+								cd $SIRIUS_ROOT/../common_video/src
+								elif [[ $arg1 == "cvid" ]]
+								then
+								cd $SIRIUS_ROOT/../pelican/drivers/canon_video/src
+								elif [[ $arg1 == "dox" ]]
+								then
+								cd $SIRIUS_ROOT/opkgbuild/dune_selene_dox
+								elif [[ $arg1 == "peld" ]]
+								then
+								cd $SIRIUS_ROOT/printengine/src/pelican_dox_wrapper/src
+						else
+							echo "I'm in a sirius repo"
+								echo "$arg1 is not supported in this sandbox"
+								fi
+
+# Phoenix directory traversing
+								elif [[ $SBX == "phoenix" ]]
+								then
+								if [[ $arg1 == "ei" ]]
+									then
+										cd $PHX_ROOT/scm/phx/components/ei/src
+										elif [[ $arg1 == "eiA" ]]
+										then
+										cd $PHX_ROOT/scm/phx/components/ei/eiAttrib/src
+										elif [[ $arg1 == "dev" ]]
+										then
+										cd $PHX_ROOT/scm/phx/components/ei/eiAttrib/dev
+										elif [[ $arg1 == "phx" ]]
+										then
+										cd $PHX_ROOT/scm/phx
+								else
+									echo "I'm in a phoenix repo"
+										echo "$arg1 is not supported in this sandbox"
+										fi
+
+# Apollo directory traversing
+										elif [[ $SBX == "apollo" ]]
+										then
+										if [[ $arg1 == "me" ]]
+											then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/me/me_src
+												elif [[ $arg1 == "pers" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/me/persona/src
+												elif [[ $arg1 == "pel" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/pelican/src
+												elif [[ $arg1 == "ei" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/pelican/ei/src
+												elif [[ $arg1 == "at" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/pelican/ei/ATCN/src
+												elif [[ $arg1 == "eiA" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/pelican/eiAttrib/src
+												elif [[ $arg1 == "dev" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/pelican/eiAttrib/dev
+												elif [[ $arg1 == "dps" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/pelican/dps/dps_classic/src
+												elif [[ $arg1 == "tools" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/pelican/tools
+												elif [[ $arg1 == "vid" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/common_video/src
+												elif [[ $arg1 == "cvid" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx/components/pelican/drivers/canon_video/src
+												elif [[ $arg1 == "phx" ]]
+												then
+												cd $APOLLO_ROOT/apollo-core/scm/phx
+										else
+											echo "I'm in an apollo/pelican repo"
+												echo "$arg1 is not supported in this sandbox"
+												fi
+
+												fi #end directory traversing
+}
+
+
+function rg() {   #Wraps 'repo grep' and searches all project names except 'apollotest'
+	PROJECT_LIST=$(repo manifest | sed -e '/project name=/!d' -e '/apollotest/d' -e 's/" .*$//' -e 's/^.*"//')
+##echo "PROJECT_LIST = '$PROJECT_LIST'."
+		repo grep "$@" $PROJECT_LIST
+}
+
+#------------------------------------------------------------------------------------------
+#                                    EXPORTS
+#------------------------------------------------------------------------------------------
+export http_proxy=http://web-proxy.boi.hp.com:8080
+export SVN_EDITOR=vi
+export VIEWBASE=viewstore
+export XDG_CONFIG_HOME=~/.config/
+export ARTISTIC_STYLE_OPTIONS=~/style.options
+
+#------------------------------------------------------------------------------------------
+#                                    SETS
+#------------------------------------------------------------------------------------------
+set -o monitor
+set -o ignoreeof
+set -o vi
+
+
+#------------------------------------------------------------------------------------------
+#                                  GIT SETUP
+#------------------------------------------------------------------------------------------
+# Set git autocompletion and PS1 integration
+if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
+source /usr/share/git-core/contrib/completion/git-prompt.sh
+fi
+
+GIT_PS1_SHOWDIRTYSTATE=true
+
+
+
+
+#use_sirius
+
+#------------------------------------------------------------------------------------------
+#                                  GREENHILLS PROBE
+#------------------------------------------------------------------------------------------
+PROBE=15.86.194.81
+alias cfprobe='configProbe $PROBE'
+
+
+#------------------------------------------------------------------------------------------
+#                                      OTHER
+#------------------------------------------------------------------------------------------
+
+# bringing in the phx development environment
+if [ -f /projects/phx/tools/.phxdevrc ]; then
+. /projects/phx/tools/.phxdevrc
+fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+
+#------------------------------------------------------------------------------------------
+#                                      DUNE
+#------------------------------------------------------------------------------------------
+
+
+function push_pr () {
+
+	if [ -z "$1" ]; then
+
+		echo "Missing branch name suffix"
+
+			echo "Usage: push_pr <branch name suffix>"
+
+			return 1
+
+			fi
+
+			email="$(git config --global user.email)"
+
+			if [ -z "${email}" ]; then
+
+				echo "Missing email address in git config."
+
+					echo "Run: 'git config --global user.email <my email address>'"
+
+					return 1
+
+					fi
+
+					git push ghe "HEAD:pr_${email}_${1}"
+
+}
+
+function update_pr() {
+
+	if [ -z "$1" ]; then
+
+		echo "Missing branch name suffix"
+
+			echo "Usage: update_pr <branch name suffix>"
+
+			return 1
+
+			fi
+
+			git push ghe $1:pr_derek.wade@hp.com_$1
+}
+
+echo "start .bashrc succeed!!!"

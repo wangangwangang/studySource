@@ -1,0 +1,138 @@
+						linux下使用makefile管理多个c目录文件
+
+之前都是一个目录下写c代码，编译自然简单一点点。现在尝试学习多目录下的makefile的使用。虽然不是非常的完美。但是总体来说，把c源码文件和编译结果的object目标文件分开了。也算一种方式吧。
+drwxr-xr-x. 2 root root 4096 3月 8 21:07 bin
+drwxr-xr-x. 2 root root 4096 3月 8 19:56 include
+-rw-r–r–. 1 root root 547 3月 8 21:00 makefile
+drwxr-xr-x. 2 root root 4096 3月 8 21:07 obj
+drwxr-xr-x. 3 root root 4096 3月 8 21:01 src
+假如为上述为目录结构，bin存储最终编译结果，include存储头文件，obj存储目标文件，src存储c源码
+src目录里面的内容，这里只是简单的弄个目录和一个外出代码，具体来说，目录结构如下所示
+drwxr-xr-x. 2 root root 4096 3月 8 20:58 daemon
+-rw-r–r–. 1 root root 164 3月 8 21:01 main.c
+在我们的daemon文件夹下存储了daemon.c文件而已。最重要的是我们的makefile文件的编写
+
+----------------------------------------------------------------------------------------------------------
+CC = gcc
+
+DIR_INC = ./include
+DIR_SRC = ./src
+DIR_OBJ = ./obj
+DIR_BIN = ./bin
+
+SRC = $(wildcard ${DIR_SRC}/*.c ${DIR_SRC}/daemon/*.c)
+OBJ = $(patsubst %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
+
+TARGET = gather
+
+BIN_TARGET = ${DIR_BIN}/${TARGET}
+
+CFLAGS = -g -O2 -Wall -I${DIR_INC}
+
+${BIN_TARGET} : ${OBJ}
+	${CC} ${CFLAGS} ${OBJ}  -o $@
+
+${DIR_OBJ}/%.o : ${DIR_SRC}/%.c
+	$(CC) ${CFLAGS} -c $< -o $@
+
+
+${DIR_OBJ}/%.o : ${DIR_SRC}/daemon/%.c
+	$(CC) ${CFLAGS} -c $< -o $@
+
+.PHONY : clean run
+clean:
+	rm -f ${DIR_OBJ}/*.o ${BIN_TARGET}
+
+run:
+	${BIN_TARGET}
+-----------------------------------------------------------------------------------------------------------
+
+重点说一下，下面两句话，这个我觉得是多目录makefile的核心写法
+SRC = $(wildcard ${DIR_SRC}/*.c ${DIR_SRC}/daemon/*.c)
+OBJ = $(patsubst %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
+
+wildcard 我个人理解为展开所有的目录下的所有文件包含路径
+patsubst 我个人理解为一种查找替换，例子中就是查找c结尾的文件，替换为第二个参数中的.o文件。当然，因为末日得到的SRC变量是包含目录结构的，所以使用notdir去掉目录，只包含文件名。
+
+因为想要把所有的文件的目标文件都编译到特定的obj目录下，所以不清楚如何去写更加合适。
+
+最后附上一个改进版本，大家可以只对目录只写一遍看看就行哦
+
+---------------------------------------------------------------------------------------------------------
+CC = gcc
+
+DIR_INC = ./include
+DIR_SRC = ./src
+DIR_OBJ = ./obj
+DIR_BIN = ./bin
+
+SRC = $(wildcard ${DIR_SRC}/*.c) \
+	$(wildcard ${DIR_SRC}/daemon/*.c)
+
+OBJ = $(patsubst %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
+
+TARGET = gather
+
+BIN_TARGET = ${DIR_BIN}/${TARGET}
+
+CFLAGS = -g -O2 -Wall -I${DIR_INC}
+
+${BIN_TARGET} : ${OBJ}
+	@echo 链接生成文件目标文件
+	${CC} ${CFLAGS} ${OBJ}  -o $@
+
+${DIR_OBJ}/%.o : ${SRC}
+	@echo 编译文件开始..
+	$(CC) ${CFLAGS} -c $?
+	-mv *.o $(DIR_OBJ)/
+	@echo 编译文件完成
+
+
+.PHONY : clean run
+clean:
+	@echo 删除编译结果文件
+	-rm -f ${DIR_OBJ}/*.o ${BIN_TARGET}
+
+run:
+	@echo 执行文件
+	${BIN_TARGET}
+--------------------------------------------------------------------------------------
+
+当然，如果大家不介意目标文件和src源文件放在同一个目录下的话，可以用下面更加简单方式来实现编译，具体的makefile写法如下
+-----------------------------------------------------------------------------------------
+CC = gcc
+
+DIR_INC = ./include
+DIR_SRC = ./src
+DIR_BIN = ./bin
+
+SRC = $(wildcard ${DIR_SRC}/*.c) \
+	$(wildcard ${DIR_SRC}/daemon/*.c) \
+	$(wildcard ${DIR_SRC}/sql/*.c)
+
+OBJ = $(patsubst %.c,%.o,${SRC})
+
+TARGET = gather
+
+BIN_TARGET = ${DIR_BIN}/${TARGET}
+
+CFLAGS = -g -O2 -Wall -I/usr/include/mysql  -I${DIR_INC} -L/usr/lib64/mysql -lmysqlclient_r
+
+${BIN_TARGET} : ${OBJ}
+	@echo 链接生成文件目标文件
+	${CC} ${CFLAGS} ${OBJ}  -o $@
+
+$(OBJ):%.o:%.c
+	@echo "Compiling $< ==> $@"
+	${CC} ${CFLAGS} -c $< -o $@
+
+.PHONY : clean run
+clean:
+	@echo 删除编译结果文件
+	-rm -rf ${DIR_SRC}/*.o ${BIN_TARGET}
+
+run:
+	@echo 执行文件
+	${BIN_TARGET}
+---------------------------------------------------------------------------------------------------------
+基本上可以满足简单的一个目录结构下的编译操作了。
