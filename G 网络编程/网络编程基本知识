@@ -199,3 +199,21 @@
 								struct 		sockaddr *src_addr, 	用于接受客户端地址
 								socklen_t 	*addrlen);				用于接受客户端地址长度
 -------------------------------------------------------------------------------------------------------------------------					  
+
+
+~Tcp协议端口状态说明：
+	1）LISTENING：tcp服务端开启，端口处于监听状态
+	2）ESTABLISHED：建立链接状态
+	3）CLOSE_WAIT：对方主动关闭链接或者网络异常导致链接中断，这时我方的状态
+	4）TIME_WAIT：我方主动断开链接，收到对方确认后状态变为TIME_WAIT。默认3-4min资源不被释放
+	
+~socket程序退出后端口依然被占用问题的解决
+	1）方法一：查看端口对应的pid，杀死。例：8888
+		lsof  -i:8888
+		kill -9 pid_8888
+	2）方法二：端口处于timeout_wait状态，设置socket的SO_REUSEADDR选项
+		int opt=1;
+		set sockopt(listenfd ,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt1));
+		
+		以上两步操作在listenfd=socket()之后
+		            在ret=bind()之前
