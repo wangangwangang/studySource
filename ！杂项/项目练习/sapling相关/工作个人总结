@@ -1,0 +1,31 @@
+~新机配网
+网口 sw3 29 
+192.168.202.74
+255.255.255.0
+192.168.202.1
+114.114.114.114
+8.8.8.8
+
+网口 sw4 29
+192.168.212.74
+255.255.255.0
+192.168.212.1
+114.114.114.114
+8.8.8.8
+
+~无线网
+wifi sapling-2.4
+sapling@123
+
+wifi sapling-5
+sapling@123
+
+~安博通客户端地址
+https://192.168.223.10/login.html
+user:admin   pwd:admin
+
+~代码权限
+svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1_HBBANK
+svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1
+svn://192.168.0.254/saplingos/branches/NTA/NPV_SDK2
+
