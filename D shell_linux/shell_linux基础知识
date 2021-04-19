@@ -1,3 +1,6 @@
+~svn相关命令
+	svn checkout path
+
 ~查fun()函数依赖库：man -a fun
 
 ~打开终端快捷键
