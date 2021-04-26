@@ -1,40 +1,44 @@
 ~新机配网
-网口 sw3 29 
-192.168.202.74
-255.255.255.0
-192.168.202.1
-114.114.114.114
-8.8.8.8
+	网口 sw3 29 
+	192.168.202.74
+	255.255.255.0
+	192.168.202.1
+	114.114.114.114
+	8.8.8.8
 
-网口 sw4 29
-192.168.212.74
-255.255.255.0
-192.168.212.1
-114.114.114.114
-8.8.8.8
+	网口 sw4 29
+	192.168.212.74
+	255.255.255.0
+	192.168.212.1
+	114.114.114.114
+	8.8.8.8
 
 ~无线网
-wifi sapling-2.4
-sapling@123
+	wifi sapling-2.4
+	sapling@123
 
-wifi sapling-5
-sapling@123
+	wifi sapling-5
+	sapling@123
 
-~安博通客户端地址
-https://192.168.223.10/login.html
-user:admin   pwd:admin
+~安博通服务器地址
+	https://192.168.216.87
+	user:admin   pwd:admin@2019
+
+~科莱服务器地址
+	https://192.168.223.6
+	user:csadmin   pwd:!CSRAS23
 
 ~代码权限
-svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1_HBBANK
-svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1
-svn://192.168.0.254/saplingos/branches/NTA/NPV_SDK2
-svn://192.168.0.254/saplingos/branches/TFS_D1.0/
+	svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1_HBBANK
+	svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1
+	svn://192.168.0.254/saplingos/branches/NTA/NPV_SDK2
+	svn://192.168.0.254/saplingos/branches/TFS_D1.0/
 
 ~编译服务器
-	武汉的编译服务器192.168.205.250系统被我升级到ubuntu 20.04LTS版本了。 网关的dpdk版本请不要在这台服务器上编译，指令集可能和我们的硬件不匹配，请移步到192.168.0.253上编译。网关的cavium版本可以在192.168.205.250上编译
-	
 	192.168.205.250   admin   admin 
-	192.168.0.253
+
 	
-	
+~编译方式：
+	make ARCH=x86 PLAT=NPV > /dev/null
+	make ARCH=dpdk PLAT=NPV > /dev/null
 
