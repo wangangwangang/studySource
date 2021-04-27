@@ -8,34 +8,45 @@
                               ***工作部分***
 
 
-~浏览老接口模块注册流程
+~浏览老接口模块
 	·数据包的传输过程
-	·接口模块的注册流程
-	·数据包的解析
+	·接口模块的注册流程	
+	·分析现有的数据结构
+	
 	
 ~构建新模块
-	·链路的概念以及各个要素的含义
+	·测试通过一条测试接口
+		cd /work/wa/TFS_D1.0/src  && ARCH=dpdk PLAT=x86
+		vi /etc/ld.so.conf  &&  /sbin/ldconfig -v
+		cd /work/wa/TFS_D1.0/bin/obj-x86  && ./dplane
+	·链路/子链路的概念
+	·接口/虚接口的概念
+	·相关字段的组成以及解析
 	
-~科莱服务器界面/客户端，abt服务器界面	
-~如何编译，通过命令行模拟发送json-c请求
-	先配置环境
-	cd /work/wa/TFS_D1.0/src  && ARCH=dpdk PLAT=x86
-	vi /etc/ld.so.conf  &&  /sbin/ldconfig -v
-	cd /work/wa/TFS_D1.0/bin/obj-x86  && ./dplane
+
 
 
                               ***学习部分（晚上8：00开始）***
+~使用AF_UNIX域建立本地套接字，实现OICQ客户端与服务器的通信，为调试测试接口做准备
+
+~TCP、IP协议族详解（网易云课堂）
+
 ~了解tcp/ip相关概念	
-··	1.tcp五层架构
+··	1.tcp五层架构，每一层的设备是什么
 	2.二层地址样式，各字段含义
 	3.三层各类地址范围，用途
 	4.二层arp，mac相关协议作用和运行流程
 	5.第一个报文穿过路由设备经历的过程（单播基础ppt）
 	6.ospf，bgp等路由协议生成路由过程（单播基础ppt）
 	7.多播igmp基本内容（详解）	
-	8.广播域概念，vlan概念（网络基础ppt）
-~TCP、IP协议族详解（网易云课堂）
+	8.广播域概念
+	9.冲突域的概念
+	10.vlan概念以及现实意义（网络基础ppt）
+	11.了解网段，Gre,mpls,vxlan的概念
+
 ~学习wireshark
+
+~select/epoll编程的实现以及各自的优缺点
 
 
 

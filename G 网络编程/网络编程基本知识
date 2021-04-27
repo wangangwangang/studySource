@@ -98,14 +98,6 @@
 	·read()
 	·write()
 
-	
-~服务端 
-	·socket()
-	·bind()
-	·listen()
-	·accept()
-	·read()
-	·write()
 
 
 ~socket()	初始化创建套接字
@@ -124,7 +116,22 @@
 							struct sockaddr*	seraddr,		服务器地址结构
 							int					addrlen			服务器地址结构长度
 					   );
+	
+~服务端 
+	·socket()
+	·bind()
+	·listen()
+	·accept()
+	·read()
+	·write()
 
+~socket()	初始化创建套接字
+	1.依赖库：<sys/socket.h>
+	2.原型：int socket(						返回值是套接字文件描述符
+						int domain,			地址族，如AF_INET为IPV4
+						int type,			协议类型：SOCK_STREAM/tcp  SOCK_DGRAM/udp
+						int protocol		指定具体协议，通常传递0
+					  );
 					   
 ~bind()	服务端用来固定本地端口和IP
 	1.依赖库：<sys/socket.h> <sys/types.h>

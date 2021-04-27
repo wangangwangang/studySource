@@ -266,7 +266,7 @@
 		
 ~详谈read()/write()返回值的含义
 		
-	ret_read=(fds[0],buf,1024)
+	ret_read=read(fds[0],buf,1024)
 	1.ret_read==0	管道断裂，即对面fds[1]关闭了，且此时read()不再阻塞
 	2.ret_read>0	读取成功，值为读取的字节数
 	3.ret_read<0	因为其他的原因读取失败
