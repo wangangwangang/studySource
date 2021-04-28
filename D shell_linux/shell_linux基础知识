@@ -1,5 +1,6 @@
 ~svn相关命令
-	svn checkout path
+	svn checkout path     //将远程仓库下载到本地
+	svn update            //将仓库更新到最新版本
 
 ~查fun()函数依赖库：man -a fun
 
