@@ -1,3 +1,14 @@
+~samba实现linux系统的文件共享
+	·apt-cache search samba
+	·apt-get install samba
+	·cd /etc/samba/ && vim smb.conf
+	·smbpasswd -a  root
+	·reboot
+	·vim smb.conf 
+	·systemctl restart smbd.service
+	
+	
+
 ~svn相关命令
 	svn checkout path     //将远程仓库下载到本地
 	svn update            //将仓库更新到最新版本
@@ -1146,6 +1157,7 @@ cat /proc/meminfo | grep MemTotal     查看内存总数
 		0：关闭所有属性  
 		1：设置高亮度  
 		4：下划线  
+		5：闪烁
 		7：反显（字体颜色与背景颜色互换）
 		8：消隐								#可以用于隐藏密码  
 

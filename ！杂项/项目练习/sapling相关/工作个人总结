@@ -34,11 +34,30 @@
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_SDK2
 	svn://192.168.0.254/saplingos/branches/TFS_D1.0/
 
-~编译服务器
-	192.168.205.250   admin   admin 
-
+~服务器
+	·编译服务器		192.168.205.250		admin/admin 
+	·连接管理平台	100.100.0.254		root/sapling.123
+	·个人ip申请范围（192.168.222.190-194	192.168.223.190-194）
+	·个人虚拟机
+		·tfs	192.168.223.190		root/sapling         
 	
-~编译方式：
-	make ARCH=x86 PLAT=NPV > /dev/null
-	make ARCH=dpdk PLAT=NPV > /dev/null
+~编译步骤
+	·src目录 make
+	
+
+~运行环境设置
+	·设置运行库
+		·export LD_LIBRARY_PATH=/root/TFS_D1.0/lib/prebuild-dpdk:/usr/local/lib64/
+	·设置tipc
+		·modprobe tipc
+	·设置大页内存
+		·cat /proc/meminfo
+		·/mnt/workspace/TFS_D1.0/src/script/setting_hugepage.sh
+	·将管理接口名写入到/mnt/skip_dpdk_if文件中跳过初始化，否则只能从串口访问）
+
+
+~运行：
+	·cd /mnt/workspace/TFS_D1.0/bin/obj-dpdk
+	./dplane -c 0xff --vdev net_af_xdp0,iface=ens160,start_queue=0,queue_count=1
+
 

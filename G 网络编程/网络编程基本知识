@@ -26,14 +26,14 @@
 ~字节序字符串转换
 	1.inet_ntop():网络->主机
 		(1)原型：const char *inet_ntop(
-										int 			af,					地址族，如AF_INET为IPV4
+										int 			af,					地址族，如AF_INET为IPV4 、AF_INET6为IPV6
 										const void* 	restrict src,		网络ip地址，存储在addr1.sin_addr.s_addr中
 										char*			restrict dst,	 	主机ip地址，储存在字符数组中
 										socklen_t		size				指向缓存区dst的大小，避免溢出
 									  );
 	2.inet_pton():主机->网络
 		(2)原型：const inet_pton(
-									int 			af;						地址族，如AF_INET为IPV4
+									int 			af;						地址族，如AF_INET为IPV4、AF_INET6为IPV6
 									const char* 	restrict src;			主机ip地址，储存在字符数组中
 									void*			restrict dst;			网络ip地址，存储在addr1.sin_addr.s_addr中
 								)
@@ -48,11 +48,30 @@
  
 ~struct sockaddr_in			IPV4地址族结构,<netinet/in.h>
  {
-	uint_t				sin_family;				地址族，如AF_INET为IPV4
+	uint_t				sin_family;				地址族，如AF_INET为IPV4、AF_INET6为IPV6
 	uint_t				sin_port;				端口
 	struct in_addr		sin_addr;				ip
 	char				sin_zero[8];			预留空空间
  };
+ 
+//ip6地址
+struct in6_addr
+{
+    union
+    {
+        uint8_t __u6_addr8[16];   // 128 bit
+        #if defined __USE_MISC || defined __USE_GNU
+        uint16_t __u6_addr16[8];  // 64 bit
+        uint32_t __u6_addr32[4];  // 32 bit
+        #endif
+    } __in6_u;
+    #define s6_addr         __in6_u.__u6_addr8
+    #if defined __USE_MISC || defined __USE_GNU
+    # define s6_addr16      __in6_u.__u6_addr16
+    # define s6_addr32      __in6_u.__u6_addr32
+    #endif
+}
+
  
 ~struct	in_addr
  {

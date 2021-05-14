@@ -1,53 +1,32 @@
-#!/bin/bash
 
-#-------------------------------------------------------------------------------------------
-#										 开始提示
-#------------------------------------------------------------------------------------------
-clear
-echo -e "                               \033[32mhave a nice day .  bashrc start \033[0m                                              "
-echo -e "\033[31m-----------------------------------------------------------------------------------------------\033[0m"
+#================================vimrc文件设置说明========================================= 
+#1）使用前在HOME路径下设置alias waprofile=". <mytoolpath>/waprofile"
 
 
-#-------------------------------------------------------------------------------------------
-#										 设置启动文件
-#------------------------------------------------------------------------------------------
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
-
-if [ -f /home/wanga/bin/setPrint ]; then
-	 /home/wanga/bin/setPrint
-fi
-
-if [ -f ~/.profile ]; then
-	 source ~/.profile
-fi
 #------------------------------------------------------------------------------------------
 #										颜色列表
 #------------------------------------------------------------------------------------------
-BLACK="\033[0;30m"
-DARKGRAY="\033[1;30m"
-BLUE="\033[1;34m"
-LIGHTBLUE="\033[1;34m"
+
+BLUE="\033[0;34m"
+LIGHT_BLUE="\033[0;1;34m"
 GREEN="\033[0;32m"
-LIGHTGREEN="\033[1;32m"
+LIGHT_GREEN="\033[0;1;32m"
 CYAN="\033[0;36m"
-LIGHTCYAN="\033[1;36m"
+LIGHT_CYAN="\033[0;1;36m"
 RED="\033[0;31m"
-LIGHTRED="\033[1;31m"
-LIGHTRED_FLASH="\033[1;5;31m"
+LIGHT_RED="\033[0;1;31m"
+LIGHT_BLINK_RED="\033[0;1;5;31m"
 PURPLE="\033[0;35m"
-LIGHTPURPLE="\033[1;35m"
-BROWN="\033[0;33m"
-YELLOW="\033[1;33m"
-LIGHTGRAY="\033[0;37m"
-WHITE="\033[1;37m"
+LIGHT_PURPLE="\033[1;35m"
+WHITE="\033[0;37m"
+LIGHT_WHITE="\033[0;1;37m"
+LIGHT_BLINK_WHITE="\033[0;1;5;37m"
 END="\033[0m"
 
 #------------------------------------------------------------------------------------------
 #										设置PS1
 #------------------------------------------------------------------------------------------
-export PS1="$LIGHTRED[$LIGHTCYAN\u$WHITE:$LIGHTBLUE\t$LIGHTRED]$WHITE:$LIGHTGREEN\w\n$WHITE->$END"
+export PS1="$LIGHTRED[$LIGHT_CYAN\u$WHITE:$LIGHT_BLUE\t$LIGHT_RED]$LIGHT_BLINK_WHITE:$LIGHT_GREEN\w\n$WHITE->$END"
 
 
 #------------------------------------------------------------------------------------------
@@ -60,16 +39,6 @@ export LS_COLORS="di=34:fi=37:ln=33:*.sh=32:ex=31:"
 #										设置PATH
 #------------------------------------------------------------------------------------------
 
-export MANPATH=$MANPATH:/usr/man:/usr/local/man:/usr/contrib/man:/opt/langtools/man
-PATH=
-PATH=$PATH:$HOME/bin:/usr/bin:/usr/local/bin:/usr/sbin:/bin:/sbin:.:/usr/share
-PATH=$PATH:/opt/gnome/bin:/opt/kde3/bin
-PATH=$PATH:/projects/phx/tools/linux:/projects/phx/tools
-PATH=$PATH:/opt/repo:/sirius/tools/bin/multi7
-PATH=$PATH:/usr/local/vim/bin
-PATH=$PATH:/work/test/bin
-PATH=$PATH:/usr/games
-export PATH
 
 #--------------------------------------------------------------------------------------------
 #									 	系统命令alias 
@@ -82,7 +51,7 @@ alias vi="vim"
 #--------------------------------------------------------------------------------------------
 #									 	目录切换 
 #------------------------------------------------------------------------------------------
-alias ws="cd /work/my_apollo_sandbox"
+
 
 
 

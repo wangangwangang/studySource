@@ -1,6 +1,10 @@
 ~json概念（JavaScript Object Notation  JS对象图谱）
-	·JS对象图谱是一种轻量级的数据交互格式，易于人阅读和编写，同时也易于机器解析和生成
+	·json是一种轻量级的数据交互格式，易于人阅读和编写，同时也易于机器解析和生成
 	
+~什么是序列化
+	·序列化是将对象转化为json字符串的过程。作用是可以在网络上传输，或者保存到硬盘上。
+	·反序列化就是将json字符串转化为实体类。作用是有对应的库函数方便对数据进行编程操作处理。
+
 ~实例：
 	·{"name":"Jack","sex":"male"}
 	·{"name":"jack","age":11,"address":{"county":"china","zip-code":"10000"}}
@@ -44,5 +48,10 @@
 	
 	9.获取json对象的字符串值
 	const char *json_object_get_string(struct json_object *obj);
+	
+	10.释放json对象
+	int json_object_put(struct json_object *jso)
+	//json_tokener_parse生成的对象，必须使用json_object_put释放
+	//json_object_new_object生成的对象必须调用json_object_put释放
 
 	
