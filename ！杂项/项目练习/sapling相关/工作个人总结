@@ -26,13 +26,29 @@
 
 ~科莱服务器地址
 	https://192.168.223.6
-	user:csadmin   pwd:!CSRAS23
+	user:csadmin   pwd: !CSRAS23
 
 ~代码权限
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1_HBBANK
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_SDK2
 	svn://192.168.0.254/saplingos/branches/TFS_D1.0/
+
+~svn用法
+	svn checkout --username zhangsan --password 123456 <URL>
+	svn up --username zhangsan --password 123456 <URL>
+	svn status   | svn stat | grep "^[^\?]"  | svnwhat
+	svn commit -m "desc"
+	svn ci src/dplane/tfs/tfs_dev.c -m "desc"   提交指定文件
+
+~samba实现linux系统的文件共享
+	·apt-cache search samba
+	·apt-get install samba
+	·cd /etc/samba/ && vim smb.conf
+	·smbpasswd -a  root
+	·reboot
+	·vim smb.conf 
+	·systemctl restart smbd.service
 
 ~服务器
 	·编译服务器		192.168.205.250		admin/admin 
@@ -42,9 +58,14 @@
 		·tfs	192.168.223.190		root/sapling         
 	
 ~编译步骤
-	·src目录 make
+	·依赖安装
+		apt-get install flex bison libnuma-dev libncurses5 linux-source-5.4.0 libelf-dev libpcap-dev
+	·安装内核工具bpf
+		cd /usr/src/ && tar jxvf linux-source-5.4.0.tar.bz2 && cd /usr/src/linux-source-5.4.0/tools/lib/bpf
+		make install_lib
+		make install_headers
+	·src目录 make 
 	
-
 ~运行环境设置
 	·设置运行库
 		·export LD_LIBRARY_PATH=/root/TFS_D1.0/lib/prebuild-dpdk:/usr/local/lib64/
@@ -53,11 +74,45 @@
 	·设置大页内存
 		·cat /proc/meminfo
 		·/mnt/workspace/TFS_D1.0/src/script/setting_hugepage.sh
-	·将管理接口名写入到/mnt/skip_dpdk_if文件中跳过初始化，否则只能从串口访问）
-
+	·检查有没有dplane_crash的线程
+		·ps -au | grep "dplane"
+		·gdb -p 跟上dplane_crash进程号，方便定位错位
+	·将管理接口名{例："ens33"}写入到/mnt/skip_dpdk_if文件中跳过初始化，否则只能从串口访问）
+	·查看进程下文件描述符
+		·列表：ls /proc/390933/fd
+		·个数：ls /proc/390933/fd -l | wc -l
 
 ~运行：
-	·cd /mnt/workspace/TFS_D1.0/bin/obj-dpdk
-	./dplane -c 0xff --vdev net_af_xdp0,iface=ens160,start_queue=0,queue_count=1
+	·  cd /mnt/workspace/TFS_D1.0/bin/obj-dpdk
+	·  ./dplane --single-file-segments
+	
+~上库前格式转换
+	·astyle --style=linux --indent=force-tab --suffix=none --pad-oper --pad-header --unpad-paren -w
+	
+~sourceinsight4.0
+	·破解办法：https://blog.csdn.net/s2603898260/article/details/105943152
+	·更改文件编码格式
+		·全选文件复制
+		·file->open as encoding->utf-8
+		·粘贴保存
+		
+~编程规范
+	·变量定义与使用需要空一行
+	·if等关键字后有空格
+	·if等关键字左花括号紧跟其后，函数花括号换行
+	·函数参数中间有空格
+	
+~错误信息打印
+	printf_console()打印到终端和串口
+	ipc_set_emsg()将错误信息发给前端
+	
+~vpn链接
+	地址：1.202.165.166   端口：1194
+	登录账号：zhouhao     密码：111111
 
-
+~配网段网关地址
+	/etc/netplane/00-installer-config.yaml
+	netplan apply
+	
+~查网关信息
+	route -n

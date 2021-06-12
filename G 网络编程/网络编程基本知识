@@ -14,8 +14,8 @@
 	
 
 ~字节序
-	1.大端字节序（网络字节序）：小地址存储小数据
-	2.小端字节序：小地址存储大数据
+	1.大端字节序（网络字节序）：低地址存储高序字节
+	2.小端字节序：低地址存储低序字节
 
 
 ~字节序数字转换
@@ -32,12 +32,12 @@
 										socklen_t		size				指向缓存区dst的大小，避免溢出
 									  );
 	2.inet_pton():主机->网络
-		(2)原型：const inet_pton(
+		(1)原型：const inet_pton(
 									int 			af;						地址族，如AF_INET为IPV4、AF_INET6为IPV6
 									const char* 	restrict src;			主机ip地址，储存在字符数组中
 									void*			restrict dst;			网络ip地址，存储在addr1.sin_addr.s_addr中
 								)
-	
+		
 	
 ~struct sockaddr			通用地址族结构,<sys/socket.h>
  {

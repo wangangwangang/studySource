@@ -19,39 +19,48 @@
 		json_type_object,
 		json_type_array,
 		json_type_string,
-		}json_type;
+	}json_type;
 		
-~json-c  API 
-	1.将符合json格式的字符串构造为一个json对象
-	struct json_object *json_tokener_parse(const char *s);
+·json-c  API 
+	·json格式字符串->json对象（键值对）：注意使用json_object_put()释放
+		struct json_object *json_tokener_parse(const char *s);
 	
-	2.将json对象转换为符合json格式的字符串
-	const char* json_object_to_json_string(struct json_object *obj);
+	·json对象（键值对）->json格式字符串
+		const char* json_object_to_json_string(struct json_object *obj);
 	
-	3.创建json对象
-	struct json_object *json_object_new_object();
+	·创建json对象（键值对）：注意使用json_object_put()释放
+		struct json_object *json_object_new_object();
 	
-	4.往json对象中添加键值对
-	void json_object_object_add(struct json_object *obj,const char *key,struct json_object *value);
+	·往json对象（键值对）中添加键值对
+		void json_object_object_add(struct json_object *obj,const char *key,struct json_object *value);
+		
+	·根据键名获取对应的json对象（具体类型）
+		json_bool json_object_object_get_ex(struct json_object *obj,const char *key,struct json_object **value);
+		struct json_object *json_object_object_get(const struct json_object *jso, const char *key);
 	
-	5.将c字符串转换为json字符串格式的对象
-	struct json_object *json_object_new_string(const char *s);
+	·将字符串转换为json对象（具体类型）：其余类型类似处理
+		struct json_object *json_object_new_string(const char *s);
+		
+	·获取json对象（具体类型）的字符串值：其余类型类似处理
+		const char *json_object_get_string(struct json_object *obj);
+		
+	·遍历json对象中所有键值对
+		#define json_object_object_foreach(obj, key, val)   
+
+	·获取array类型长度
+		size_t json_object_array_length(const struct json_object *jso);
 	
-	6.将整形转换为json格式的对象
-	struct json_object *json_object_new_int(int32_t i);
+	·根据下表获取array的各个元素值
+		struct json_object *json_object_array_get_idx(const struct json_object *jso, size_t idx);
+		
+	·获取json对象类型
+		enum json_type json_object_get_type(const struct json_object *jso);
 	
-	7.根据键名获取对应的json对象
-	json_bool json_object_object_get_ex(struct json_object *obj,const char *key,struct json_object **value)
-	
-	8.获取json对象的整形数值
-	int_32 json_object_get_int(struct json_object *obj);
-	
-	9.获取json对象的字符串值
-	const char *json_object_get_string(struct json_object *obj);
-	
-	10.释放json对象
-	int json_object_put(struct json_object *jso)
-	//json_tokener_parse生成的对象，必须使用json_object_put释放
-	//json_object_new_object生成的对象必须调用json_object_put释放
+	·将json对象的引用计数加1，返回jso自身
+		struct json_object* json_object_get(struct json_object *jso);
+		
+	·jso对象的引用计数减1:  此时如果json的引用计数大于0，直接返回,
+							如果json的引用计数为0，则递归的对每个子对象的引用计数减1，子对象引用计数为0时释放所占用内存。
+		int json_object_put(struct json_object *jso)
 
 	
