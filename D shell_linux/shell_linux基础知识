@@ -650,6 +650,7 @@ cat /proc/meminfo | grep MemTotal     查看内存总数
 	4）awk '{print "n:" $n ",m:" $m}' file			定位第n列和第m列，""内添加打印注解
 	5）awk -F: '{print $n}' file                    定位第n列,指定：为分隔符，默认空格为分隔符
 	6）awk '$1=="a" {print $3;exit}'  file          如果$1是a,打印$3并立刻退出
+	7） awk 'NR==1 || NR==2 || NR==10'  			显示第1、2、10行
 
 		
 		

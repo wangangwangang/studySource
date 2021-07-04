@@ -22,13 +22,18 @@
 
 ~安博通服务器地址
 	https://192.168.216.87
-	user:admin   pwd:admin@2019
+	admin/admin@2019
+
+~数据中心
+	https://192.168.210.122/login.html  
+	admin/admin.123
 
 ~科莱服务器地址
 	https://192.168.223.6
-	user:csadmin   pwd: !CSRAS23
+	csadmin/!CSRAS23
 
 ~代码权限
+	svn://192.168.0.254/saplingos/branches/NGFW_D5.4_TSA_BASIC
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1_HBBANK
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_SDK2
@@ -116,3 +121,13 @@
 	
 ~查网关信息
 	route -n
+
+~ip addr ：查看本地IP地址的
+	·注意：linux下支持设备设置多个ip
+	
+~netplan: 更改ip 网关 dns等配置    </etc/netplan/filename>
+	·netplan set network.ethernets.ens33.addresses=192.168.223.193/24 && netplan apply
+	
+
+
+
