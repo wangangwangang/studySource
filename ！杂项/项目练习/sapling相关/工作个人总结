@@ -1,3 +1,13 @@
+·新环境编译运行步骤
+	·先make
+	·确定只有管理接口active
+	·打包： 
+		·src目录下: sh make_tfs_package.sh
+		·将压缩文件移到指定目录解压
+		·进入解压目录: sh install_dplane_dpdk.sh
+		·进入解压目录：./bin/dplane
+	·运行
+
 ~新机配网
 	网口 sw3 29 
 	192.168.202.74
