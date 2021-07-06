@@ -1,0 +1,8 @@
+~samba实现linux系统的文件共享
+	·apt-cache search samba
+	·apt-get install samba
+	·cd /etc/samba/ && vim smb.conf         (参照本目录下smb.conf文件)
+	·smbpasswd -a  root
+	·reboot
+	·vim smb.conf 
+	·systemctl restart smbd.service
