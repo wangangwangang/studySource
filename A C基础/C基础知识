@@ -1,3 +1,14 @@
+~strcpy /strncpy /strlcpy
+	·char * strcpy(char *to, const char *from)
+		 (1)strcpy 是依据 \0 作为结束判断的，如果 to 的空间不够，则会引起 buffer overflow(缓冲区越界)
+		 (2)如果 to 的空间足够，则没有问题
+	·char *strncpy(char *s1, const char *s2, size_t n)
+		（1）通常n是s1的大小，当s1过小时，导致没有'\0'
+		（2）当s1过大时，则s1剩余空间都会被'\0'填满
+	·
+		
+
+
 ~查fun()函数依赖库：man -a fun
 
 ~详谈printf()

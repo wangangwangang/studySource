@@ -68,4 +68,4 @@
 	4.gdb a.out core          //进入gdb调试界面，并将a.out core文件加载进dgb中
 	5.where					  //在gdb界面下执行where命令，定位到段错误的所在位置
 	6.bt                      //打印错误信息
-	
+	7.set scheduler-locking on  //线程锁定
