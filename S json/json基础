@@ -1,6 +1,17 @@
 ~json概念（JavaScript Object Notation  JS对象图谱）
 	·json是一种轻量级的数据交互格式，易于人阅读和编写，同时也易于机器解析和生成
-	
+
+~json的安装：
+	1、sudo apt-get install git gcc clang libtool autoconf automake doxygen valgrind     #安装依赖
+	2、git clone https://github.com/json-c/json-c.git
+	3、cd json-c
+	4、sh ./autogen.sh
+	5、./configure
+	6、make
+	7、make install
+	8、ldconfig
+
+
 ~什么是序列化
 	·序列化是将对象转化为json字符串的过程。作用是可以在网络上传输，或者保存到硬盘上。
 	·反序列化就是将json字符串转化为实体类。作用是有对应的库函数方便对数据进行编程操作处理。

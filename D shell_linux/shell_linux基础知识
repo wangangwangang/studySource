@@ -1,3 +1,10 @@
+~Linux命令后台执行
+	·ping -c5 8.8.8.8 >/dev/null 2>&1 &
+	·说明： (1)>/dev/null       代表将执行正确结果输出到/dev/null(丢弃)，等同于1>/dev/null
+			(2)2>&1				代表将标准错误2输出重定向到标准输出1，此时也是输出到/dev/null
+			(3)&				代表将程序后台执行
+	
+
 ~samba实现linux系统的文件共享
 	·apt-cache search samba
 	·apt-get install samba
