@@ -1,15 +1,7 @@
 ~json概念（JavaScript Object Notation  JS对象图谱）
 	·json是一种轻量级的数据交互格式，易于人阅读和编写，同时也易于机器解析和生成
 
-~json的安装：
-	1、sudo apt-get install git gcc clang libtool autoconf automake doxygen valgrind     #安装依赖
-	2、git clone https://github.com/json-c/json-c.git
-	3、cd json-c
-	4、sh ./autogen.sh
-	5、./configure
-	6、make
-	7、make install
-	8、ldconfig
+~json-c的安装(ubuntu20)：
 
 
 ~什么是序列化
@@ -32,46 +24,59 @@
 		json_type_string,
 	}json_type;
 		
-·json-c  API 
+----------------------------------------------------json-c  API-------------------------------------------------------
+1.json_tokener_parse()
 	·json格式字符串->json对象（键值对）：注意使用json_object_put()释放
-		struct json_object *json_tokener_parse(const char *s);
+	·struct json_object *json_tokener_parse(const char *s);
 	
+2.json_object_to_json_string()
 	·json对象（键值对）->json格式字符串
-		const char* json_object_to_json_string(struct json_object *obj);
+	·const char* json_object_to_json_string(struct json_object *obj);
 	
+3.json_object_new_object()
 	·创建json对象（键值对）：注意使用json_object_put()释放
-		struct json_object *json_object_new_object();
+	·struct json_object *json_object_new_object();
 	
+4.json_object_object_add()
 	·往json对象（键值对）中添加键值对
-		void json_object_object_add(struct json_object *obj,const char *key,struct json_object *value);
+	·void json_object_object_add(struct json_object *obj,const char *key,struct json_object *value);
 		
+5.json_object_object_get_ex()
 	·根据键名获取对应的json对象（具体类型）
-		json_bool json_object_object_get_ex(struct json_object *obj,const char *key,struct json_object **value);
-		struct json_object *json_object_object_get(const struct json_object *jso, const char *key);
+	·json_bool json_object_object_get_ex(struct json_object *obj,const char *key,struct json_object **value);
+	·struct json_object *json_object_object_get(const struct json_object *jso, const char *key);
 	
+6.json_object_new_string()
 	·将字符串转换为json对象（具体类型）：其余类型类似处理
-		struct json_object *json_object_new_string(const char *s);
-		
+	·struct json_object *json_object_new_string(const char *s);
+	
+7.json_object_get_string()
 	·获取json对象（具体类型）的字符串值：其余类型类似处理
-		const char *json_object_get_string(struct json_object *obj);
-		
+	·const char *json_object_get_string(struct json_object *obj);
+	
+8.json_object_object_foreach()
 	·遍历json对象中所有键值对
-		#define json_object_object_foreach(obj, key, val)   
-
+	·#define json_object_object_foreach(obj, key, val)   
+	
+9.json_object_array_length()
 	·获取array类型长度
-		size_t json_object_array_length(const struct json_object *jso);
+	·size_t json_object_array_length(const struct json_object *jso);
 	
+10.json_object_array_get_idx()
 	·根据下表获取array的各个元素值
-		struct json_object *json_object_array_get_idx(const struct json_object *jso, size_t idx);
+	·struct json_object *json_object_array_get_idx(const struct json_object *jso, size_t idx);
 		
+11.json_object_get_type()
 	·获取json对象类型
-		enum json_type json_object_get_type(const struct json_object *jso);
+	·enum json_type json_object_get_type(const struct json_object *jso);
 	
+12.json_object_get()
 	·将json对象的引用计数加1，返回jso自身
-		struct json_object* json_object_get(struct json_object *jso);
+	·struct json_object* json_object_get(struct json_object *jso);
 		
+13.json_object_put()
 	·jso对象的引用计数减1:  此时如果json的引用计数大于0，直接返回,
 							如果json的引用计数为0，则递归的对每个子对象的引用计数减1，子对象引用计数为0时释放所占用内存。
-		int json_object_put(struct json_object *jso)
+	·int json_object_put(struct json_object *jso)
 
 	

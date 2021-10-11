@@ -1,0 +1,51 @@
+·学习json(bilibili视频)（ok）
+
+·TCP、IP协议族详解（网易云课堂）
+	·理解网络分层概念，ARP/TCP/IP/ICMP基本原理、路由、二层转发、三层转发概念	
+	·tcp五层架构，每一层的设备是什么
+	·二层地址样式，各字段含义
+	·三层各类地址范围，用途
+	·二层arp，mac相关协议作用和运行流程
+	·第一个报文穿过路由设备经历的过程（单播基础ppt）
+	·ospf，bgp等路由协议生成路由过程（单播基础ppt）
+	·多播igmp基本内容（详解）	
+	·广播域概念
+	·冲突域的概念
+	·vlan概念以及现实意义（网络基础ppt）
+	·了解网段，"vlan","vxlan","mpls_vlan","gre","prefix","isl_vlan","macs"的概念
+	·熟悉Ping www.baidu.com报文的所有过程
+
+·学习Wireshark软件使用(	·icmp·dns·http·ftp·telnet·pop3·smtp·imap·mysql·tls·SMB·tcp·udp)
+	·协议基础									  
+	·wireshark抓包，wireshark分析报文	
+
+·学习书本《c pirmer plus》
+
+·学习书本《unix环境高级编程》
+
+·学习书本《深入理解计算机系统》
+
+·学习dpdk
+
+·学习clickhouse
+
+·linux下锁机制
+
+·list_head学习
+
+·rcu学习
+
+·了解Nginx 
+
+
+
+
+
+
+
+
+
+
+
+
+
