@@ -1,5 +1,41 @@
+
+
+·文件函数标记
+	/*wangang*/
+	printf("[%s %s] %s: %s: %d\n", __DATE__, __TIME__, __FILE__, __func__, __LINE__);
+
+
+·文件操作API
+	fopen()
+	while(1)
+	feof()
+	fgets()
+	strstr()/strchar()
+	fclose()
+	
+	
+
+·更改网卡名称
+	ip link set "old_name" name "new_name"
+
+·查看pci值与网卡名称的对应关系：
+	lshw -c net -businfo |grep pci | awk -F ' ' '{print $1, $2}'
+
+
+
+（1）sit0:  SIT是IPv6-in-IPv4 tunnel interfaces(隧道接口), 这个interfaces(界面或是接口)也称作sitx, 
+     sit是"Simple Internet Transition"的缩写. 它可以将IPv6的数据包塞进IPv4, 通过IPv4到达另一个地点。
+	 用lsmod命令可以发现, 系统加载了ipv6模块
+（2）docker0:  Docker启动的时候会在主机上自动创建一个docker0网桥，实际上是一个Linux网桥，
+     所有容器的启动如果在docker run的时候没有指定网络模式的情况下都会挂载到docker0网桥上。这样容器就可以和主机甚至是其他容器之间通讯了。
+
+
+·sz		linux->windows
+·rz		windows->linux
+
+
 -----------------------------------------------------------
-				重点关注流程
+				协议解析重点关注流程
 -----------------------------------------------------------
 ·mbuf:dp收包									  						
 ·mbuf->skb:
@@ -10,6 +46,13 @@
 	·对应的数据在代码中如何提取
 	·每个字段在报文中对应的内容
 ·出日志、文件
+
+协议：	·icmp	·dns	·http	·ftp	·telnet						
+		·pop3   ·smtp   ·imap  ·mysql	·tls						
+		·SMB	·tcp	·udp
+-----------------------------------------------------------
+
+
 
 ·测试环境获取授权码：
 http://192.168.216.188:8098/authorization/#/home
@@ -44,9 +87,9 @@ admin  Admin.123
 	22	trace			关于syscall的工具。
 	23	probe			用于定义动态检查点。    
 
-·tcpreplay -i ens33 -l 200 <*.pcap>
-	·-i			指定输出接口
-	·-l			指定循环发送次数
+·tcpreplay -i ens33 -L 200 <*.pcap>
+	-i			指定输出接口
+	-L			指定发送pcap文件中报文的个数
 
 ·tcprewrite --enet-vlan=add --enet-vlan-tag=100 --enet-vlan-cfi=1 --enet-vlan-pri=4 --infile=re_mysql_login_v4_227.pcap --outfile=new.pcap
 	·更改报文vlan头部信息
@@ -217,21 +260,25 @@ admin  Admin.123
 	账号：liyonghui       密码：admin@123
 
 
-~配网段网关地址
+~配置网卡信息
 	/etc/netplane/00-installer-config.yaml
 	netplan apply
-	
-~查网关信息
+
+~netplan: 更改ip 网关 dns 静态路由等配置
+	·--origin-hint /etc/netplan/00-installer-config指定更改的配置文件，默认更改70-installer-config.yaml文件
+	·netplan set network.ethernets.ens33.addresses=[192.168.223.193/24,ip2] && netplan apply
+	·netplan set network.ethernets.ens33.gateway4=192.168.223.1 && netplan apply
+	·netplan set network.ethernets.ens33.nameservers.addresses=[1.1.1.1，2.2.2.2] && netplan apply
+	·netplan set network.ethernets.ens33.routes='[{"to":"192.168.222.194/24","via":"192.168.223.1"}]' && netplan apply
+
+~查路由信息
 	route -n
 
 ~ip addr ：查看本地IP地址的
 	·注意：linux下支持设备设置多个ip
 	·ip -6 addr del/add fe80::250:56ff:feb8:f15c/64  dev ens33
 	·ip    addr del/add 192.168.223.194/24           dev ens33
-	
-~netplan: 更改ip 网关 dns等配置    </etc/netplan/filename>
-	·netplan set network.ethernets.ens33.addresses=192.168.223.193/24 && netplan apply
-	
+		
 
 ~ssh通过ipv6远程管理服务器：ssh -6 fe80::250:56ff:feb8:f15a%ens33
 
