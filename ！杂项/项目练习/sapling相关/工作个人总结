@@ -1,4 +1,21 @@
+~虚拟机的内核自动升级关掉：sudo apt-mark hold linux-image-generic linux-headers-generic
+	备注：我们标配的内核是5.4.0-65。如果内核升级，编译出来的igb_uio在5.4.0-65内核上跑不了。
+	
+~将高版本内核回退到5.4.0-65的方法：
+	1、apt-get install linux-image-unsigned-5.4.0-65-generic
+	2、vi /etc/default/grub
+	   GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 5.4.0-65-generic"
+	3、update-grub
+	4、reboot
 
+~远程传输命令
+	scp root@192.168.223.252:/home/guifang/tfs_trunk/src/dplane/obj-dpdk/dplane ./
+
+~中台重启命令
+	/usr/local/nginx/sbin/nginx
+	nohup python3 /usr/local/sa/run.py &
+
+·lspci -Dvmmnnk：查询原始驱动的类型
 
 ·文件函数标记
 	/*wangang*/
@@ -37,7 +54,7 @@
 -----------------------------------------------------------
 				协议解析重点关注流程
 -----------------------------------------------------------
-·mbuf:dp收包									  						
+·mbuf:dp收包
 ·mbuf->skb:
 ·ct:dp建流
 ·skb->packet:
@@ -154,6 +171,10 @@ admin  Admin.123
 	https://192.168.216.87
 	admin/admin@2019
 
+
+
+
+
 ~数据中心
 	https://192.168.210.122/login.html  
 	admin/admin.123
@@ -171,6 +192,7 @@ admin  Admin.123
 	svn://192.168.0.254/da/branches/TFS_Trunk
 	svn://192.168.0.254/da/branches/TFS_R1.0
 	svn://192.168.0.254/da/branches/TFS_Probe1.0
+	svn://192.168.0.254/saplingos/trunk
 
 ~svn用法
 	svn checkout --username zhangsan --password 123456 <URL>

@@ -1,3 +1,22 @@
+·结构体赋值方式
+	1.在结构体变量定义时赋值
+	  例如：struct stu{
+				int num;
+				char name[32];
+	        };
+			
+			struct stu s1 = {1, "zhangsan"};
+			struct stu s1 = {.num = 1, .name = "zhangsan"};
+			struct stu s[2] = {{1, "zhangsan"}, {2, "lisi"}};
+			struct stu s[2] = {{.num = 1, .name = "zhangsan"}, {.num = 2, .name = "lisi"}};
+			struct stu s[2] = {[0] = {1, "zhangsan"}, [1] = {2, "lisi"}};
+			struct stu s[2] = {[0] = {.num = 1, .name = "zhangsan"}, [1] = {.num = 2, .name = "lisi"}};
+		    备注：1.初始化可以直接用"="对字符串赋值，2.可以指定下标，去除顺序限制
+	2.定义之后给变量赋值
+			struct stu s1;
+			s1.num = 1;
+			strlcpy(s1.name, "zhangsan", 32);
+
 ·c语言在main函数执行前后加逻辑
 	__attribute__((constructor))：被修饰的函数在main函数之前调用
 	__attribute__((destructor))：被修饰的函数在main函数之后调用
