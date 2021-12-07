@@ -1,0 +1,10 @@
+·将csv文件导入到数据库中：
+	·导入的CSV文件没有字段名称时：
+		cat csv文件路径 | clickhouse-client --query="INSERT INTO 数据库.表名 FORMAT CSV"
+		或者
+		clickhosue client --query='insert into sa.t_db_log format CSV'  < 文件名
+	
+	·导入的CSV文件有字段名称时
+		cat csv文件路径 | clickhouse-client --query="INSERT INTO 数据库.表名 FORMAT CSVWithNames"
+
+·查询命令：select  app_protocol, app_name  from t_db_log  where time > '2021-10-28 15:50:00' 

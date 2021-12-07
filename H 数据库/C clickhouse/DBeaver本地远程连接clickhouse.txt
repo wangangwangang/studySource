@@ -1,0 +1,35 @@
+1.准备工具DBeaver
+      DBeaver社区版下载地址：https://dbeaver.io/
+
+2.配置clickhuse
+
+      具体配置文档参照：https://www.jianshu.com/p/0e41ce59b85a
+
+3.解决本地网络不行远程下载jdbc网络延时问题 
+
+	第一步：安装依赖
+
+             下载安装apache-maven-3.6.0，安装1.8jdk
+
+	第二步：修改镜像
+
+            在apache-maven-3.6.0\conf\settings.xml 文件中修改镜像代码如下：
+
+                      <mirror>
+                          <id>aliyunmaven</id>
+                         <mirrorOf>*</mirrorOf>
+                         <name>阿里云公共仓库</name>
+                         <url>https://maven.aliyun.com/repository/public</url>
+                     </mirror>
+
+4.第四步配置阿里云代理
+
+	1. 在数据库-->新建连接-->选择clickhouse-->编辑驱动设置
+	2.设置库下载更新
+
+		--在下载配置-->连接-->驱动-->添加http://maven.aliyun.com/nexus/content/groups/public/
+
+		– - 仓库出现maven.aliyun.com 并将其向上置顶，并点击应用即可
+
+第五步：
+    填写主机IP、数据库模式、默认用户名default，密码不填即可
