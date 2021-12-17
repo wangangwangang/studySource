@@ -1,13 +1,48 @@
-~虚拟机的内核自动升级关掉：sudo apt-mark hold linux-image-generic linux-headers-generic
-	备注：我们标配的内核是5.4.0-65。如果内核升级，编译出来的igb_uio在5.4.0-65内核上跑不了。
-	
-~将高版本内核回退到5.4.0-65的方法：
-	1、apt-get install linux-image-unsigned-5.4.0-65-generic
-	2、vi /etc/default/grub
-	   GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 5.4.0-65-generic"
-	3、update-grub
-	4、reboot
 
+
+~ccache加快全量编译速度
+	Step 1: 
+	安装ccache
+	apt-get install ccache
+
+	Step 2:
+	更改环境变量PATH
+	通过 vim ~/.bashrc （若是root账号，需要修改/root/.bashrc），打开bashrc界面
+	点击i进入写入模式
+	在文末加上 export PATH=/usr/lib/ccache:$PATH
+	保存退出
+
+	Step 3: 
+	重新打开终端
+	输入which gcc
+	输出/usr/lib/ccache/gcc表示成功
+	
+	说明：
+	·ccache编译器缓存，第一次编译时ccache缓存了GCC -E输出，把那些头文件展开信息保存在缓存中，当第二次编译时会尽量得用缓存,有改动时会更新缓存。
+	·第一次编译不会提升，后面会很快的，即使采用make clean
+	·通过ccache -s查看参数信息
+	·ccache的默认最大缓存大小是5GB，可以通过ccache -M XG指定，例如：ccache -M 50G
+------------------------------------------------------------------------------------------------------------------------------------------------------	
+	
+~手动更新编译好的中英文翻译配置文件：cp /mnt/workspace/Trunk/spos/src/locale/zh_CN/locale/zh_CN/LC_MESSAGES/msg.mo  /usr/share/locale/zh_CN/LC_MESSAGES
+
+~linux设置系统时间:
+	date 0102030405.06:将当前系统时间设置为2005年1月2日3点04分06秒
+
+~文件还原相关
+	1.app_filetype_identify
+	2.tfs_tcp_rsm
+
+~解决高版本内核编译的igb_uio在低版本内核跑不了了问题
+	（备注：我们标配的内核是5.4.0-65。如果内核升级，编译出来的igb_uio在5.4.0-65内核上跑不了。）
+	·虚拟机的内核自动升级关掉：sudo apt-mark hold linux-image-generic linux-headers-generic
+	·将高版本内核回退到5.4.0-65的方法：
+		1、apt-get install linux-image-unsigned-5.4.0-65-generic
+		2、vi /etc/default/grub
+			GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 5.4.0-65-generic"
+		3、update-grub
+		4、reboot
+----------------------------------------------------------------------------------------------------------------------------------------------------------
 ~远程传输命令
 	scp root@192.168.223.252:/home/guifang/tfs_trunk/src/dplane/obj-dpdk/dplane ./
 
@@ -46,9 +81,11 @@
 （2）docker0:  Docker启动的时候会在主机上自动创建一个docker0网桥，实际上是一个Linux网桥，
      所有容器的启动如果在docker run的时候没有指定网络模式的情况下都会挂载到docker0网桥上。这样容器就可以和主机甚至是其他容器之间通讯了。
 
-
-·sz		linux->windows
-·rz		windows->linux
+~文件传输工具
+	·sz		linux->windows
+	·rz		windows->linux
+	·scp audit root@192.168.223.192:/mnt/tfs_config
+	
 
 
 -----------------------------------------------------------
@@ -72,10 +109,8 @@
 
 
 ·测试环境获取授权码：
-http://192.168.216.188:8098/authorization/#/home
-admin  Admin.123
-
-
+	http://192.168.216.188:8098/authorization/#/home
+	admin  Admin.123
 
 
 ·perf 性能分析工具
@@ -103,6 +138,7 @@ admin  Admin.123
 	21	top				类似于linux的top命令，对系统性能进行实时分析。
 	22	trace			关于syscall的工具。
 	23	probe			用于定义动态检查点。    
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ·tcpreplay -i ens33 -L 200 <*.pcap>
 	-i			指定输出接口
@@ -122,19 +158,13 @@ admin  Admin.123
 
 ·设置网卡混杂：ifconfig ens34 promisc
 
-·scp audit root@192.168.223.192:/mnt/tfs_config
-
-·rz <filename>		发送文件至本地
-
 ·lsmod | grep igb_uio
 
 ·tcpreplay -i ens34  111.pcap			//发包命令
 
-·	/mnt/workspace/TFS_D1.0/bin/obj-dpdk# ./vtysh
+·/mnt/workspace/TFS_D1.0/bin/obj-dpdk# ./vtysh
 	show statistics interface								//检查是否收报
   
-
-
 ·新环境编译运行步骤
 	·先 make >>/dev/null -j 20
 	·确定只有管理接口active
@@ -144,6 +174,7 @@ admin  Admin.123
 		·进入解压目录: sh install_dplane_dpdk.sh
 		·进入解压目录：./bin/dplane
 	·运行
+========================================================================================================================================
 
 ~新机配网
 	网口 sw3 29 
@@ -159,6 +190,7 @@ admin  Admin.123
 	192.168.212.1
 	114.114.114.114
 	8.8.8.8
+=========================================================================================================================================
 
 ~无线网
 	wifi sapling-2.4
@@ -171,19 +203,11 @@ admin  Admin.123
 	https://192.168.216.87
 	admin/admin@2019
 
-
-
-
-
-~数据中心
-	https://192.168.210.122/login.html  
-	admin/admin.123
-
 ~科莱服务器地址
 	https://192.168.223.6
 	csadmin/!CSRAS23
 
-~代码权限
+~代码分支
 	svn://192.168.0.254/saplingos/branches/NGFW_D5.4_TSA_BASIC
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1_HBBANK
 	svn://192.168.0.254/saplingos/branches/NTA/NPV_R2.1
@@ -193,6 +217,7 @@ admin  Admin.123
 	svn://192.168.0.254/da/branches/TFS_R1.0
 	svn://192.168.0.254/da/branches/TFS_Probe1.0
 	svn://192.168.0.254/saplingos/trunk
+	svn://192.168.0.254/da/branches/TFS_BJ_POLICE
 
 ~svn用法
 	svn checkout --username zhangsan --password 123456 <URL>

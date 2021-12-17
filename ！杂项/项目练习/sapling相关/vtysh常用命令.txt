@@ -1,0 +1,48 @@
+·查看所有会话信息
+	show ip connection all
+
+·查看特定的会话信息
+	show ip connection protocol all ip source any dest any sport any dport any app-name any
+
+·查看会话计数
+	show ip connection count [detail]
+	show ip connection statistics (port|source-ip|dest-ip)
+
+·查看内存信息
+	show memory
+	show dp memory
+	show dp memory top
+	show dp memory detail [MID]
+	show dp memory diff
+	show dp memory mempool
+
+·查看cpu使用率
+	show cpu usage [detail]
+
+·查看网卡统计信息
+	show statistics interface
+	show statistics hardware-interface
+	show statistics device-traffic (seconds | minutes) 
+
+·查看网卡寄存器统计信息
+	show statistics hardware-interface INTERFACE_NAME
+
+·看门狗开关
+	watchdog (enable | disable)
+
+·dplane调试命令
+	enable/en
+	debug dp basic
+	debug dp drop
+	debug dp filter src-ip any dst-ip any src-port any dst-port any two-way
+	debug conntrack (brief | clear | detail | error)
+	debug tfs config
+	show log debug
+	clear log debug
+	no debug all
+
+
+
+
+
+

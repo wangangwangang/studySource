@@ -143,25 +143,6 @@ struct in6_addr
 	·read()
 	·write()
 
-
-
-~socket()	初始化创建套接字
-	1.依赖库：<sys/socket.h>
-	2.原型：int socket(						返回值是套接字文件描述符
-						int domain,			地址族，如AF_INET为IPV4
-						int type,			协议类型：SOCK_STREAM/tcp  SOCK_DGRAM/udp
-						int protocol		指定具体协议，通常传递0
-					  );
-
-					  
-~connect()	客户端用来连接服务端
-	1.依赖库：<sys/types.h> <sys/socket.h>
-	2.原型：int connect(
-							int 				sockfd,			socket文件描述符
-							struct sockaddr*	seraddr,		服务器地址结构
-							int					addrlen			服务器地址结构长度
-					   );
-	
 ~服务端 
 	·socket()
 	·bind()
@@ -173,7 +154,7 @@ struct in6_addr
 ~socket()	初始化创建套接字
 	1.依赖库：<sys/socket.h>
 	2.原型：int socket(						返回值是套接字文件描述符
-						int domain,			地址族，如AF_INET为IPV4
+						int domain,			地址族，如AF_INET为IPV4  AF_INET6为IPV6
 						int type,			协议类型：SOCK_STREAM/tcp  SOCK_DGRAM/udp
 						int protocol		指定具体协议，通常传递0
 					  );
@@ -194,7 +175,14 @@ struct in6_addr
 						int backlog			决定挂起连接的队列的大小个数
 					  );
 
-					  
+~connect()	客户端用来连接服务端
+	1.依赖库：<sys/types.h> <sys/socket.h>
+	2.原型：int connect(
+							int 				sockfd,			socket文件描述符
+							struct sockaddr*	seraddr,		服务器地址结构
+							int					addrlen			服务器地址结构长度
+					   );
+		  
 ~accept()：服务端用来建立与客户端的连接
 	1.依赖库：<sys/socket.h>
 	2.原型：int accept(										返回已链接套接字，用来监控具体的已连接客户端
@@ -218,7 +206,7 @@ struct in6_addr
 ~socket()	初始化创建套接字
 	1.依赖库：<sys/socket.h>
 	2.原型：int socket(						返回值是套接字文件描述符
-						int domain,			地址族，如AF_INET为IPV4
+						int domain,			地址族，如AF_INET为IPV4  AF_INET6为IPV6
 						int type,			协议类型：SOCK_STREAM/tcp  SOCK_DGRAM/udp
 						int protocol		指定具体协议，通常传递0
 					  );
@@ -252,6 +240,62 @@ struct in6_addr
 								socklen_t 	*addrlen);				用于接受客户端地址长度
 -------------------------------------------------------------------------------------------------------------------------					  
 
+
+------------------------------------------------本地套接字建立---------------------------------------------------------------------
+~客户端
+	·socket()
+	·connect()
+	·read()
+	·write()
+
+~服务端 
+	·socket()
+	·bind()
+	·listen()
+	·accept()
+	·read()
+	·write()
+
+~socket()	初始化创建套接字
+	1.依赖库：<sys/socket.h>
+	2.原型：int socket(						返回值是套接字文件描述符
+						int domain,			地址族，如AF_INET为IPV4  AF_INET6为IPV6
+						int type,			协议类型：SOCK_STREAM/tcp  SOCK_DGRAM/udp
+						int protocol		指定具体协议，通常传递0
+					  );
+
+~bind()	服务端用来固定本地端口和IP
+	1.依赖库：<sys/socket.h> <sys/types.h>
+	2.原型：int bind(
+						int     				sockfd,			socket文件描述符
+						const struct sockaddr*	seraddr,		服务器地址结构
+						socklen_t				addrlen			服务器地址结构长度
+					);
+
+~listen()	服务端设置表明sock为服务端
+	1.依赖库：<sys/socket.h>
+	2.原型：int listen(
+						int sockfd,			socket文件描述符
+						int backlog			决定挂起连接的队列的大小个数
+					  );
+
+~connect()	客户端用来连接服务端
+	1.依赖库：<sys/types.h> <sys/socket.h>
+	2.原型：int connect(
+							int 				sockfd,			socket文件描述符
+							struct sockaddr*	seraddr,		服务器地址结构
+							int					addrlen			服务器地址结构长度
+					   );
+		  
+~accept()：服务端用来建立与客户端的连接
+	1.依赖库：<sys/socket.h>
+	2.原型：int accept(										返回已链接套接字，用来监控具体的已连接客户端
+						int 				sockfd,			监听套接字，用来监控是否有新客户端链接进来
+						struct sockadd* 	cliaddr,		客户端地址
+						socklen_t*			addrlen			客户端地址长度，在此之前必须对addrlen赋值
+					  );
+
+------------------------------------------------------------------------------------------------------------------
 
 ~Tcp协议端口状态说明：
 	1）LISTENING：tcp服务端开启，端口处于监听状态
