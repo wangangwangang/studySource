@@ -25,23 +25,25 @@
 	gdb	 <可执行文件名>				带文件启动gdb
 	q/quit							退出gdb
 	
-	
+	r/run							运行程序
+	bt                      		显示栈信息
+	frame/f x 						切换到第x帧
 	b/break <函数名>				设置断点
 	b/break <源文件名>:numLine  	设置断点
 	d/delete						删除所有断点
 	d/delete  n						删除编号为n的断点
 	i/info b/breakpoints			查询断点信息
 	s/step							进入到子函数内部
-	r/run							运行程序
+	finish							结束当前子函数
 	c/continue						遇到断点终止程序的运行后，继续运行软件
 	n/next							单步运行
 	p  <变量名>						查看变量值
 	p  <函数名>						显示函数地址
 	p  <数组名：array>				打印数组值：{0，1，2，3}
 	p  array[n]						打印数组特定元素值
-	finish							结束当前子函数
 	until							结束当前循环
-	backtrace						查看当前运行的文件和所在的行
+	show scheduler-locking 			显示线程的scheduler-locking状态
+	set scheduler-locking on 		调试加锁当前线程，停止所有其他线程
 	
 	l/list 							显示代码，默认10行
 	l/list <源文件名>:行号			显示指定行号附近10行的代码，如果不加文件名默认当前运行到的文件

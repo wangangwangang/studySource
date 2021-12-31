@@ -1,4 +1,10 @@
-
+~gdb中忽略信号处理 SIGPIPE  
+	现象：GDB调试网络程序时，会遇到SIGPIPE信息，默认GDB会把程序停下来，即使程序使用signal(SIGPIPE, SIG_IGN);来忽略信号。
+	处理：
+		（1）用handle命令设置一下缺省的signal的处理行为即可：(在gdb模式下运行下面的命令)
+    		handle SIGPIPE nostop print
+		（2）如果连信息提示都不想看见，可以这样设置：
+    		handle SIGPIPE nostop noprint
 
 ~ccache加快全量编译速度
 	Step 1: 
