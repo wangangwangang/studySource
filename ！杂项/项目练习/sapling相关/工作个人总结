@@ -1,3 +1,14 @@
+~apt-get install bmon：这个工具可以实时统计网卡的流量大小、pps，我们可以以它为参照，来定位我们流量统计的问题
+	·bmon的基本用法：https://blog.csdn.net/xungjhj/article/details/70186568
+
+~万能授权码：	5YhBGj9thvdyVQdrp4ZjC6e+dOaLhGpRLeJSPCWbfxY3XziUPyMhZmoHe8qJmKKItLs9Mvsho4MELYHvp70/O6vqxsRNMcNYyaTJ+NMBOkw24TjggfSrFhhx1rbXTxFBi1UBcadaun5d4ALxrK24NqSkFelsF0uRhkUgFO/cuD5PZgzukDzInVDFBIWPpDVI
+
+~contrl + ? : 项目范围内搜索字符串
+
+~ethtool -p eth0 
+	（1）给服务器网口点灯，识别ifconfig命令下网口名对应物理设备上哪一个
+	（2）注意要在不插网线的时候进行，否则看不出来是否因ethtool引起的闪烁
+
 ~gdb中忽略信号处理 SIGPIPE  
 	现象：GDB调试网络程序时，会遇到SIGPIPE信息，默认GDB会把程序停下来，即使程序使用signal(SIGPIPE, SIG_IGN);来忽略信号。
 	处理：
@@ -30,7 +41,9 @@
 	·ccache的默认最大缓存大小是5GB，可以通过ccache -M XG指定，例如：ccache -M 50G
 ------------------------------------------------------------------------------------------------------------------------------------------------------	
 	
-~手动更新编译好的中英文翻译配置文件：cp /mnt/workspace/Trunk/spos/src/locale/zh_CN/locale/zh_CN/LC_MESSAGES/msg.mo  /usr/share/locale/zh_CN/LC_MESSAGES
+~手动更新编译好的中英文翻译配置文件：cp /mnt/workspace/Trunk/spos/src/locale/zh_CN/locale/zh_CN/LC_MESSAGES/msg.mo /usr/share/locale/zh_CN/LC_MESSAGES
+
+scp /mnt/workspace/Trunk/spos/src/locale/zh_CN/locale/zh_CN/LC_MESSAGES/msg.mo root@192.168.223.194:/usr/share/locale/zh_CN/LC_MESSAGES
 
 ~linux设置系统时间:
 	date 0102030405.06:将当前系统时间设置为2005年1月2日3点04分06秒
