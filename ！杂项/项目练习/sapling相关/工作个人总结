@@ -1,3 +1,16 @@
+~202.76
+
+~修改回放报文的ip校验和:
+	tcprewrite  -C  -i mysql_login_v4_227.pcap   -o re_mysql_login.pcap
+
+~wiresharkz规则过滤语法：
+	ip.addr==192.168.99.134
+	and
+	or
+
+~qq_mail : qwqfitbqlvvudcic   bbohdcgfndkdegci
+~163_mail : ADPHOPURODRSINWX
+
 ~apt-get install bmon：这个工具可以实时统计网卡的流量大小、pps，我们可以以它为参照，来定位我们流量统计的问题
 	·bmon的基本用法：https://blog.csdn.net/xungjhj/article/details/70186568
 
@@ -165,6 +178,9 @@ scp /mnt/workspace/Trunk/spos/src/locale/zh_CN/locale/zh_CN/LC_MESSAGES/msg.mo r
 
 ·tcprewrite --enet-vlan=add --enet-vlan-tag=100 --enet-vlan-cfi=1 --enet-vlan-pri=4 --infile=re_mysql_login_v4_227.pcap --outfile=new.pcap
 	·更改报文vlan头部信息
+	
+~修改回放报文的ip校验和:(因为在__ip_listen_rcv中有ip_fast_csum函数，对IP进行校验核验证，如果IP校验和不对，将不处理。)
+	tcprewrite  -C  -i mysql_login_v4_227.pcap   -o re_mysql_login.pcap
 
 ·查看debug信息
 	·vtysh -> enable

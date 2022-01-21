@@ -1,3 +1,8 @@
+~网卡重启操作
+	·systemctl daemon-reload
+	·service network restart
+	·systemctl restart network
+
 ~概念：
 	1）Git 是一个开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目
 	2）通过GIT管理GitHub托管的项目代码

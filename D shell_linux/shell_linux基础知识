@@ -1,3 +1,5 @@
+~
+
 ~Linux命令后台执行
 	·ping -c5 8.8.8.8 >/dev/null 2>&1 &
 	·说明： (1)>/dev/null       代表将执行正确结果输出到/dev/null(丢弃)，等同于1>/dev/null
@@ -980,8 +982,8 @@ cat /proc/meminfo | grep MemTotal     查看内存总数
 				          执行之后键盘输入密码口令
 				（1）-oPort		接端口号
 				（2）help		打开帮助手册
-				（3）l<command> 操作本地服务器
-				（4）<command>	操作远程连接的服务器
+				（3）lcd		切换本地工作目录（注意：在ftp环境下不能直接查看本地工作目录下文件列表）
+				（4）ls/pwd/cd	操作远程连接的服务器
 				（5）Binary		指定传输方式是二进制
 				（6）put/mput	推送文件/批量推送文件至远程服务器
 				（7）get/mget	获取文件/批量获取文件从远程服务器
