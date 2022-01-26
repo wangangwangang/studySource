@@ -1,9 +1,59 @@
-~202.76
+~配置网卡信息
+	/etc/netplane/00-installer-config.yaml
+	netplan apply
+~查路由信息
+	route -n
 
-~修改回放报文的ip校验和:
+~ip addr ：查看本地IP地址的
+	·注意：linux下支持设备设置多个ip
+	·ip -6 addr del/add fe80::250:56ff:feb8:f15c/64  dev ens33
+	·ip    addr del/add 192.168.223.194/24           dev ens33
+
+~netplan相关(ubuntu20.04)
+	·netplan是ubuntu操作系统18版本之后支持的网卡管理工具
+	·--origin-hint /etc/netplan/00-installer-config指定更改的配置文件，默认更改70-installer-config.yaml文件
+	·设置ipv4ip:	netplan set --origin-hint /etc/netplan/00-installer-config network.ethernets.ens33.addresses=[192.168.223.191/24,2000:223::191/64]
+	·设置ipv4网关:	netplan set --origin-hint /etc/netplan/00-installer-config network.ethernets.ens33.gateway4=192.168.223.1
+	·设置ipv6ip:	netplan set --origin-hint /etc/netplan/00-installer-config network.ethernets.ens33.addresses=[192.168.223.191/24,2000:223::191/64]
+	·设置ipv6网关:	netplan set --origin-hint /etc/netplan/00-installer-config network.ethernets.ens33.gateway6=2000:223::1
+	·设置ipv4DNS:	netplan set --origin-hint /etc/netplan/00-installer-config network.ethernets.ens33.nameservers.addresses=[114.114.114.114,8.8.8.8]
+	·设置静态路由:	netplan set --origin-hint /etc/netplan/00-installer-config network.ethernets.%s.routes='[{"to":"192.168.222.194/24","via":"192.168.223.1"}]'
+	·网卡配置信息生效:	netplan apply
+
+
+~nmcli相关(centos8)
+	·nmcli是centos操作系统NetworkManager服务下支持的网卡管理工具
+	·设置ipv4ip:		nmcli connection modify ens33 ipv4.method manual (+/-/无)ipv4.addr 192.168.1.131/24
+						nmcli connection show enp20s0f0 | grep ipv4.addresses:
+	·设置ipv4网关:		nmcli connection modify ens33 ipv4.gateway 192.168.1.1
+						nmcli connection show enp20s0f0 | grep ipv4.gateway:
+	·设置ipv6ip:		nmcli connection modify ens33 ipv6.method manual (+/-/无)ipv6.addresses 2000:1::131/64
+						nmcli connection show enp20s0f0 | grep ipv6.addresses:
+	·设置ipv6网关:		nmcli connection modify ens33 ipv6.gateway 2000:1::1
+						nmcli connection show enp20s0f0 | grep ipv6.gateway:
+	·设置ipv4DNS:		nmcli connection modify ens33 (+/-/无)ipv4.dns 114.114.114.114
+						nmcli connection show enp20s0f0 | grep ipv4.dns:
+	·设置静态路由:		nmcli connection modify ens33 (+/-/无)ipv4.routes "192.168.1.133/24 192.168.1.1"
+						
+	·网卡配置信息生效: 	nmcli connection  up ens33
+	·查看所有网卡配置： nmcli connection show
+	·显示激活的网卡：   nmcli connection show --active
+
+~systemctl相关
+	·systemctl是CentOS7操作系统支持的服务管理工具中主要的工具
+	·启动一个服务：systemctl start
+	·关闭一个服务：systemctl stop firewalld.service
+	·重启一个服务：systemctl restart
+	·显示一个服务的状态：systemctl status
+	·在开机时启用一个服务：systemctl enable
+	·在开机时禁用一个服务：systemctl disable
+	·查看开机启动的服务列表：systemctl list-unit-files|grep enabled
+	·查看启动失败的服务列表：systemctl --failed
+
+~修改回放报文的ip校验和
 	tcprewrite  -C  -i mysql_login_v4_227.pcap   -o re_mysql_login.pcap
 
-~wiresharkz规则过滤语法：
+~wiresharkz规则过滤语法
 	ip.addr==192.168.99.134
 	and
 	or
@@ -14,7 +64,7 @@
 ~apt-get install bmon：这个工具可以实时统计网卡的流量大小、pps，我们可以以它为参照，来定位我们流量统计的问题
 	·bmon的基本用法：https://blog.csdn.net/xungjhj/article/details/70186568
 
-~万能授权码：	5YhBGj9thvdyVQdrp4ZjC6e+dOaLhGpRLeJSPCWbfxY3XziUPyMhZmoHe8qJmKKItLs9Mvsho4MELYHvp70/O6vqxsRNMcNYyaTJ+NMBOkw24TjggfSrFhhx1rbXTxFBi1UBcadaun5d4ALxrK24NqSkFelsF0uRhkUgFO/cuD5PZgzukDzInVDFBIWPpDVI
+~万能授权码:5YhBGj9thvdyVQdrp4ZjC6e+dOaLhGpRLeJSPCWbfxY3XziUPyMhZmoHe8qJmKKItLs9Mvsho4MELYHvp70/O6vqxsRNMcNYyaTJ+NMBOkw24TjggfSrFhhx1rbXTxFBi1UBcadaun5d4ALxrK24NqSkFelsF0uRhkUgFO/cuD5PZgzukDzInVDFBIWPpDVI
 
 ~contrl + ? : 项目范围内搜索字符串
 
@@ -340,26 +390,6 @@ scp /mnt/workspace/Trunk/spos/src/locale/zh_CN/locale/zh_CN/LC_MESSAGES/msg.mo r
 
 	地址：sapling.oicp.io 端口：1194
 	账号：liyonghui       密码：admin@123
-
-
-~配置网卡信息
-	/etc/netplane/00-installer-config.yaml
-	netplan apply
-
-~netplan: 更改ip 网关 dns 静态路由等配置
-	·--origin-hint /etc/netplan/00-installer-config指定更改的配置文件，默认更改70-installer-config.yaml文件
-	·netplan set network.ethernets.ens33.addresses=[192.168.223.193/24,ip2] && netplan apply
-	·netplan set network.ethernets.ens33.gateway4=192.168.223.1 && netplan apply
-	·netplan set network.ethernets.ens33.nameservers.addresses=[1.1.1.1，2.2.2.2] && netplan apply
-	·netplan set network.ethernets.ens33.routes='[{"to":"192.168.222.194/24","via":"192.168.223.1"}]' && netplan apply
-
-~查路由信息
-	route -n
-
-~ip addr ：查看本地IP地址的
-	·注意：linux下支持设备设置多个ip
-	·ip -6 addr del/add fe80::250:56ff:feb8:f15c/64  dev ens33
-	·ip    addr del/add 192.168.223.194/24           dev ens33
 		
 
 ~ssh通过ipv6远程管理服务器：ssh -6 fe80::250:56ff:feb8:f15a%ens33
